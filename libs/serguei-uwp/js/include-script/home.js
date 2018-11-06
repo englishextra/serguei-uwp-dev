@@ -244,6 +244,75 @@
 			]
 		};
 
+		var acRenderMediaJson = {
+			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+			"type": "AdaptiveCard",
+			"version": "1.0",
+			"speak": "The Seattle Seahawks beat the Carolina Panthers 40-7",
+			"body": [{
+					"type": "Container",
+					"items": [{
+							"type": "ColumnSet",
+							"columns": [{
+									"type": "Column",
+									"width": "auto",
+									"items": [{
+											"type": "Image",
+											"url": "http://adaptivecards.io/content/cats/3.png",
+											"size": "medium"
+										}, {
+											"type": "TextBlock",
+											"text": "SHADES",
+											"horizontalAlignment": "center",
+											"weight": "bolder"
+										}
+									]
+								}, {
+									"type": "Column",
+									"width": "stretch",
+									"separator": true,
+									"spacing": "medium",
+									"items": [{
+											"type": "TextBlock",
+											"text": "Dec 4",
+											"horizontalAlignment": "center"
+										}, {
+											"type": "TextBlock",
+											"text": "Final",
+											"spacing": "none",
+											"horizontalAlignment": "center"
+										}, {
+											"type": "TextBlock",
+											"text": "7 - 40",
+											"size": "extraLarge",
+											"horizontalAlignment": "center"
+										}
+									]
+								}, {
+									"type": "Column",
+									"width": "auto",
+									"separator": true,
+									"spacing": "medium",
+									"items": [{
+											"type": "Image",
+											"url": "http://adaptivecards.io/content/cats/2.png",
+											"size": "medium",
+											"horizontalAlignment": "center"
+										}, {
+											"type": "TextBlock",
+											"text": "SKINS",
+											"horizontalAlignment": "center",
+											"weight": "bolder"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		};
+
 		var renderAdaptiveCard = function (conatainerClass, cardObj, renderOptions, onExecute, callback) {
 			var container = document[getElementsByClassName](conatainerClass)[0] || "";
 			if (root.AdaptiveCards && container) {
@@ -318,7 +387,7 @@
 			acRenderRestaurantJson,
 			acRenderGalleryJson,
 			acRenderActivityJson,
-			acRenderRestaurantJson
+			acRenderMediaJson
 		];
 
 		var i,

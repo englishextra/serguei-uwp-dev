@@ -57,6 +57,7 @@ gulp.task("browser-sync", ["bundle-assets"], function () {
 	gulp.watch("../../libs/serguei-uwp/js/include-script/*.js").on("change", reload);
 	gulp.watch("../../libs/serguei-uwp/json/*.json").on("change", reload);
 	gulp.watch("../../libs/serguei-uwp/css/*.css").on("change", reload);
+	gulp.watch("../../libs/serguei-uwp/css/include-style/*.css").on("change", reload);
 });
 
 gulp.task("compile-uwp-web-framework-scss", function () {
