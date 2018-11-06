@@ -1,0 +1,69 @@
+<page-container>
+    <page-title>Documentation</page-title>
+    <page-content>
+            <h2>Documentation</h2>
+            <section>
+                <h3>Documentation</h3>
+                <h4>System requirements</h4>
+                <ul>
+                    <li>Windows 10</li>
+                    <li>…that's all!</li>
+                </ul>
+                <h4>Browser support</h4>
+                <p>Universal Windows Platform web framework was created specifically to help developers create web-based UWP apps. Therefore it's best supported by Microsoft Edge, although it should look almost perfect in the following browsers:</p>
+                <ul>
+                    <li><strong>Edge</strong> (all versions)</li>
+                    <li><strong>Chrome</strong> (version 29 or later)</li>
+                    <li><strong>Firefox</strong> (version 28 or later)</li>
+                    <li><strong>Internet Explorer</strong> (version 11 or later)</li>
+                </ul>
+                <h4>Configuration</h4>
+                <p>Configuration is an object you can optionally pass as an argument to UWP.init() call. If you want to change the way the page looks or behaves by default, you need to edit that object.</p>
+                <p>Neither the object nor any of its properties in it listed below are required for the UWP web framework to work properly.</p>
+                <h5>Available config properties:</h5>
+                <ul>
+                    <li><strong>pageTitle</strong> <em>(string)</em> - specifies page title.</li>
+                    <li><strong>layoutType</strong> <em>([tabs, overlay, docked-minimized, docked], default: overlay)</em> - specifies header type. See "Available layout types" for more information.</li>
+                    <li><strong>mainColor</strong> <em>(string)</em> - specifies main theme color. Supported formats: rgb.</li>
+                    <li><strong>activeColor</strong> <em>(string)</em> - specifies active theme color. Supported formats: rgb.</li>
+                </ul>
+                <h5>Available layout types</h5>
+                <ul>
+                    <li><strong>tabs</strong> - displays as a tab bar at the top of the page. Similar to what can be found in Phone app.</li>
+                    <li><strong>overlay</strong> - displays as a menu activated using a button in top-left corner. Typical hamburger menu. Similar to what can be found in Store app.</li>
+                    <li><strong>docked-minimized</strong> - displays as a menu activated using a button in top-left corner. While deactivated, the icons of all menu options are still displayed and active. Similar to what can be found in Groove Music app.</li>
+                    <li><strong>docked</strong> - displays as a menu that's always visible on the page. Similar to what can be found in Groove Music app.</li>
+                </ul>
+                <p><a href="https://msdn.microsoft.com/en-us/library/windows/apps/dn997766.aspx" target="_blank">More on navigation in UWP apps</a></p>
+                <h4>Navigation</h4>
+                <p>Navigations are created by creating an XML files in nav folder. default.xml is used by default. If you want to amend main menu items, you need to edit that file.</p>
+                <p>There are several navigation areas that you can amend using that file.</p>
+                <h5>Available navigation areas:</h5>
+                <ul>
+                    <li><strong>mainMenu</strong> - main menu.</li>
+                </ul>
+                <p>Each navigation area might consist of several navigation lists. Each navigation area will treat them a little differently to match UWP design guidelines.</p>
+                <h5>Default navigation areas behavior:</h5>
+                <ul>
+                    <li><strong>mainMenu</strong> - If you use layoutType pane-*: All the lists but the last one will be separated from the others with a line. The last list is fixed to the bottom of the navigation pane. If you use layoutType tabs: All the list but the first one will be hidden.</li>
+                </ul>
+                <p>Each navigation list might consist of several elements.</p>
+                <h5>Available navigation list elements attributes:</h5>
+                <ul>
+                    <li><strong>label</strong> <em>(string)</em> - required - a text label that will be visible on the list.</li>
+                    <li><strong>icon</strong> <em>(string or HTML entity)</em> - an icon that will be visible on the list.</li>
+                    <li><strong>target</strong> <em>(string)</em> - required - an ID of the page that should be opened by the navigation element.</li>
+                </ul>
+                <h4>Pages</h4>
+                <p>Pages are created by creating an XML file in pages folder. If you want to create a page with page ID "potato", you need to create pages/potato.xml file.</p>
+                <p>The ID specified can be used later by linking to it in navigation or by creating a link in any other page.</p>
+                <h5>Available page attributes:</h5>
+                <ul>
+                    <li><strong>title</strong> <em>(string)</em> - required - page title.</li>
+                    <li><strong>nav</strong> <em>(string, default: default)</em> - navigation used by the page.</li>
+                    <li><strong>body</strong> <em>(CDATA)</em> - required - page body.</li>
+                    <li><strong>includeScript</strong> <em>(script)</em> - a filename of the script to include on the page. The script shall be placed in /static/js folder.</li>
+                </ul>
+            </section>
+    </page-content>
+</page-container>

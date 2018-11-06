@@ -1,0 +1,167 @@
+/*! @import "englishextra-ui-variables"; */
+
+/*!
+ * root
+ */
+
+* {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+html {
+	/* font-size: 15px;
+	line-height: 20px; */
+	/**
+	 * set the parent to background transparent
+	 * and position relative to parent, absolute for child
+	 */
+	background-color: transparent;
+}
+
+body {
+	font-family: Roboto, Segoe UI, Segoe MDL2 Assets, Helvetica Neue, sans-serif;
+	color: #212121;
+}
+
+h3,
+h4,
+h5 {
+	color: #212121;
+}
+
+main {
+	color: #212121;
+	background-color: transparent;
+}
+
+/*!
+ * @see {@link https://www.w3.org/Style/Examples/007/center.en.html}
+ */
+
+header button img {
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+nav li img {
+	width: 16px;
+	height: 16px;
+}
+
+header button svg {
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+nav li svg {
+	width: 16px;
+	height: 16px;
+}
+
+main a {
+	color: #0097A7;
+}
+
+main input[type="text"]:focus,
+main input[type="email"]:focus,
+main input[type="password"]:focus,
+main input[type="number"]:focus,
+main select:focus {
+	border-color: #0097A7;
+}
+
+main input[type="checkbox"]:checked + label:before {
+	background-color: #0097A7;
+	border-color: #0097A7;
+}
+
+/*!
+ * reveal on css loaded
+ */
+
+.ac-grid,
+main {
+	visibility: visible;
+	opacity: 1;
+}
+
+template,
+.ac-container img,
+.ac-container iframe {
+	display: block;
+}
+
+/* mainColor */
+
+[data-layoutType="overlay"] header {
+	background-color: #373737 !important;
+}
+
+/* mainColor */
+
+[data-layoutType="overlay"] header {
+	background-color: #373737 !important;
+}
+
+/* mainColorDarkened */
+
+[data-layoutType="docked-minimized"] header {
+	background-color: #0097A7 !important;
+}
+
+/* mainColorDarkened */
+
+[data-layoutType="docked"] header {
+	background-color: #0097A7 !important;
+}
+
+/*!
+ * adaptivecards
+ */
+
+/* .ac-grid {
+	width: calc(100% - 40px);
+	height: 100%;
+	background-color: transparent;
+	margin: 20px 20px 0 20px;
+}
+
+.ac-grid:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.ac-grid > .ac-container {
+	border: none;
+	padding: 10px;
+}
+
+@media screen and (max-width: 480px) {
+	.ac-grid {
+		width: 100%;
+		margin: 20px 0 0 0;
+	}
+} */

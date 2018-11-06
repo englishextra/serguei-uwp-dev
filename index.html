@@ -1,15 +1,135 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="UTF-8">
-        <title></title>
+<!--
+2. lazyload images
+3. remove font face, display block, opacity 1, visibility visible in critical inline css
+4. set font display swap in font face in css -->
+<html class="no-js" lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="HandheldFriendly" content="True" />
+		<meta name="MobileOptimized" content="320" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta property="og:image" content="/image_src.jpg" />
+		<meta name="robots" content="index,follow" />
+		<meta name="keywords" content="веб,разработка,дизайн,сайт,портфолио,фронтенд" />
+		<meta name="description" content="Портфолио lovespy" /><title>UWP web framework</title>
+		<link rel="dns-prefetch" href="https://fonts.googleapis.com" /><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" /><link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" /><link rel="dns-prefetch" href="https://farm9.staticflickr.com" /><link rel="dns-prefetch" href="https://farm8.staticflickr.com" /><link rel="dns-prefetch" href="https://farm7.staticflickr.com" /><link rel="dns-prefetch" href="https://farm6.staticflickr.com" /><link rel="dns-prefetch" href="https://farm5.staticflickr.com" /><link rel="dns-prefetch" href="https://farm4.staticflickr.com" /><link rel="dns-prefetch" href="https://farm3.staticflickr.com" /><link rel="dns-prefetch" href="https://farm2.staticflickr.com" /><link rel="dns-prefetch" href="https://farm1.staticflickr.com" /><link rel="dns-prefetch" href="https://i.vimeocdn.com" /><link rel="dns-prefetch" href="https://f.vimeocdn.com" /><link rel="dns-prefetch" href="https://w.soundcloud.com" /><link rel="dns-prefetch" href="https://a.disquscdn.com" /><link rel="dns-prefetch" href="https://api-maps.yandex.ru" /><link rel="dns-prefetch" href="https://chart.googleapis.com" /><link rel="dns-prefetch" href="https://connect.mail.ru" /><link rel="dns-prefetch" href="https://connect.ok.ru" /><link rel="dns-prefetch" href="https://disqus.com" /><link rel="dns-prefetch" href="https://graph.facebook.com" /><link rel="dns-prefetch" href="https://mc.yandex.ru" /><link rel="dns-prefetch" href="https://www.google-analytics.com" /><link rel="dns-prefetch" href="https://yastatic.net" /><link rel="dns-prefetch" href="https://audiomack.com" /><link rel="dns-prefetch" href="https://api.audiomack.com" /><link rel="dns-prefetch" href="https://platform.twitter.com" /><link rel="dns-prefetch" href="https://www.instagram.com" />
+		<link rel="preconnect" href="https://lovespygithubio.disqus.com/embed.js" as="script" /><link rel="preconnect" href="https://mc.yandex.ru/metrika/watch.js" as="script" /><link rel="preconnect" href="https://www.google-analytics.com/analytics.js" as="script" /><link rel="preconnect" href="https://yastatic.net/share2/share.js" as="script" /><link rel="preconnect" href="https://vk.com/js/api/openapi.js?154" as="script" /><link rel="preconnect" href="https://www.instagram.com/embed.js" as="script" /><link rel="preconnect" href="https://platform.twitter.com/widgets.js" as="script" />
+		<!-- <link rel="preload" href="./libs/serguei-uwp/css/bundle.min.css" as="style" />
+		<link rel="preload" href="./libs/serguei-uwp/css/vendors.min.css" as="style" />
+		<link rel="preload" href="./libs/serguei-uwp/js/vendors.min.js" as="script" /> -->
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="manifest" href="/manifest.json" />
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#22C0F8" />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-title" content="lovespy" />
+		<meta name="application-name" content="lovespy" />
+		<meta name="msapplication-TileColor" content="#22C0F8" />
+		<meta name="theme-color" content="#22C0F8" />
+		<link rel="yandex-tableau-widget" href="/yandex-tableau.json" />
+		<link rel="image_src" href="/image_src.jpg" type="image/jpeg" title="Портфолио lovespy" />
+		<link rel="sitemap" href="/sitemap.xml" type="application/xml" />
+		<style>
+			/*!
+			 * critical.css
+			 * @see {@link https://github.com/addyosmani/critical}
+			 * npm install -g critical
+			 * >critical ../../index.html --base ../../ > css/critical.css
+			 * remove font face, display block, opacity 1, visibility visible
+			 */
+			[data-layoutType=docked-minimized] header>span,h1{display:none}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;-ms-text-size-adjust:100%;-o-text-size-adjust:100%;text-size-adjust:100%;margin:0;padding:0;font-family:inherit}body{font-family:Segoe UI,Segoe MDL2 Assets;font-size:15px;line-height:1.5;height:100vh;display:flex;overflow:hidden}body[data-layoutType=docked-minimized]{flex-direction:row}h3{color:#000;font-weight:300}h3{font-size:34px}header{position:relative;z-index:997}[data-layoutType=docked-minimized] header{width:44px;height:100%;background:#fafafa;color:#323232;display:flex;flex-shrink:0}[data-layoutType=docked-minimized].theme-dark header{color:rgba(255,255,255,1)}main{background:#fff;color:rgba(0,0,0,.8);flex-grow:1;overflow-y:auto}[data-layoutType=docked-minimized] main{width:calc(100% - 44px)}main a{color:#0078d7}main.error{text-align:center}main.error .error-container{position:relative;margin-top:50vh;transform:translateY(-50%)}*{-webkit-box-sizing:border-box;box-sizing:border-box}body,html{height:100%}html{background-color:transparent}body{font-family:Roboto,Segoe UI,Segoe MDL2 Assets,Helvetica Neue,sans-serif;color:#212121}h3{color:#212121}main{color:#212121;background-color:transparent}main a{color:#0097a7}
+			/*!
+			 * custom critical
+			 */
+			body {
+				font-family: Roboto, sans-serif;
+				color: #212121 !important;/* mui.css has rgba(0, 0, 0, 0.87) body text */
+				background-color: #F5F5F5 !important;/* mui.css has white body background */
+				margin: 0;
+			}
+			html,
+			body {
+				height: 100%;
+			}
+			/*!
+			 * hide before scripts and styles loaded
+			 */
+			.ac-grid,
+			main {
+				visibility: hidden;
+				opacity: 0;
+			}
+			.ac-grid.is-active {
+				visibility: visible;
+				opacity: 1;
+			}
+			template,
+			.ac-container img,
+			.ac-container iframe {
+				display: none;
+			}
+			[data-layoutType="tabs"] header,
+			[data-layoutType="overlay"] header,
+			[data-layoutType="docked-minimized"] header,
+			[data-layoutType="docked"] header {
+				background-color: transparent !important;
+			}
+			content {display: block;}
+		</style>
 		<noscript>
-			<link rel="stylesheet" href="./static/css/uwp.style.fixed.css" />
-			<link rel="stylesheet" href="./static/css/app.css" />
+			<link rel="stylesheet" href="./libs/serguei-uwp/css/vendors.min.css" />
+			<link rel="stylesheet" href="./libs/serguei-uwp/css/bundle.min.css" />
+			<style>
+				.ac-grid,
+				header,
+				main {
+					visibility: visible;
+					opacity: 1;
+				}
+				.ac-container img,
+				.ac-container iframe {
+					display: block;
+				}
+			</style>
 		</noscript>
-    </head>
-    <body>
-        <script src="./static/js/app.js" async=""></script>
-    </body>
+		<script>
+			(function(){return (function templatePolyfill(){"use strict";if("content"in document.createElement("template")){return false;}var templates=document.getElementsByTagName("template");var plateLen=templates.length;for(var x=0;x<plateLen;++x){var template=templates[x];var content=template.childNodes;var fragment=document.createDocumentFragment();while(content[0]){fragment.appendChild(content[0]);}template.content=fragment;}}());})();
+
+
+
+
+ /* document.createElement('header');
+  document.createElement('list');
+  document.createElement('main');
+  document.createElement('el');
+  document.createElement('icon');
+  document.createElement('nav');
+  document.createElement('include-script');
+  document.createElement('target');
+  document.createElement('label');
+  document.createElement('page');
+
+  document.createElement('mainMenu');
+
+  document.createElement('content');*/
+
+
+
+
+
+			var imagesPreloaded=false;(function(m){m="[object Array]"===Object.prototype.toString.apply(m)?m:[m];var t=function(){return (imagesPreloaded=true);},f=function(){return (imagesPreloaded=false);},c=[];for(var i=0,l=m.length;i<l;i++){c[i]=new Image();c[i].onabort=f;c[i].onerror=f;c[i].onload=t;c[i].src=m[i];}}([
+"/image_src.jpg"
+			]));
+			console.log("Source code: https://github.com/lovespy/lovespy.github.io");
+		</script>
+	</head>
+	<body>
+		<script src="./libs/serguei-uwp/js/bundle.min.js" async=""></script>
+		<script src="/sw-register.min.js" async="" data-service-worker="/sw.min.js"></script>
+		<!-- Yandex.Metrika counter --><script>if(/^http/.test(window.location.protocol||"")&&!(/^(localhost|127.0.0.1)/).test(window.location.hostname||"")){(function(d,w,c){(w[c]=w[c]||[]).push(function(){try{w.yaCounter50262577=new Ya.Metrika({id:50262577,webvisor:true,clickmap:true,trackLinks:true,accurateTrackBounce:true,trackHash:true});}catch(e){}});var n=d.getElementsByTagName("script")[0],s=d.createElement("script"),f=function(){n.parentNode.insertBefore(s,n);};s.type="text/javascript";s.async=true;s.src=(d.location.protocol=="https:"?"https:":"http:")+"//mc.yandex.ru/metrika/watch.js";if(w.opera=="[object Opera]"){d.addEventListener("DOMContentLoaded",f,false);}else{f();}}(document,window,"yandex_metrika_callbacks"));}</script><noscript><div><img src="//mc.yandex.ru/watch/50262577" style="position:absolute; left:-9999px;" alt="Illustration / Иллюстрация" /></div></noscript><!-- /Yandex.Metrika counter --><!-- Google Analytics --><script>if(/^http/.test(window.location.protocol||"")&&!(/^(localhost|127.0.0.1)/).test(window.location.hostname||"")){(function(i,s,o,g,r,a,m){i.GoogleAnalyticsObject=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments);};i[r].l=1*new Date();a=s.createElement(o);m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m);}(window,document,"script","//www.google-analytics.com/analytics.js","ga"));ga("create","UA-125408914-1","auto");ga("send","pageview");}</script><!-- /Google Analytics -->
+	</body>
 </html>

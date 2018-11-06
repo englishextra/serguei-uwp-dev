@@ -1,1 +1,10 @@
-node_modules
+*.ai
+*.fw.png
+*.map
+*.psd
+*.URL
+*.zip
+.src
+bower_components/
+maps/
+node_modules/
