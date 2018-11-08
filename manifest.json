@@ -19,9 +19,9 @@
 	}],
 	"scope": "/",
 	"mjs_access_whitelist": [{
-		"url": "https://lovespy.github.io/"
+		"url": "https://uwp-ac-demo.surge.sh/"
 	}],
-	"start_url": "https://lovespy.github.io/",
+	"start_url": "https://uwp-ac-demo.surge.sh/",
 	"display": "standalone",
 	"orientation": "any",
 	"ms_TileColor": "#22C0F8",

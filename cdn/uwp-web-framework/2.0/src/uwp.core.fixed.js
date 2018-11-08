@@ -88,16 +88,17 @@
 
 		/* Default config */
 		config: {
-			pageTitle: "UWP web framework",
-			layoutType: "docked-minimized",
-			activeColor: "#26c6da",
-			mainColor: "#373737",
-			mainColorDarkened: "#0097a7",
-			includes: "./includes/serguei-uwp",
-			includeScript: "./libs/serguei-uwp/js/include-script",
-			includeStyle: "./libs/serguei-uwp/css/include-style",
-			navContainer: "nav-container",
-			home: "home"
+				pageTitle: "UWP web framework",
+				layoutType: "docked-minimized",
+				activeColor: "#26c6da",
+				mainColor: "#373737",
+				mainColorDarkened: "#0097a7",
+				includes: "./includes/serguei-uwp",
+				includeScript: "./libs/serguei-uwp/js/include-script",
+				includeStyle: "./libs/serguei-uwp/css/include-style",
+				navContainer: "nav-container",
+				home: "home",
+				hashNavKey: "page"
 		},
 
 		/* Main init function */
@@ -127,6 +128,7 @@
 
 			UWP.body.addEventListener("click", function (event) {
 				if (event.target.getAttribute("data-target") !== null) {
+					event.stopPropagation();
 					event.preventDefault();
 					UWP.navigate(event.target.getAttribute("data-target"));
 				}
@@ -198,16 +200,19 @@
 				}
 
 				navLink.addEventListener("click", function (event) {
+					event.stopPropagation();
 					event.preventDefault();
-					UWP.menuList.classList.remove("active");
-					UWP.navigate(navTarget);
+					if (root.location.hash !== "".concat("#", UWP.config.hashNavKey, "=", navTarget)) {
+						UWP.menuList.classList.remove("active");
+						UWP.navigate(navTarget);
+					}
 				});
 				navLink.setAttribute("data-target", navTarget);
 				navElement.appendChild(navLink);
 				return navElement;
 			}
 
-			var URL = "".concat(UWP.config.includes, "/").concat(target, ".html");
+			var URL = "".concat(UWP.config.includes, "/", target, ".html");
 
 			var UWP_navigation_request = root.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
 
@@ -356,7 +361,7 @@
 			/* Pushes history state */
 
 			if (addHistory !== false) {
-				history.pushState("", "", "".concat(root.location.href.split("#")[0], "#page=").concat(target));
+				history.pushState("", "", "".concat(root.location.href.split("#")[0], "#", UWP.config.hashNavKey, "=", target));
 			}
 			/* Clears the page content */
 
@@ -369,6 +374,7 @@
 				UWP.main.innerHTML = "\n\t\t\t\t<div class=\"error-container\">\n\t\t\t\t\t<h3>".concat(title, "</h3>\n\t\t\t\t\t<p>Ready for an adventure?</p>\n\t\t\t\t\t<p><a href=\"#\">Try again</a>\n\t\t\t\t</div>\n\t\t\t");
 				var mainA = UWP.main.getElementsByTagName("a")[0] || "";
 				mainA.addEventListener("click", function (event) {
+					event.stopPropagation();
 					event.preventDefault();
 					UWP.navigate(target);
 				});

@@ -1,15 +1,15 @@
 {
 	"name": "lovespy",
 	"productName": "lovespy",
-	"companyName": "lovespy.github.io",
+	"companyName": "uwp-ac-demo.surge.sh",
 	"version": "0.1.0",
 	"description": "Tutor of English in Tushino Portfolio",
 	"repository": {
 		"type": "git",
-		"url": "https://gitlab.com/lovespy/lovespy.github.io.git"
+		"url": "https://gitlab.com/lovespy/uwp-ac-demo.surge.sh.git"
 	},
 	"email": "englishextra@mail.ru",
-	"url": "https://gitlab.com/lovespy/lovespy.github.io/issues",
+	"url": "https://gitlab.com/lovespy/uwp-ac-demo.surge.sh/issues",
 	"main_file": "index.js",
 	"electronVersion": "1.6.11",
 	"dependencies": {

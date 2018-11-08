@@ -141,7 +141,7 @@ template,
  * adaptivecards
  */
 
-/* .ac-grid {
+.ac-grid {
 	width: calc(100% - 40px);
 	height: 100%;
 	background-color: transparent;
@@ -164,4 +164,4 @@ template,
 		width: 100%;
 		margin: 20px 0 0 0;
 	}
-} */
+}

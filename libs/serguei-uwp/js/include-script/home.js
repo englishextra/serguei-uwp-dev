@@ -1,4 +1,4 @@
-/*global AdaptiveCards, manageMacy, updateMacyThrottled */
+/*global AdaptiveCards, console, imagesLoaded, manageMacy, updateMacyThrottled */
 (function (root, document) {
 	"use strict";
 
@@ -15,21 +15,6 @@
 		var location = "location";
 		var _length = "length";
 
-		manageMacy("ac-grid", {
-			trueOrder: false,
-			waitForImages: false,
-			margin: 20,
-			columns: 3,
-			breakAt: {
-				1280: 3,
-				1024: 2,
-				960: 2,
-				640: 1,
-				480: 1,
-				360: 1
-			}
-		});
-
 		/*!
 		 * @see {@link https://docs.microsoft.com/en-us/adaptive-cards/sdk/rendering-cards/javascript/render-a-card}
 		 * @see {@link https://adaptivecards.io/samples/}
@@ -38,7 +23,7 @@
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
-			//"backgroundImage": "http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Background-Dark.jpg",
+			//"backgroundImage": "./libs/serguei-uwp/img/demo-images/Mostly-Cloudy-Background-Dark.jpg",
 			"body": [{
 					"type": "TextBlock",
 					"text": "Here are some cool photos",
@@ -56,31 +41,31 @@
 					"imageSize": "medium",
 					"images": [{
 							"type": "Image",
-							"url": "https://picsum.photos/200/200?image=100"
+							"url": "./libs/serguei-uwp/img/demo-images/002.jpg"
 						}, {
 							"type": "Image",
-							"url": "https://picsum.photos/300/200?image=200"
+							"url": "./libs/serguei-uwp/img/demo-images/003.jpg"
 						}, {
 							"type": "Image",
-							"url": "https://picsum.photos/300/200?image=301"
+							"url": "./libs/serguei-uwp/img/demo-images/004.jpg"
 						}, {
 							"type": "Image",
-							"url": "https://picsum.photos/200/200?image=400"
+							"url": "./libs/serguei-uwp/img/demo-images/005.jpg"
 						}, {
 							"type": "Image",
-							"url": "https://picsum.photos/300/200?image=500"
+							"url": "./libs/serguei-uwp/img/demo-images/006.jpg"
 						}, {
 							"type": "Image",
-							"url": "https://picsum.photos/200/200?image=600"
+							"url": "./libs/serguei-uwp/img/demo-images/007.jpg"
 						}, {
 							"type": "Image",
-							"url": "https://picsum.photos/300/200?image=700"
+							"url": "./libs/serguei-uwp/img/demo-images/008.jpg"
 						}, {
 							"type": "Image",
-							"url": "https://picsum.photos/300/200?image=800"
+							"url": "./libs/serguei-uwp/img/demo-images/009.jpg"
 						}, {
 							"type": "Image",
-							"url": "https://picsum.photos/300/200?image=900"
+							"url": "./libs/serguei-uwp/img/demo-images/010.jpg"
 						}
 					]
 				}
@@ -103,7 +88,7 @@
 							"width": "auto",
 							"items": [{
 									"type": "Image",
-									"url": "https://pbs.twimg.com/profile_images/3647943215/d7f12830b3c17a5a9e4afcc370e3a37e_400x400.jpeg",
+									"url": "./libs/serguei-uwp/img/demo-images/d7f12830b3c17a5a9e4afcc370e3a37e_400x400.jpg",
 									"size": "small",
 									"style": "person"
 								}
@@ -224,7 +209,7 @@
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"url": "https://picsum.photos/300?image=882",
+									"url": "./libs/serguei-uwp/img/demo-images/001.jpg",
 									"size": "auto"
 								}
 							]
@@ -258,7 +243,7 @@
 									"width": "auto",
 									"items": [{
 											"type": "Image",
-											"url": "http://adaptivecards.io/content/cats/3.png",
+											"url": "./libs/serguei-uwp/img/demo-images/3.png",
 											"size": "medium"
 										}, {
 											"type": "TextBlock",
@@ -295,7 +280,7 @@
 									"spacing": "medium",
 									"items": [{
 											"type": "Image",
-											"url": "http://adaptivecards.io/content/cats/2.png",
+											"url": "./libs/serguei-uwp/img/demo-images/2.png",
 											"size": "medium",
 											"horizontalAlignment": "center"
 										}, {
@@ -311,22 +296,6 @@
 					]
 				}
 			]
-		};
-
-		var renderAdaptiveCard = function (conatainerClass, cardObj, renderOptions, onExecute, callback) {
-			var container = document[getElementsByClassName](conatainerClass)[0] || "";
-			if (root.AdaptiveCards && container) {
-				var adaptiveCard = new AdaptiveCards.AdaptiveCard();
-				adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(renderOptions);
-				adaptiveCard.onExecuteAction = onExecute;
-				adaptiveCard.parse(cardObj);
-				var renderedCard = adaptiveCard.render();
-				container[appendChild](renderedCard);
-				if ("function" === typeof callback) {
-					callback();
-				}
-				adaptiveCard = renderedCard = null;
-			}
 		};
 
 		/*!
@@ -375,10 +344,31 @@
 			}
 		};
 
+		var renderAdaptiveCard = function (conatainerClass, cardObj, renderOptions, onExecute, callback) {
+			var container = document[getElementsByClassName](conatainerClass)[0] || "";
+			if (root.AdaptiveCards && container) {
+				var adaptiveCard = new AdaptiveCards.AdaptiveCard();
+				adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(renderOptions);
+				adaptiveCard.onExecuteAction = onExecute;
+				adaptiveCard.parse(cardObj);
+				var renderedCard = adaptiveCard.render();
+				container[appendChild](renderedCard);
+				if ("function" === typeof callback) {
+					callback();
+				}
+				adaptiveCard = renderedCard = null;
+			}
+		};
+
 		var acOnExecuteCallback = function (action) {
+			updateMacyThrottled();
 			if (action.url) {
 				root[location].href = action.url;
 			}
+		};
+
+		var acOnRenderCallback = function () {
+			updateMacyThrottled();
 		};
 
 		var acRenderArray = [
@@ -390,12 +380,56 @@
 			acRenderMediaJson
 		];
 
-		var i,
-		l;
-		for (i = 0, l = acRenderArray[_length]; i < l; i += 1) {
-			renderAdaptiveCard("ac-grid", acRenderArray[i], acRenderOptions, acOnExecuteCallback, updateMacyThrottled);
+		var acOnManageCallback = function () {
+			if (root.imagesLoaded) {
+				/*!
+				 * @see {@link https://imagesloaded.desandro.com/}
+				 * Triggered after all images have been either loaded or confirmed broken.
+				 */
+				var imgLoad;
+				imgLoad = new imagesLoaded(acGrid);
+				var imgLoadOnAlways = function (instance) {
+					updateMacyThrottled();
+					console.log("imagesLoaded: found " + instance.images[_length] + " images");
+				};
+				imgLoad.on("always", imgLoadOnAlways);
+			}
+		};
+
+		var manageAdaptiveCards = function (gridClass, callback) {
+			var i,
+			l;
+			for (i = 0, l = acRenderArray[_length]; i < l; i += 1) {
+				renderAdaptiveCard(gridClass, acRenderArray[i], acRenderOptions, acOnExecuteCallback, acOnRenderCallback);
+			}
+			i = l = null;
+			if ("function" === typeof callback) {
+				callback();
+			}
+		};
+
+		var acGridClass = "ac-grid";
+
+		var acGrid = document[getElementsByClassName](acGridClass)[0] || "";
+
+		if (acGrid) {
+			manageMacy(acGridClass, {
+				trueOrder: false,
+				waitForImages: false,
+				margin: 20,
+				columns: 3,
+				breakAt: {
+					1280: 3,
+					1024: 2,
+					960: 2,
+					640: 1,
+					480: 1,
+					360: 1
+				}
+			});
+
+			manageAdaptiveCards(acGridClass, acOnManageCallback);
 		}
-		i = l = null;
 	};
 	run();
 
