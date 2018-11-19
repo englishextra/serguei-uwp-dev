@@ -1,12 +1,13 @@
-/*global console, doesFontExist, loadJsCss, Macy, throttle */
+/*global AdaptiveCards, console, debounce, doesFontExist, getHTTP, isElectron,
+isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 /*!
  * modified loadExt
  * @see {@link https://gist.github.com/englishextra/ff9dc7ab002312568742861cb80865c9}
  * passes jshint
  */
-(function (root, document) {
+(function(root, document) {
 	"use strict";
-	var loadJsCss = function (files, callback) {
+	var loadJsCss = function(files, callback) {
 		var _this = this;
 		var appendChild = "appendChild";
 		var body = "body";
@@ -21,34 +22,34 @@
 		_this.head = document[getElementsByTagName]("head")[0] || "";
 		_this.body = document[body] || "";
 		_this.ref = document[getElementsByTagName]("script")[0] || "";
-		_this.callback = callback || function () {};
-		_this.loadStyle = function (file) {
+		_this.callback = callback || function() {};
+		_this.loadStyle = function(file) {
 			var link = document[createElement]("link");
 			link.rel = "stylesheet";
 			link.type = "text/css";
 			link.href = file;
 			/* _this.head[appendChild](link); */
 			link.media = "only x";
-			link.onload = function () {
+			link.onload = function() {
 				this.onload = null;
 				this.media = "all";
 			};
 			link[setAttribute]("property", "stylesheet");
 			(_this.body || _this.head)[appendChild](link);
 		};
-		_this.loadScript = function (i) {
+		_this.loadScript = function(i) {
 			var script = document[createElement]("script");
 			script.type = "text/javascript";
 			script.async = true;
 			script.src = _this.js[i];
-			var loadNextScript = function () {
+			var loadNextScript = function() {
 				if (++i < _this.js[_length]) {
 					_this.loadScript(i);
 				} else {
 					_this.callback();
 				}
 			};
-			script.onload = function () {
+			script.onload = function() {
 				loadNextScript();
 			};
 			_this.head[appendChild](script);
@@ -60,7 +61,7 @@
 			(_this.body || _this.head)[appendChild](script);
 		};
 		var i,
-		l;
+			l;
 		for (i = 0, l = _this.files[_length]; i < l; i += 1) {
 			if ((/\.js$|\.js\?/).test(_this.files[i])) {
 				_this.js.push(_this.files[i]);
@@ -81,9 +82,9 @@
 /*!
  * throttle
  */
-(function (root) {
+(function(root) {
 	"use strict";
-	var throttle = function (func, wait) {
+	var throttle = function(func, wait) {
 		var ctx;
 		var args;
 		var rtn;
@@ -113,32 +114,240 @@
 	root.throttle = throttle;
 })("undefined" !== typeof window ? window : this);
 /*!
- * Macy
+ * debounce
  */
 (function (root) {
+	"use strict";
+	var debounce = function (func, wait) {
+		var timeout;
+		var args;
+		var context;
+		var timestamp;
+		return function () {
+			context = this;
+			args = [].slice.call(arguments, 0);
+			timestamp = new Date();
+			var later = function () {
+				var last = (new Date()) - timestamp;
+				if (last < wait) {
+					timeout = setTimeout(later, wait - last);
+				} else {
+					timeout = null;
+					func.apply(context, args);
+				}
+			};
+			if (!timeout) {
+				timeout = setTimeout(later, wait);
+			}
+		};
+	};
+	root.debounce = debounce;
+})("undefined" !== typeof window ? window : this);
+/*!
+ *
+ */
+(function(root){
+	"use strict";
+	var isNodejs = "undefined" !== typeof process && "undefined" !== typeof require || "";
+	var isElectron = "undefined" !== typeof root && root.process && "renderer" === root.process.type || "";
+	var isNwjs = (function () {
+		if ("undefined" !== typeof isNodejs && isNodejs) {
+			try {
+				if ("undefined" !== typeof require("nw.gui")) {
+					return true;
+				}
+			} catch (e) {
+				return false;
+			}
+		}
+		return false;
+	})();
+	root.isNodejs = isNodejs;
+	root.isElectron = isElectron;
+	root.isNwjs = isNwjs;
+})("undefined" !== typeof window ? window : this);
+/*!
+ * openDeviceBrowser
+ */
+(function (root) {
+	"use strict";
+	var openDeviceBrowser = function (url) {
+		var triggerForElectron = function () {
+			var es = isElectron ? require("electron").shell : "";
+			return es ? es.openExternal(url) : "";
+		};
+		var triggerForNwjs = function () {
+			var ns = isNwjs ? require("nw.gui").Shell : "";
+			return ns ? ns.openExternal(url) : "";
+		};
+		var triggerForHTTP = function () {
+			return true;
+		};
+		var triggerForLocal = function () {
+			return root.open(url, "_system", "scrollbars=1,location=no");
+		};
+		if (isElectron) {
+			triggerForElectron();
+		} else if (isNwjs) {
+			triggerForNwjs();
+		} else {
+			var locationProtocol = root.location.protocol || "",
+			hasHTTP = locationProtocol ? "http:" === locationProtocol ? "http" : "https:" === locationProtocol ? "https" : "" : "";
+			if (hasHTTP) {
+				triggerForHTTP();
+			} else {
+				triggerForLocal();
+			}
+		}
+	};
+	root.openDeviceBrowser = openDeviceBrowser;
+})("undefined" !== typeof window ? window : this);
+/*!
+ * getHTTP
+ */
+(function (root) {
+	"use strict";
+	var getHTTP = function (force) {
+		var any = force || "";
+		var locationProtocol = root.location.protocol || "";
+		return "http:" === locationProtocol ? "http" : "https:" === locationProtocol ? "https" : any ? "http" : "";
+	};
+	root.getHTTP = getHTTP;
+})("undefined" !== typeof window ? window : this);
+/*!
+ * parseLink
+ */
+(function (root, document) {
+	"use strict";
+	/*jshint bitwise: false */
+	var createElement = "createElement";
+	var parseLink = function (url, full) {
+		var _full = full || "";
+		return (function () {
+			var _replace = function (s) {
+				return s.replace(/^(#|\?)/, "").replace(/\:$/, "");
+			};
+			var _location = location || "";
+			var _protocol = function (protocol) {
+				switch (protocol) {
+				case "http:":
+					return _full ? ":" + 80 : 80;
+				case "https:":
+					return _full ? ":" + 443 : 443;
+				default:
+					return _full ? ":" + _location.port : _location.port;
+				}
+			};
+			var _isAbsolute = (0 === url.indexOf("//") || !!~url.indexOf("://"));
+			var _locationHref = root.location || "";
+			var _origin = function () {
+				var o = _locationHref.protocol + "//" + _locationHref.hostname + (_locationHref.port ? ":" + _locationHref.port : "");
+				return o || "";
+			};
+			var _isCrossDomain = function () {
+				var c = document[createElement]("a");
+				c.href = url;
+				var v = c.protocol + "//" + c.hostname + (c.port ? ":" + c.port : "");
+				return v !== _origin();
+			};
+			var _link = document[createElement]("a");
+			_link.href = url;
+			return {
+				href: _link.href,
+				origin: _origin(),
+				host: _link.host || _location.host,
+				port: ("0" === _link.port || "" === _link.port) ? _protocol(_link.protocol) : (_full ? _link.port : _replace(_link.port)),
+				hash: _full ? _link.hash : _replace(_link.hash),
+				hostname: _link.hostname || _location.hostname,
+				pathname: _link.pathname.charAt(0) !== "/" ? (_full ? "/" + _link.pathname : _link.pathname) : (_full ? _link.pathname : _link.pathname.slice(1)),
+				protocol: !_link.protocol || ":" === _link.protocol ? (_full ? _location.protocol : _replace(_location.protocol)) : (_full ? _link.protocol : _replace(_link.protocol)),
+				search: _full ? _link.search : _replace(_link.search),
+				query: _full ? _link.search : _replace(_link.search),
+				isAbsolute: _isAbsolute,
+				isRelative: !_isAbsolute,
+				isCrossDomain: _isCrossDomain(),
+				hasHTTP: (/^(http|https):\/\//i).test(url) ? true : false
+			};
+		})();
+	};
+	/*jshint bitwise: true */
+	root.parseLink = parseLink;
+})("undefined" !== typeof window ? window : this, document);
+/*!
+ * manageExternalLinkAll
+ */
+(function (root, document) {
+	"use strict";
+	var classList = "classList";
+	var getAttribute = "getAttribute";
+	var getElementsByTagName = "getElementsByTagName";
+	var _addEventListener = "addEventListener";
+	var _length = "length";
+	var manageExternalLinkAll = function (scope) {
+		var ctx = scope && scope.nodeName ? scope : "";
+		var linkTag = "a";
+		var linkAll = ctx ? ctx[getElementsByTagName](linkTag) || "" : document[getElementsByTagName](linkTag) || "";
+		var handleExternalLink = function (url, ev) {
+			ev.stopPropagation();
+			ev.preventDefault();
+			var logicHandleExternalLink = openDeviceBrowser.bind(null, url);
+			var debounceLogicHandleExternalLink = debounce(logicHandleExternalLink, 200);
+			debounceLogicHandleExternalLink();
+		};
+		var arrange = function (e) {
+			var isBindedExternalLinkClass = "is-binded-external-link";
+			if (!e[classList].contains(isBindedExternalLinkClass)) {
+				var url = e[getAttribute]("href") || "";
+				if (url && parseLink(url).isCrossDomain && parseLink(url).hasHTTP) {
+					e.title = "" + (parseLink(url).hostname || "") + " откроется в новой вкладке";
+					if ("undefined" !== typeof getHTTP && getHTTP()) {
+						e.target = "_blank";
+						e.rel = "noopener";
+					} else {
+						e[_addEventListener]("click", handleExternalLink.bind(null, url));
+					}
+					e[classList].add(isBindedExternalLinkClass);
+				}
+			}
+		};
+		if (linkAll) {
+			var i,
+			l;
+			for (i = 0, l = linkAll[_length]; i < l; i += 1) {
+				arrange(linkAll[i]);
+			}
+			i = l = null;
+		}
+	};
+	root.manageExternalLinkAll = manageExternalLinkAll;
+})("undefined" !== typeof window ? window : this, document);
+/*!
+ * Macy
+ */
+(function(root) {
 	"use strict";
 	var classList = "classList";
 	var getElementsByClassName = "getElementsByClassName";
 	var isActiveClass = "is-active";
 	var macy;
-	var updateMacy = function (delay) {
+	var updateMacy = function(delay) {
 		var timeout = delay || 100;
 		var logThis;
-		logThis = function () {
+		logThis = function() {
 			console.log("updateMacy");
 		};
 		if (macy) {
-			var timer = setTimeout(function () {
-					clearTimeout(timer);
-					timer = null;
-					logThis();
-					macy.recalculate(true, true);
-				}, timeout);
+			var timer = setTimeout(function() {
+				clearTimeout(timer);
+				timer = null;
+				logThis();
+				macy.recalculate(true, true);
+			}, timeout);
 		}
 	};
 	var updateMacyThrottled = throttle(updateMacy, 2000);
 	/* var macyContainerClass = "ac-grid"; */
-	var initMacy = function (macyContainerClass, options) {
+	var initMacy = function(macyContainerClass, options) {
 		var defaultSettings = {
 			/* container: ".macy-container", */
 			trueOrder: false,
@@ -176,9 +385,9 @@
 			}
 		}
 	};
-	var manageMacy = function (macyContainerClass, options) {
+	var manageMacy = function(macyContainerClass, options) {
 		var macyContainer = document[getElementsByClassName](macyContainerClass)[0] || "";
-		var handleMacyContainer = function () {
+		var handleMacyContainer = function() {
 			if (!macyContainer[classList].contains(isActiveClass)) {
 				initMacy(macyContainerClass, options);
 			}
@@ -191,45 +400,67 @@
 	root.manageMacy = manageMacy;
 })("undefined" !== typeof window ? window : this);
 /*!
+ * AdaptiveCards
+ */
+(function(root) {
+	"use strict";
+	var appendChild = "appendChild";
+	var renderAdaptiveCard = function(acGrid, cardObj, renderOptions, onExecute, callback) {
+		if (root.AdaptiveCards && acGrid) {
+			var adaptiveCard = new AdaptiveCards.AdaptiveCard();
+			adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(renderOptions);
+			adaptiveCard.onExecuteAction = onExecute;
+			adaptiveCard.parse(cardObj);
+			var renderedCard = adaptiveCard.render();
+			acGrid[appendChild](renderedCard);
+			if ("function" === typeof callback) {
+				callback();
+			}
+			adaptiveCard = renderedCard = null;
+		}
+	};
+	root.renderAdaptiveCard = renderAdaptiveCard;
+})("undefined" !== typeof window ? window : this);
+/*!
  * UWP layout
  */
-(function(root){
+(function(root) {
 	"use strict";
 
-	root.layoutTypeToTabs = function (event) {
+	root.layoutTypeToTabs = function(event) {
 		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
+		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function(el) {
 			return (el.disabled = false);
 		});
 		event.target.disabled = true;
-		document.body.setAttribute("data-layouttype", "tabs");
+		document.body.setAttribute("data-layout-type", "tabs");
 	};
 
-	root.layoutTypeToOverlay = function (event) {
+	root.layoutTypeToOverlay = function(event) {
 		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
+		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function(el) {
 			return (el.disabled = false);
 		});
 		event.target.disabled = true;
-		document.body.setAttribute("data-layouttype", "overlay");
+		document.body.setAttribute("data-layout-type", "overlay");
 	};
 
-	root.layoutTypeToDockedMinimized = function (event) {
+	root.layoutTypeToDockedMinimized = function(event) {
 		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
+		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function(el) {
 			return (el.disabled = false);
 		});
 		event.target.disabled = true;
-		document.body.setAttribute("data-layouttype", "docked-minimized");
+		document.body.setAttribute("data-layout-type", "docked-minimized");
 	};
 
-	root.layoutTypeToDocked = function (event) {
+	root.layoutTypeToDocked = function(event) {
 		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
+		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function(el) {
 			return (el.disabled = false);
 		});
 		event.target.disabled = true;
-		document.body.setAttribute("data-layouttype", "docked");
+		document.body.setAttribute("data-layout-type", "docked");
 	};
 })("undefined" !== typeof window ? window : this);
 /*!
@@ -239,7 +470,6 @@
 	"use strict";
 
 	var docElem = document.documentElement || "";
-	var docBody = document.body || "";
 
 	var classList = "classList";
 	var createElement = "createElement";
@@ -249,7 +479,8 @@
 	var querySelector = "querySelector";
 	var querySelectorAll = "querySelectorAll";
 	var _addEventListener = "addEventListener";
-	docBody[classList].add("hide-sidedrawer");
+
+	docElem[classList].add("no-js");
 
 	var run = function() {
 
@@ -268,7 +499,7 @@
 				hashNavKey: "page"
 			});
 		}
-		var switchLayoutType = function (x) {
+		var switchLayoutType = function(x) {
 			if (x.matches) { // If media query matches
 				document.body.dataset.layouttype = "overlay";
 			} else {
@@ -282,9 +513,9 @@
 	};
 
 	/* var scripts = [
-				"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css",
 				"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
-				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css"
+				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
+				"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
 	]; */
 
 	var scripts = [
@@ -337,8 +568,9 @@
 	}
 
 	/* var scripts = [
-				"../../cdn/imagesloaded/4.1.4/js/imagesloaded.fixed.js",
+				"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
 				"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
+				"./node_modules/any-resize-event/dist/any-resize-event.js",
 				"./node_modules/adaptivecards/dist/adaptivecards.js",
 				"./node_modules/macy/dist/macy.js"
 	]; */
@@ -350,7 +582,7 @@
 	 */
 
 	var supportsCanvas;
-	supportsCanvas	= (function() {
+	supportsCanvas = (function() {
 		var elem = document[createElement]("canvas");
 		return !!(elem.getContext && elem.getContext("2d"));
 	})();
@@ -376,7 +608,7 @@
 			/*!
 			 * check only for fonts that are used in current page
 			 */
-			if (doesFontExist("Roboto") /* && doesFontExist("Roboto Mono") */) {
+			if (doesFontExist("Roboto") /* && doesFontExist("Roboto Mono") */ ) {
 				onFontsLoaded();
 			}
 		};
@@ -390,19 +622,20 @@
 		onFontsLoaded();
 	};
 
-	var loadDeferred = function () {
+	var loadDeferred = function() {
 		var timer;
-		var logic = function () {
+		var logic = function() {
 			clearTimeout(timer);
 			timer = null;
 			var load;
 			load = new loadJsCss([
-						/* forcedHTTP + "://fonts.googleapis.com/css?family=Roboto+Mono%7CRoboto:300,400,500,700&subset=cyrillic,latin-ext", */
-						"./libs/serguei-uwp/css/vendors.min.css"],
-					onFontsLoadedCallback);
+					/* forcedHTTP + "://fonts.googleapis.com/css?family=Roboto+Mono%7CRoboto:300,400,500,700&subset=cyrillic,latin-ext", */
+					"./libs/serguei-uwp/css/vendors.min.css"
+				],
+				onFontsLoadedCallback);
 		};
 		var req;
-		var raf = function () {
+		var raf = function() {
 			cancelAnimationFrame(req);
 			timer = setTimeout(logic, 0);
 		};

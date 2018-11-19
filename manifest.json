@@ -1,6 +1,6 @@
 {
-	"name": "lovespy",
-	"short_name": "lovespy",
+	"name": "serguei-uwp-dev",
+	"short_name": "serguei-uwp-dev",
 	"manifest_version": 2,
 	"icons": [{
 		"src": "/android-chrome-192x192.png",
@@ -19,12 +19,12 @@
 	}],
 	"scope": "/",
 	"mjs_access_whitelist": [{
-		"url": "https://uwp-ac-demo.surge.sh/"
+		"url": "https://serguei-uwp-dev/"
 	}],
-	"start_url": "https://uwp-ac-demo.surge.sh/",
+	"start_url": "https://serguei-uwp-dev/",
 	"display": "standalone",
 	"orientation": "any",
-	"ms_TileColor": "#22C0F8",
-	"theme_color": "#22C0F8",
-	"background_color": "#22C0F8"
+	"ms_TileColor": "#0097A7",
+	"theme_color": "#0097A7",
+	"background_color": "#0097A7"
 }

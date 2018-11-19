@@ -26,8 +26,131 @@ html {
 
 body {
 	font-family: Roboto, Segoe UI, Segoe MDL2 Assets, Helvetica Neue, sans-serif;
+	font-weight: 400;
+	/* font-size: 1.000rem;
+	line-height: 1.333rem; */
+	width: 100%;
 	color: #212121;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	text-size-adjust: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-moz-font-feature-settings: "liga", "kern";
+	-webkit-touch-callout: none;
+	-webkit-tap-highlight-color: transparent;
+	outline: none;
+	overflow-x: hidden;
+	/* user-select: none; */
+	margin: 0;
+	padding: 0;
+	/*!
+	 * @see {@link https://css-tricks.com/couple-takes-sticky-footer/}
+	 * Sticky Footer
+	 * The position relative on body is required to make it work.
+	 */
+	/* min-height: 100%;
+ position: relative;
+ padding-bottom: 3.500rem; */
 }
+
+/*!
+ * englishextra specific rules
+ */
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+a:focus,
+a:active,
+button:focus,
+button:active,
+select:focus,
+select:active {
+	-webkit-tap-highlight-color: transparent;
+	outline: none;
+}
+
+img {
+	border: 0;
+	-ms-interpolation-mode: bicubic;
+	vertical-align: bottom;
+}
+
+p:first-child {
+	margin-top: 0;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+b,
+strong,
+.bolder {
+	font-weight: bold;
+}
+
+i,
+em,
+.italic {
+	font-style: italic;
+}
+
+u,
+.underline {
+	text-decoration: underline;
+}
+
+*,
+*:after,
+*::before {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+::-moz-selection {
+	color: #212121;
+	background-color: #b3e5fc;
+}
+
+::selection {
+	color: #212121;
+	background-color: #b3e5fc;
+}
+
+::-webkit-input-placeholder {
+	color: #757575 !important;
+	opacity: 1;
+}
+
+:-ms-input-placeholder {
+	color: #757575 !important;
+	opacity: 1;
+}
+
+::placeholder {
+	color: #757575 !important;
+	opacity: 1;
+}
+
+html,
+body,
+input,
+textarea,
+button {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-shadow: 0.063rem 0.063rem 0.063rem rgba(0, 0, 0, 0.004);
+}
+
+/*!
+ * fixes to uwp.style.fixed.css
+ */
 
 h3,
 h4,
@@ -102,6 +225,7 @@ main input[type="checkbox"]:checked + label:before {
  */
 
 .ac-grid,
+header,
 main {
 	visibility: visible;
 	opacity: 1;
@@ -113,27 +237,19 @@ template,
 	display: block;
 }
 
-/* mainColor */
-
-[data-layoutType="overlay"] header {
+[data-layout-type="tabs"] header {
 	background-color: #373737 !important;
 }
 
-/* mainColor */
-
-[data-layoutType="overlay"] header {
+[data-layout-type="overlay"] header {
 	background-color: #373737 !important;
 }
 
-/* mainColorDarkened */
-
-[data-layoutType="docked-minimized"] header {
+[data-layout-type="docked-minimized"] header {
 	background-color: #0097A7 !important;
 }
 
-/* mainColorDarkened */
-
-[data-layoutType="docked"] header {
+[data-layout-type="docked"] header {
 	background-color: #0097A7 !important;
 }
 
@@ -141,7 +257,7 @@ template,
  * adaptivecards
  */
 
-.ac-grid {
+/* .ac-grid {
 	width: calc(100% - 40px);
 	height: 100%;
 	background-color: transparent;
@@ -156,7 +272,7 @@ template,
 
 .ac-grid > .ac-container {
 	border: none;
-	padding: 10px;
+	padding: 15px !important;
 }
 
 @media screen and (max-width: 480px) {
@@ -164,4 +280,4 @@ template,
 		width: 100%;
 		margin: 20px 0 0 0;
 	}
-}
+} */

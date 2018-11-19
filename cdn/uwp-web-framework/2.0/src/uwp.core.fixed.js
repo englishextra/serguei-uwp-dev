@@ -46,7 +46,7 @@
 	/*!
 	 * @see {@link http://www.javascriptkit.com/javatutors/loadjavascriptcss2.shtml}
 	 */
-	var removejscssfile = function removejscssfile(filename, filetype) {
+	var removeJsCssFile = function (filename, filetype) {
 		var targetelement = filetype == "js" ? "script" : filetype == "css" ? "link" : "none";
 		var targetattr = filetype == "js" ? "src" : filetype == "css" ? "href" : "none";
 		var allsuspects = document.getElementsByTagName(targetelement) || "";
@@ -123,7 +123,7 @@
 			/* Define additional variables */
 
 			UWP.header.type = UWP.config.layoutType;
-			UWP.body.setAttribute("data-layoutType", UWP.header.type);
+			UWP.body.setAttribute("data-layout-type", UWP.header.type);
 			/* Handles clicking internal links */
 
 			UWP.body.addEventListener("click", function (event) {
@@ -300,7 +300,7 @@
 				}
 				/* var Darkened_RGB = parseColor(UWP.config.Darkened); */
 
-				UWP.customStyle.innerHTML += "\n\t\t\t\t[data-layoutType=\"tabs\"] header {\n\t\t\t\t\tbackground: ".concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\n\t\t\t\t[data-layoutType=\"overlay\"] header {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layoutType=\"overlay\"] header nav:nth-of-type(1) {\n\t\t\t\t\tbackground-color: ").concat(UWP.config.mainColorDarkened, "; // @TODO: Darkened?\n\t\t\t\t}\n\n\t\t\t\t[data-layoutType=\"docked-minimized\"] header {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layoutType=\"docked-minimized\"] header nav:nth-of-type(1) {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColorDarkened, "; // @TODO: Darkened?\n\t\t\t\t}\n\n\t\t\t\t[data-layoutType=\"docked\"] header {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layoutType=\"docked\"] header nav:nth-of-type(1) {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColorDarkened, "; // @TODO: Darkened?\n\t\t\t\t}\n\t\t\t");
+				UWP.customStyle.innerHTML += "\n\t\t\t\t[data-layout-type=\"tabs\"] header {\n\t\t\t\t\tbackground: ".concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\n\t\t\t\t[data-layout-type=\"overlay\"] header {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layout-type=\"overlay\"] header nav:nth-of-type(1) {\n\t\t\t\t\tbackground-color: ").concat(UWP.config.mainColorDarkened, ";\n\t\t\t\t}\n\n\t\t\t\t[data-layout-type=\"docked-minimized\"] header {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layout-type=\"docked-minimized\"] header nav:nth-of-type(1) {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColorDarkened, ";\n\t\t\t\t}\n\n\t\t\t\t[data-layout-type=\"docked\"] header {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layout-type=\"docked\"] header nav:nth-of-type(1) {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColorDarkened, ";\n\t\t\t\t}\n\t\t\t");
 			}
 
 			if (UWP.config.activeColor) {
@@ -316,11 +316,12 @@
 					}
 				}
 
-				UWP.customStyle.innerHTML += "\n\t\t\t\t[data-layoutType=\"tabs\"] header nav:nth-of-type(1) ul li.active {\n\t\t\t\t\tcolor: ".concat(UWP.config.activeColor, ";\n\t\t\t\t\tborder-bottom-color: ").concat(UWP.config.activeColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layoutType=\"overlay\"] header nav:nth-of-type(1) ul li.active {\n\t\t\t\t\tbackground-color: ").concat(UWP.config.activeColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layoutType=\"docked-minimized\"] header nav:nth-of-type(1) ul li.active {\n\t\t\t\t\tbackground-color: ").concat(UWP.config.activeColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layoutType=\"docked\"] header nav:nth-of-type(1) ul li.active {\n\t\t\t\t\tbackground-color: ").concat(UWP.config.activeColor, ";\n\t\t\t\t}\n\t\t\t");
+				UWP.customStyle.innerHTML += "\n\t\t\t\t[data-layout-type=\"tabs\"] header nav:nth-of-type(1) ul li.active {\n\t\t\t\t\tcolor: ".concat(UWP.config.activeColor, ";\n\t\t\t\t\tborder-bottom-color: ").concat(UWP.config.activeColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layout-type=\"overlay\"] header nav:nth-of-type(1) ul li.active {\n\t\t\t\t\tbackground-color: ").concat(UWP.config.activeColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layout-type=\"docked-minimized\"] header nav:nth-of-type(1) ul li.active {\n\t\t\t\t\tbackground-color: ").concat(UWP.config.activeColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layout-type=\"docked\"] header nav:nth-of-type(1) ul li.active {\n\t\t\t\t\tbackground-color: ").concat(UWP.config.activeColor, ";\n\t\t\t\t}\n\t\t\t");
 			}
 
 			if (UWP.customStyle.innerHTML.length) {
 				UWP.body.appendChild(UWP.customStyle);
+				/* UWP.body.insertBefore(UWP.customStyle, UWP.body.firstChild); */
 			}
 		},
 
@@ -439,7 +440,7 @@
 
 						var _src = "".concat(UWP.config.includeScript, "/").concat(scriptName);
 
-						removejscssfile(_src, "js");
+						removeJsCssFile(_src, "js");
 
 						var script = document.createElement("script");
 						script.setAttribute("src", _src);
@@ -454,7 +455,7 @@
 
 						var _href = "".concat(UWP.config.includeStyle, "/").concat(styleName);
 
-						removejscssfile(_href, "css");
+						removeJsCssFile(_href, "css");
 
 						var link = document.createElement("link");
 						link.setAttribute("href", _href);

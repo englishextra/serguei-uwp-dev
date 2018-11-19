@@ -30,7 +30,6 @@ module.exports = {
 				//"./bower_components/verge/verge.js",
 				//"./bower_components/wheel-indicator/lib/wheel-indicator.js",
 				//"./node_modules/adaptivecards/dist/adaptivecards.js",
-				//"./node_modules/any-resize-event/dist/any-resize-event.js",
 				//"./node_modules/imagesloaded/imagesloaded.pkgd.js",
 				//"./node_modules/jquery/dist/jquery.js",
 				//"./node_modules/macy/dist/macy.js",
@@ -39,6 +38,7 @@ module.exports = {
 				//"./node_modules/wolfy87-eventemitter/EventEmitter.js",
 				"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
 				"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
+				"./node_modules/any-resize-event/dist/any-resize-event.js",
 				"./node_modules/adaptivecards/dist/adaptivecards.js",
 				"./node_modules/macy/dist/macy.js"
 			],
@@ -80,7 +80,6 @@ module.exports = {
 				//"./bower_components/verge/verge.js",
 				//"./bower_components/wheel-indicator/lib/wheel-indicator.js",
 				//"./node_modules/adaptivecards/dist/adaptivecards.js",
-				//"./node_modules/any-resize-event/dist/any-resize-event.js",
 				//"./node_modules/imagesloaded/imagesloaded.pkgd.js",
 				//"./node_modules/jquery/dist/jquery.js",
 				//"./node_modules/macy/dist/macy.js",
@@ -89,6 +88,7 @@ module.exports = {
 				//"./node_modules/wolfy87-eventemitter/EventEmitter.js",
 				"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
 				"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
+				"./node_modules/any-resize-event/dist/any-resize-event.js",
 				"./node_modules/adaptivecards/dist/adaptivecards.js",
 				"./node_modules/macy/dist/macy.js"
 			],
@@ -118,9 +118,9 @@ module.exports = {
 				//"./bower_components/img-lightbox/img-lightbox.css",
 				//"./bower_components/mui/src/sass/mui.css",
 				//"./node_modules/normalize.css/normalize.css",
-				"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css",
 				"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
-				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css"
+				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
+				"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
 			],
 			"options": {
 				rev: false,
@@ -149,9 +149,9 @@ module.exports = {
 				//"./bower_components/img-lightbox/img-lightbox.css",
 				//"./bower_components/mui/src/sass/mui.css",
 				//"./node_modules/normalize.css/normalize.css",
-				"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css",
 				"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
-				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css"
+				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
+				"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
 			],
 			"options": {
 				rev: false,

@@ -13,7 +13,7 @@ babel = require("gulp-babel"),
 
 uwp = {
 	scss: "../../cdn/uwp-web-framework/2.0/scss/uwp.style.fixed.scss",
-	css: "../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
+	css: "../../cdn/uwp-web-framework/2.0/css"
 },
 
 /* material = {

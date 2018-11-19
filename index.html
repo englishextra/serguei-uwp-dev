@@ -23,13 +23,13 @@
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 		<link rel="manifest" href="/manifest.json" />
-		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#22C0F8" />
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0097A7" />
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-title" content="lovespy" />
 		<meta name="application-name" content="lovespy" />
-		<meta name="msapplication-TileColor" content="#22C0F8" />
-		<meta name="theme-color" content="#22C0F8" />
+		<meta name="msapplication-TileColor" content="#0097A7" />
+		<meta name="theme-color" content="#0097A7" />
 		<link rel="yandex-tableau-widget" href="/yandex-tableau.json" />
 		<link rel="image_src" href="/image_src.jpg" type="image/jpeg" title="UWP web framework" />
 		<link rel="sitemap" href="/sitemap.xml" type="application/xml" />
@@ -41,14 +41,14 @@
 			 * >critical ../../index.html --base ../../ > css/critical.css
 			 * remove font face, display block, opacity 1, visibility visible
 			 */
-			[data-layoutType=docked-minimized] header>span,h1{display:none}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;-ms-text-size-adjust:100%;-o-text-size-adjust:100%;text-size-adjust:100%;margin:0;padding:0;font-family:inherit}body{font-family:Segoe UI,Segoe MDL2 Assets;font-size:15px;line-height:1.5;height:100vh;display:flex;overflow:hidden}body[data-layoutType=docked-minimized]{flex-direction:row}h3{color:#000;font-weight:300}h3{font-size:34px}header{position:relative;z-index:997}[data-layoutType=docked-minimized] header{width:44px;height:100%;background:#fafafa;color:#323232;display:flex;flex-shrink:0}[data-layoutType=docked-minimized].theme-dark header{color:rgba(255,255,255,1)}main{background:#fff;color:rgba(0,0,0,.8);flex-grow:1;overflow-y:auto}[data-layoutType=docked-minimized] main{width:calc(100% - 44px)}main a{color:#0078d7}main.error{text-align:center}main.error .error-container{position:relative;margin-top:50vh;transform:translateY(-50%)}*{-webkit-box-sizing:border-box;box-sizing:border-box}body,html{height:100%}html{background-color:transparent}body{font-family:Roboto,Segoe UI,Segoe MDL2 Assets,Helvetica Neue,sans-serif;color:#212121}h3{color:#212121}main{color:#212121;background-color:transparent}main a{color:#0097a7}
+			*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;-ms-text-size-adjust:100%;-o-text-size-adjust:100%;text-size-adjust:100%;margin:0;padding:0;font-family:inherit}body{font-family:Segoe UI,Segoe MDL2 Assets;font-size:15px;line-height:1.5;height:100vh;display:flex;overflow:hidden}*{-webkit-box-sizing:border-box;box-sizing:border-box}body,html{height:100%}html{background-color:transparent}body{font-family:Roboto,Segoe UI,Segoe MDL2 Assets,Helvetica Neue,sans-serif;font-weight:400;width:100%;color:#212121;-webkit-text-size-adjust:none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-moz-font-feature-settings:"liga","kern";-webkit-touch-callout:none;outline:0;overflow-x:hidden;margin:0;padding:0}*,::before,:after{-webkit-box-sizing:border-box;box-sizing:border-box}::-webkit-input-placeholder{color:#757575!important;opacity:1}:-ms-input-placeholder{color:#757575!important;opacity:1}::placeholder{color:#757575!important;opacity:1}body,html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-shadow:.063rem .063rem .063rem rgba(0,0,0,.004)}
 			/*!
 			 * custom critical
 			 */
 			body {
 				font-family: Roboto, sans-serif;
-				color: #212121 !important;/* mui.css has rgba(0, 0, 0, 0.87) body text */
-				background-color: #F5F5F5 !important;/* mui.css has white body background */
+				color: #212121 !important;
+				background-color: #F5F5F5 !important;
 				margin: 0;
 			}
 			html,
@@ -59,11 +59,16 @@
 			 * hide before scripts and styles loaded
 			 */
 			.ac-grid,
+			.ac-grid.cards,
+			.ac-grid.masonry,
+			header,
 			main {
 				visibility: hidden;
 				opacity: 0;
 			}
-			.ac-grid.is-active {
+			.ac-grid.is-active,
+			.ac-grid.cards.is-active,
+			.ac-grid.masonry.is-active {
 				visibility: visible;
 				opacity: 1;
 			}
@@ -72,19 +77,14 @@
 			.ac-container iframe {
 				display: none;
 			}
-			[data-layoutType="tabs"] header,
-			[data-layoutType="overlay"] header,
-			[data-layoutType="docked-minimized"] header,
-			[data-layoutType="docked"] header {
-				background-color: transparent !important;
-			}
-			content {display: block;}
 		</style>
 		<noscript>
 			<link rel="stylesheet" href="./libs/serguei-uwp/css/vendors.min.css" />
 			<link rel="stylesheet" href="./libs/serguei-uwp/css/bundle.min.css" />
 			<style>
 				.ac-grid,
+				.ac-grid.cards,
+				.ac-grid.masonry,
 				header,
 				main {
 					visibility: visible;
@@ -98,33 +98,29 @@
 		</noscript>
 		<script>
 			(function(){return (function templatePolyfill(){"use strict";if("content"in document.createElement("template")){return false;}var templates=document.getElementsByTagName("template");var plateLen=templates.length;for(var x=0;x<plateLen;++x){var template=templates[x];var content=template.childNodes;var fragment=document.createDocumentFragment();while(content[0]){fragment.appendChild(content[0]);}template.content=fragment;}}());})();
-
-
-
-
- /* document.createElement('header');
-  document.createElement('list');
-  document.createElement('main');
-  document.createElement('el');
-  document.createElement('icon');
-  document.createElement('nav');
-  document.createElement('include-script');
-  document.createElement('target');
-  document.createElement('label');
-  document.createElement('page');
-
-  document.createElement('mainMenu');
-
-  document.createElement('content');*/
-
-
-
-
-
 			var imagesPreloaded=false;(function(m){m="[object Array]"===Object.prototype.toString.apply(m)?m:[m];var t=function(){return (imagesPreloaded=true);},f=function(){return (imagesPreloaded=false);},c=[];for(var i=0,l=m.length;i<l;i++){c[i]=new Image();c[i].onabort=f;c[i].onerror=f;c[i].onload=t;c[i].src=m[i];}}([
-"/image_src.jpg"
+"/image_src.jpg",
+"./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/29c50626a6dac85aaa355bacfca2929d.jpg",
+"./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/3b60033301b54ab6552f06ac61902749.jpg",
+"./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/69861f6b540bc9377ea193dc043e991d.jpg",
+"./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/6a6e4f6198cc19aaf08995bfbf390908.jpg",
+"./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/70110be738b29dfe366bedf4ff5fa012.jpg",
+"./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/7141b58e73b39a0837f0f933ea394975.jpg",
+"./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/799463f7476954257d5b45671dc76e0b.jpg",
+"./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/9d063d1fec85960f81275a0ed1f1529b.jpg",
+"./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/c599a30aa1744c200a159bc418635d46.jpg",
+"./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/e58495540679687089b9f86c4b94b5dc.jpg",
+"./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-email-640x640.png",
+"./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-phone-640x640.png",
+"./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-telegram-640x640.png",
+"./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-viber-640x640.png",
+"./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-whatsapp-640x640.png",
+"./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-skype-640x640.png",
+"./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-instagram-640x640.png",
+"./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-twitter-640x640.png",
+"./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-behance-640x640.png"
 			]));
-			console.log("Source code: https://github.com/lovespy/uwp-ac-demo.surge.sh");
+			console.log("Source code: https://github.com/englishextra/serguei-uwp-dev");
 		</script>
 	</head>
 	<body>

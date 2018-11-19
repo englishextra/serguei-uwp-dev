@@ -1,111 +1,74 @@
-/*global AdaptiveCards, console, imagesLoaded, manageMacy, updateMacyThrottled */
+/*global console, imagesLoaded, manageExternalLinkAll, manageMacy,
+renderAdaptiveCard,
+updateMacyThrottled*/
 (function (root, document) {
 	"use strict";
 
-	var docBody = document.body || "";
-
-	var classList = "classList";
-
-	docBody[classList].add("hide-sidedrawer");
-
 	var run = function () {
 
-		var appendChild = "appendChild";
+		var classList = "classList";
 		var getElementsByClassName = "getElementsByClassName";
 		var location = "location";
+		var querySelectorAll = "querySelectorAll";
+		var _addEventListener = "addEventListener";
 		var _length = "length";
 
 		/*!
 		 * @see {@link https://docs.microsoft.com/en-us/adaptive-cards/sdk/rendering-cards/javascript/render-a-card}
 		 * @see {@link https://adaptivecards.io/samples/}
+		 * @see {@link https://github.com/Microsoft/AdaptiveCards/issues/1984}
 		 */
-		var acRenderGalleryJson = {
+		var acRenderIntro = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
-			//"backgroundImage": "./libs/serguei-uwp/img/demo-images/Mostly-Cloudy-Background-Dark.jpg",
 			"body": [{
 					"type": "TextBlock",
-					"text": "Here are some cool photos",
-					"fontFamily": "Roboto Mono",
+					"text": "Репетитор английского в Тушино",
 					"color": "accent",
-					"size": "large"
-				}, {
-					"type": "TextBlock",
-					"text": "Sorry some of them are repeats",
-					"isSubtle": true,
-					"size": "medium",
-					"weight": "lighter"
-				}, {
-					"type": "ImageSet",
-					"imageSize": "medium",
-					"images": [{
-							"type": "Image",
-							"url": "./libs/serguei-uwp/img/demo-images/002.jpg"
-						}, {
-							"type": "Image",
-							"url": "./libs/serguei-uwp/img/demo-images/003.jpg"
-						}, {
-							"type": "Image",
-							"url": "./libs/serguei-uwp/img/demo-images/004.jpg"
-						}, {
-							"type": "Image",
-							"url": "./libs/serguei-uwp/img/demo-images/005.jpg"
-						}, {
-							"type": "Image",
-							"url": "./libs/serguei-uwp/img/demo-images/006.jpg"
-						}, {
-							"type": "Image",
-							"url": "./libs/serguei-uwp/img/demo-images/007.jpg"
-						}, {
-							"type": "Image",
-							"url": "./libs/serguei-uwp/img/demo-images/008.jpg"
-						}, {
-							"type": "Image",
-							"url": "./libs/serguei-uwp/img/demo-images/009.jpg"
-						}, {
-							"type": "Image",
-							"url": "./libs/serguei-uwp/img/demo-images/010.jpg"
-						}
-					]
-				}
-			]
-		};
-
-		var acRenderActivityJson = {
-			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-			"type": "AdaptiveCard",
-			"version": "1.0",
-			"body": [{
-					"type": "TextBlock",
-					"text": "Publish Adaptive Card schema",
+					"size": "large",
 					"weight": "bolder",
-					"size": "medium"
+					"spacing": "none",
+					"wrap": true
+				}, {
+					"type": "TextBlock",
+					"text": "«С нуля», подтянуть, улучшить, подготовка к ЕГЭ",
+					"isSubtle": true,
+					"spacing": "none"
 				}, {
 					"type": "ColumnSet",
 					"columns": [{
 							"type": "Column",
-							"width": "auto",
+							"width": 1,
 							"items": [{
 									"type": "Image",
-									"url": "./libs/serguei-uwp/img/demo-images/d7f12830b3c17a5a9e4afcc370e3a37e_400x400.jpg",
-									"size": "small",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/c599a30aa1744c200a159bc418635d46.jpg",
+									"size": "stretch",
 									"style": "person"
 								}
 							]
 						}, {
 							"type": "Column",
-							"width": "stretch",
+							"width": 5,
 							"items": [{
 									"type": "TextBlock",
-									"text": "Matt Hidinger",
+									"text": "Serguei Shimansky",
 									"color": "accent",
 									"weight": "bolder",
 									"wrap": true
 								}, {
 									"type": "TextBlock",
 									"spacing": "none",
-									"text": "Created {{DATE(2017-02-14T06:08:39Z, SHORT)}}",
+									"text": "Москва, Южное Тушино",
+									"size": "small",
+									"isSubtle": true,
+									"wrap": true
+								}, {
+									"type": "TextBlock",
+									"spacing": "none",
+									"text": "19 лет стажа",
+									"size": "small",
 									"isSubtle": true,
 									"wrap": true
 								}
@@ -114,94 +77,18 @@
 					]
 				}, {
 					"type": "TextBlock",
-					"text": "Now that we have defined the main rules and features of the format, we need to produce a schema and publish it to GitHub. The schema will be the starting point of our reference documentation.",
+					"text": "Общий, разговорный, британский американский английский. Подготовка к олимпиаде по английскому языку, международный экзамен IELTS, деловой английский, ОГЭ по английскому языку, ЕГЭ по английскому языку. Также, увлекаюсь веб-разработкой, делаю сайты-визитки.",
 					"wrap": true
 				}, {
-					"type": "FactSet",
-					"facts": [{
-							"title": "Board:",
-							"value": "Adaptive Card"
-						}, {
-							"title": "List:",
-							"value": "Backlog"
-						}, {
-							"title": "Assigned to:",
-							"value": "Matt Hidinger"
-						}, {
-							"title": "Due date:",
-							"value": "Not set"
-						}
-					]
-				}
-			],
-			"actions": [{
-					"type": "Action.ShowCard",
-					"title": "Set due date",
-					"card": {
-						"type": "AdaptiveCard",
-						"body": [{
-								"type": "Input.Date",
-								"id": "dueDate"
-							}
-						],
-						"actions": [{
-								"type": "Action.Submit",
-								"title": "OK"
-							}
-						]
-					}
-				}, {
-					"type": "Action.ShowCard",
-					"title": "Comment",
-					"card": {
-						"type": "AdaptiveCard",
-						"body": [{
-								"type": "Input.Text",
-								"id": "comment",
-								"isMultiline": true,
-								"placeholder": "Enter your comment"
-							}
-						],
-						"actions": [{
-								"type": "Action.Submit",
-								"title": "OK"
-							}
-						]
-					}
-				}
-			]
-		};
-
-		var acRenderRestaurantJson = {
-			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-			"type": "AdaptiveCard",
-			"version": "1.0",
-			"body": [{
-					"speak": "Tom's Pie is a Pizza restaurant which is rated 9.3 by customers.",
 					"type": "ColumnSet",
 					"columns": [{
 							"type": "Column",
-							"width": 2,
+							"width": 1,
 							"items": [{
-									"type": "TextBlock",
-									"text": "PIZZA",
-									"color": "accent"
-								}, {
-									"type": "TextBlock",
-									"text": "Tom's Pie",
-									"weight": "bolder",
-									"size": "extraLarge",
-									"spacing": "none"
-								}, {
-									"type": "TextBlock",
-									"text": "4.2 ★★★☆ (93) · $$",
-									"isSubtle": true,
-									"spacing": "none"
-								}, {
-									"type": "TextBlock",
-									"text": "**Matt H. said** \"I'm compelled to give this place 5 stars due to the number of times I've chosen to eat here this past year!\"",
-									"size": "small",
-									"wrap": true
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/3b60033301b54ab6552f06ac61902749.jpg",
+									"size": "stretch"
 								}
 							]
 						}, {
@@ -209,87 +96,331 @@
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"url": "./libs/serguei-uwp/img/demo-images/001.jpg",
-									"size": "auto"
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/6a6e4f6198cc19aaf08995bfbf390908.jpg",
+									"size": "stretch"
+								}
+							]
+						}, {
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/69861f6b540bc9377ea193dc043e991d.jpg",
+									"size": "stretch"
 								}
 							]
 						}
 					]
 				}
-			],
-			"actions": [{
-					"type": "Action.OpenUrl",
-					"title": "More Info",
-					"url": "#page=sample_form"
+
+			]
+		};
+
+		var acRenderBackground = {
+			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+			"type": "AdaptiveCard",
+			"version": "1.0",
+			"body": [{
+					"type": "TextBlock",
+					"text": "Опыт работы",
+					"size": "medium",
+					"weight": "bolder",
+					"spacing": "none",
+					"wrap": true
 				}, {
-					"type": "Action.OpenUrl",
-					"title": "More Info",
-					"url": "#page=sample_text"
+					"type": "TextBlock",
+					"text": "Работал переводчиком в различных некоммерческих организациях (Врачи без границ, United Way, ВКБ ООН и др.), преподавателем английского в частной школе. В настоящий момент преподаю английский школьникам, студентам и взрослым в частном порядке в Тушино.",
+					"wrap": true
+				}, {
+					"type": "FactSet",
+					"facts": [{
+							"title": "Стаж:",
+							"value": "19 лет"
+						}, {
+							"title": "Образование:",
+							"value": "МЭГУ, менеджмент в культуре, 1994"
+						}, {
+							"title": "График:",
+							"value": "с 10:00 до 20:00"
+						}, {
+							"title": "Адрес:",
+							"value": "Москва, Южное Тушино"
+						}
+					]
 				}
 			]
 		};
 
-		var acRenderMediaJson = {
+		var acRenderInPerson = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
-			"speak": "The Seattle Seahawks beat the Carolina Panthers 40-7",
 			"body": [{
-					"type": "Container",
-					"items": [{
-							"type": "ColumnSet",
-							"columns": [{
-									"type": "Column",
-									"width": "auto",
-									"items": [{
-											"type": "Image",
-											"url": "./libs/serguei-uwp/img/demo-images/3.png",
-											"size": "medium"
-										}, {
-											"type": "TextBlock",
-											"text": "SHADES",
-											"horizontalAlignment": "center",
-											"weight": "bolder"
-										}
-									]
-								}, {
-									"type": "Column",
-									"width": "stretch",
-									"separator": true,
-									"spacing": "medium",
-									"items": [{
-											"type": "TextBlock",
-											"text": "Dec 4",
-											"horizontalAlignment": "center"
-										}, {
-											"type": "TextBlock",
-											"text": "Final",
-											"spacing": "none",
-											"horizontalAlignment": "center"
-										}, {
-											"type": "TextBlock",
-											"text": "7 - 40",
-											"size": "extraLarge",
-											"horizontalAlignment": "center"
-										}
-									]
-								}, {
-									"type": "Column",
-									"width": "auto",
-									"separator": true,
-									"spacing": "medium",
-									"items": [{
-											"type": "Image",
-											"url": "./libs/serguei-uwp/img/demo-images/2.png",
-											"size": "medium",
-											"horizontalAlignment": "center"
-										}, {
-											"type": "TextBlock",
-											"text": "SKINS",
-											"horizontalAlignment": "center",
-											"weight": "bolder"
-										}
-									]
+					"type": "TextBlock",
+					"text": "Идивидуально",
+					"size": "medium",
+					"weight": "bolder",
+					"wrap": true
+				}, {
+					"type": "TextBlock",
+					"text": "Английский индивидуально - наиболее эффективный метод образования: вы говорите больше, чем на занятиях в группах. Язык — средство общения, и мерилом служат ваши навыки аудирования, говорения и чтения, но не объем записанных новых слов вкупе с неспособностью общаться на иностранном языке в реальных ситуациях.",
+					"wrap": true
+				}
+			]
+		};
+
+		var acRenderDiploma1 = {
+			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+			"type": "AdaptiveCard",
+			"version": "1.0",
+			"body": [{
+					"type": "TextBlock",
+					"text": "Дипломы",
+					"size": "medium",
+					"weight": "bolder",
+					"wrap": true
+				}, {
+					"type": "TextBlock",
+					"text": "1 место в районной олимпиаде по немецкому языку среди 8-x классов.",
+					"wrap": true
+				}, {
+					"type": "ColumnSet",
+					"columns": [{
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/e58495540679687089b9f86c4b94b5dc.jpg",
+									"size": "stretch",
+									"selectAction": {
+										"type": "Action.OpenUrl",
+										"title": "Показать картинку",
+										"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@2x/e58495540679687089b9f86c4b94b5dc.jpg"
+									}
+								}
+							]
+						}
+					]
+				}
+			]
+		};
+
+		var acRenderDiploma2 = {
+			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+			"type": "AdaptiveCard",
+			"version": "1.0",
+			"body": [{
+					"type": "TextBlock",
+					"text": "Дипломы",
+					"size": "medium",
+					"weight": "bolder",
+					"wrap": true
+				}, {
+					"type": "TextBlock",
+					"text": "1 место в районной олимпиаде по английскому языку среди 8-x классов.",
+					"wrap": true
+				}, {
+					"type": "ColumnSet",
+					"columns": [{
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/29c50626a6dac85aaa355bacfca2929d.jpg",
+									"size": "stretch",
+									"selectAction": {
+										"type": "Action.OpenUrl",
+										"title": "Показать картинку",
+										"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@2x/29c50626a6dac85aaa355bacfca2929d.jpg"
+									}
+								}
+							]
+						}
+					]
+				}
+			]
+		};
+
+		var acRenderDiploma3 = {
+			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+			"type": "AdaptiveCard",
+			"version": "1.0",
+			"body": [{
+					"type": "TextBlock",
+					"text": "Дипломы",
+					"size": "medium",
+					"weight": "bolder",
+					"wrap": true
+				}, {
+					"type": "TextBlock",
+					"text": "1 место в районной олимпиаде по английскому языку среди 9-x классов.",
+					"wrap": true
+				}, {
+					"type": "ColumnSet",
+					"columns": [{
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/9d063d1fec85960f81275a0ed1f1529b.jpg",
+									"size": "stretch",
+									"selectAction": {
+										"type": "Action.OpenUrl",
+										"title": "Показать картинку",
+										"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@2x/9d063d1fec85960f81275a0ed1f1529b.jpg"
+									}
+								}
+							]
+						}
+					]
+				}
+			]
+		};
+
+		var acRenderDiploma4 = {
+			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+			"type": "AdaptiveCard",
+			"version": "1.0",
+			"body": [{
+					"type": "TextBlock",
+					"text": "Дипломы",
+					"size": "medium",
+					"weight": "bolder",
+					"wrap": true
+				}, {
+					"type": "TextBlock",
+					"text": "1 место в районной олимпиаде по английскому языку среди 10-x классов.",
+					"wrap": true
+				}, {
+					"type": "ColumnSet",
+					"columns": [{
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/799463f7476954257d5b45671dc76e0b.jpg",
+									"size": "stretch",
+									"selectAction": {
+										"type": "Action.OpenUrl",
+										"title": "Показать картинку",
+										"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@2x/799463f7476954257d5b45671dc76e0b.jpg"
+									}
+								}
+							]
+						}
+					]
+				}
+			]
+		};
+
+		var acRenderContacts = {
+			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+			"type": "AdaptiveCard",
+			"version": "1.0",
+			"body": [{
+					"type": "TextBlock",
+					"text": "Контакты",
+					"size": "medium",
+					"weight": "bolder",
+					"spacing": "none",
+					"wrap": true
+				}, {
+					"type": "ColumnSet",
+					"columns": [{
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-email-640x640.png",
+									"size": "stretch",
+									"selectAction": {
+										"type": "Action.OpenUrl",
+										"title": "Мейл",
+										"url": "mailto:englishextra2%40yahoo.com"
+									}
+								}
+							]
+						}, {
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-phone-640x640.png",
+									"size": "stretch",
+									"selectAction": {
+										"type": "Action.OpenUrl",
+										"title": "Телефон",
+										"url": "tel:%2B79854416702"
+									}
+								}
+							]
+						}, {
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-telegram-640x640.png",
+									"size": "stretch",
+									"selectAction": {
+										"type": "Action.OpenUrl",
+										"title": "Телеграм",
+										"url": "tg://resolve?domain=english_tushino"
+									}
+								}
+							]
+						}, {
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-viber-640x640.png",
+									"size": "stretch",
+									"selectAction": {
+										"type": "Action.OpenUrl",
+										"title": "Вайбер",
+										"url": "viber://chat?number=%2B79854416702"
+									}
+								}
+							]
+						}, {
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-whatsapp-640x640.png",
+									"size": "stretch",
+									"selectAction": {
+										"type": "Action.OpenUrl",
+										"title": "Вотсап",
+										"url": "whatsapp://send?phone=79854416702"
+									}
+								}
+							]
+						}, {
+							"type": "Column",
+							"width": 1,
+							"items": [{
+									"type": "Image",
+									"altText" : "",
+									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-skype-640x640.png",
+									"size": "stretch",
+									"selectAction": {
+										"type": "Action.OpenUrl",
+										"title": "Скайп",
+										"url": "skype:serguei.shimansky?chat"
+									}
 								}
 							]
 						}
@@ -312,7 +443,7 @@
 					"foregroundColors": {
 						"default": {
 							"default": "#212121",
-							"subtle": "#616161"
+							"subtle": "#757575"
 						},
 						"dark": {
 							"default": "#000000",
@@ -344,43 +475,60 @@
 			}
 		};
 
-		var renderAdaptiveCard = function (conatainerClass, cardObj, renderOptions, onExecute, callback) {
-			var container = document[getElementsByClassName](conatainerClass)[0] || "";
-			if (root.AdaptiveCards && container) {
-				var adaptiveCard = new AdaptiveCards.AdaptiveCard();
-				adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(renderOptions);
-				adaptiveCard.onExecuteAction = onExecute;
-				adaptiveCard.parse(cardObj);
-				var renderedCard = adaptiveCard.render();
-				container[appendChild](renderedCard);
-				if ("function" === typeof callback) {
-					callback();
-				}
-				adaptiveCard = renderedCard = null;
-			}
-		};
+		var acRenderArray = [
+			acRenderIntro,
+			acRenderBackground,
+			acRenderInPerson,
+			acRenderDiploma1,
+			acRenderDiploma2,
+			acRenderDiploma3,
+			acRenderDiploma4,
+			acRenderContacts
+		];
 
-		var acOnExecuteCallback = function (action) {
-			updateMacyThrottled();
+		var acOnExecute = function (action) {
 			if (action.url) {
 				root[location].href = action.url;
 			}
 		};
 
-		var acOnRenderCallback = function () {
-			updateMacyThrottled();
+		var acOnRender = function () {
+			if (root.updateMacyThrottled) {
+				updateMacyThrottled();
+			}
+			if (root.manageExternalLinkAll) {
+				manageExternalLinkAll();
+			}
 		};
 
-		var acRenderArray = [
-			acRenderGalleryJson,
-			acRenderActivityJson,
-			acRenderRestaurantJson,
-			acRenderGalleryJson,
-			acRenderActivityJson,
-			acRenderMediaJson
-		];
+		var isBindedAdaptiveCardClass = "is-binded-adaptive-card";
 
-		var acOnManageCallback = function () {
+		var acGridClass = "ac-grid";
+
+		var acGrid = document[getElementsByClassName](acGridClass)[0] || "";
+
+		var acOnResize = function () {
+			try {
+				var acContainer = acGrid ? (acGrid.children || acGrid[querySelectorAll]("." + acGridClass + " > div") || "") : "";
+				if (acContainer) {
+					var i,
+					l;
+					for (i = 0, l = acContainer[_length]; i < l; i += 1) {
+						if (!acContainer[i][classList].contains(isBindedAdaptiveCardClass)) {
+							acContainer[i][classList].add(isBindedAdaptiveCardClass);
+							acContainer[i][_addEventListener]("onresize", updateMacyThrottled, {
+								passive: true
+							});
+						}
+					}
+					i = l = null;
+				}
+			} catch (err) {
+				throw new Error("cannot acOnResize " + err);
+			}
+		};
+
+		var acOnManage = function () {
 			if (root.imagesLoaded) {
 				/*!
 				 * @see {@link https://imagesloaded.desandro.com/}
@@ -388,39 +536,40 @@
 				 */
 				var imgLoad;
 				imgLoad = new imagesLoaded(acGrid);
-				var imgLoadOnAlways = function (instance) {
-					updateMacyThrottled();
+				var onAlways = function (instance) {
+					if (root.updateMacyThrottled) {
+						updateMacyThrottled();
+					}
 					console.log("imagesLoaded: found " + instance.images[_length] + " images");
 				};
-				imgLoad.on("always", imgLoadOnAlways);
+				imgLoad.on("always", onAlways);
 			}
+			acOnResize();
 		};
 
-		var manageAdaptiveCards = function (gridClass, callback) {
-			var i,
-			l;
-			for (i = 0, l = acRenderArray[_length]; i < l; i += 1) {
-				renderAdaptiveCard(gridClass, acRenderArray[i], acRenderOptions, acOnExecuteCallback, acOnRenderCallback);
-			}
-			i = l = null;
-			if ("function" === typeof callback) {
-				callback();
+		var manageAdaptiveCards = function (acGrid, callback) {
+			if (root.renderAdaptiveCard) {
+				var i,
+				l;
+				for (i = 0, l = acRenderArray[_length]; i < l; i += 1) {
+					renderAdaptiveCard(acGrid, acRenderArray[i], acRenderOptions, acOnExecute, acOnRender);
+				}
+				i = l = null;
+				if ("function" === typeof callback) {
+					callback();
+				}
 			}
 		};
-
-		var acGridClass = "ac-grid";
-
-		var acGrid = document[getElementsByClassName](acGridClass)[0] || "";
 
 		if (acGrid) {
 			manageMacy(acGridClass, {
 				trueOrder: false,
 				waitForImages: false,
 				margin: 20,
-				columns: 3,
+				columns: 4,
 				breakAt: {
-					1280: 3,
-					1024: 2,
+					1280: 4,
+					1024: 3,
 					960: 2,
 					640: 1,
 					480: 1,
@@ -428,7 +577,11 @@
 				}
 			});
 
-			manageAdaptiveCards(acGridClass, acOnManageCallback);
+			manageAdaptiveCards(acGrid, acOnManage);
+		}
+
+		if (root.manageExternalLinkAll) {
+			manageExternalLinkAll();
 		}
 	};
 	run();
