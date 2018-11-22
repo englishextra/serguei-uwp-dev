@@ -46,10 +46,15 @@
 			}
 		};
 
+		/*!
+		 * @see {@link https://sachinchoolur.github.io/lightgallery.js/docs/api.html}
+		 */
 		var manageGlightbox = function (macyGrid) {
 			if (root.lightGallery) {
 				if (macyGrid) {
-					lightGallery(macyGrid);
+					lightGallery(macyGrid, {
+						autoplayControls: false
+					});
 				}
 			}
 		};

@@ -48,6 +48,9 @@
 
 		var glightboxClass = "glightbox";
 
+		/*!
+		 * @see {@link https://glightbox.mcstudios.com.mx/#options}
+		 */
 		var manageGlightbox = function (glightboxClass) {
 			if (root.GLightbox) {
 				var glightbox;
