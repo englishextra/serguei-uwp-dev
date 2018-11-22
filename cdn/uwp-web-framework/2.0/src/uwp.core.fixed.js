@@ -225,7 +225,7 @@
 
 			UWP_navigation_request.onreadystatechange = function () {
 
-				if (UWP_navigation_request.status === "404" || UWP_navigation_request.status === "0") {
+				if (UWP_navigation_request.status === 404 || UWP_navigation_request.status === 0) {
 					console.log("Error XMLHttpRequest-ing file", UWP_navigation_request.status);
 				} else if (UWP_navigation_request.readyState === 4 && UWP_navigation_request.status === 200 && UWP_navigation_request.responseText) {
 
@@ -397,8 +397,10 @@
 
 			UWP_navigate_request.onreadystatechange = function () {
 
-				if (UWP_navigate_request.status === "404" || UWP_navigate_request.status === "0") {
+				if (UWP_navigate_request.status === 404 || UWP_navigate_request.status === 0) {
 					console.log("Error XMLHttpRequest-ing file", UWP_navigate_request.status);
+					console.error("Something went wrong");
+					displayError("Something went wrong");
 				} else if (UWP_navigate_request.readyState === 4 && UWP_navigate_request.status === 200 && UWP_navigate_request.responseText) {
 
 					/* var parser = new DOMParser();
