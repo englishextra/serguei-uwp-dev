@@ -233,9 +233,9 @@ template,
 }
 
 [data-layout-type="docked-minimized"] header {
-	background-color: #0097A7 !important;
+	background-color: $mainColorDarkened !important;
 }
 
 [data-layout-type="docked"] header {
-	background-color: #0097A7 !important;
+	background-color: $mainColorDarkened !important;
 }

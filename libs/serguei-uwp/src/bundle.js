@@ -144,7 +144,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	root.debounce = debounce;
 })("undefined" !== typeof window ? window : this);
 /*!
- *
+ * isNodejs isElectron isNwjs;
  */
 (function (root) {
 	"use strict";
@@ -345,7 +345,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 				}, timeout);
 		}
 	};
-	var updateMacyThrottled = throttle(updateMacy, 2000);
+	var updateMacyThrottled = throttle(updateMacy, 1000);
 	/* var macyContainerClass = "ac-grid"; */
 	var initMacy = function (macyContainerClass, options) {
 		var defaultSettings = {
@@ -513,9 +513,11 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	};
 
 	/* var scripts = [
-	"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
-	"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
-	"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
+				"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
+				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
+				"../../cdn/glightbox/1.0.8/css/glightbox.fixed.css",
+				"../../cdn/lightgallery.js/1.1.1/css/lightgallery.fixed.css",
+				"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
 	]; */
 
 	var scripts = [
@@ -568,11 +570,19 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	}
 
 	/* var scripts = [
-	"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
-	"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
-	"./node_modules/any-resize-event/dist/any-resize-event.js",
-	"./node_modules/adaptivecards/dist/adaptivecards.js",
-	"./node_modules/macy/dist/macy.js"
+				"../../cdn/glightbox/1.0.8/js/glightbox.fixed.js",
+				"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
+				"../../cdn/lightgallery.js/1.1.1/js/lightgallery.fixed.js",
+				"../../cdn/lightgallery.js/1.1.1/js/lg-autoplay.js",
+				"../../cdn/lightgallery.js/1.1.1/js/lg-fullscreen.js",
+				"../../cdn/lightgallery.js/1.1.1/js/lg-hash.js",
+				"../../cdn/lightgallery.js/1.1.1/js/lg-share.js",
+				"../../cdn/lightgallery.js/1.1.1/js/lg-thumbnail.js",
+				"../../cdn/lightgallery.js/1.1.1/js/lg-zoom.js",
+				"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
+				"./node_modules/any-resize-event/dist/any-resize-event.js",
+				"./node_modules/adaptivecards/dist/adaptivecards.js",
+				"./node_modules/macy/dist/macy.js"
 	]; */
 
 	scripts.push("./libs/serguei-uwp/js/vendors.min.js");
