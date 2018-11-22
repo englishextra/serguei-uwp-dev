@@ -474,6 +474,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	var classList = "classList";
 	var createElement = "createElement";
 	var createElementNS = "createElementNS";
+	var dataset = "dataset";
 	var defineProperty = "defineProperty";
 	var getOwnPropertyDescriptor = "getOwnPropertyDescriptor";
 	var querySelector = "querySelector";
@@ -501,9 +502,9 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 		}
 		var switchLayoutType = function (x) {
 			if (x.matches) { // If media query matches
-				document.body.dataset.layouttype = "overlay";
+				document.body[dataset].layoutType = "overlay";
 			} else {
-				document.body.dataset.layouttype = "docked-minimized";
+				document.body[dataset].layoutType = "docked-minimized";
 			}
 		};
 		var layoutTypeTreshold = root.matchMedia("(max-width: 360px)");
