@@ -141,10 +141,12 @@
 			UWP.createStyles();
 			/* Handles navigation between pages */
 
-			UWP.navigate(root.location.hash.split("=")[1], false);
+			/* UWP.navigate(root.location.hash.split("=")[1], false); */
+			UWP.navigate(root.location.hash.split(/#\//)[1], false);
 
 			root.onhashchange = function () {
-				UWP.navigate(root.location.hash.split("=")[1], false);
+				/* UWP.navigate(root.location.hash.split("=")[1], false); */
+				UWP.navigate(root.location.hash.split(/#\//)[1], false);
 			};
 			/* Prepares space for document's title, puts it in place */
 
@@ -202,7 +204,8 @@
 				navLink.addEventListener("click", function (event) {
 					event.stopPropagation();
 					event.preventDefault();
-					if (root.location.hash !== "".concat("#", UWP.config.hashNavKey, "=", navTarget)) {
+					/* if (root.location.hash !== "".concat("#", UWP.config.hashNavKey, "=", navTarget)) { */
+					if (root.location.hash !== "".concat("#/", navTarget)) {
 						UWP.menuList.classList.remove("active");
 						UWP.navigate(navTarget);
 					}
@@ -362,7 +365,8 @@
 			/* Pushes history state */
 
 			if (addHistory !== false) {
-				history.pushState("", "", "".concat(root.location.href.split("#")[0], "#", UWP.config.hashNavKey, "=", target));
+				/* history.pushState("", "", "".concat(root.location.href.split("#")[0], "#", UWP.config.hashNavKey, "=", target)); */
+				history.pushState("", "", "".concat(root.location.href.split(/#\//)[0], "#/", target));
 			}
 			/* Clears the page content */
 

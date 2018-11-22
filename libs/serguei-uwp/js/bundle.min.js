@@ -5,9 +5,9 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
  * @see {@link https://gist.github.com/englishextra/ff9dc7ab002312568742861cb80865c9}
  * passes jshint
  */
-(function(root, document) {
+(function (root, document) {
 	"use strict";
-	var loadJsCss = function(files, callback) {
+	var loadJsCss = function (files, callback) {
 		var _this = this;
 		var appendChild = "appendChild";
 		var body = "body";
@@ -22,34 +22,34 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 		_this.head = document[getElementsByTagName]("head")[0] || "";
 		_this.body = document[body] || "";
 		_this.ref = document[getElementsByTagName]("script")[0] || "";
-		_this.callback = callback || function() {};
-		_this.loadStyle = function(file) {
+		_this.callback = callback || function () {};
+		_this.loadStyle = function (file) {
 			var link = document[createElement]("link");
 			link.rel = "stylesheet";
 			link.type = "text/css";
 			link.href = file;
 			/* _this.head[appendChild](link); */
 			link.media = "only x";
-			link.onload = function() {
+			link.onload = function () {
 				this.onload = null;
 				this.media = "all";
 			};
 			link[setAttribute]("property", "stylesheet");
 			(_this.body || _this.head)[appendChild](link);
 		};
-		_this.loadScript = function(i) {
+		_this.loadScript = function (i) {
 			var script = document[createElement]("script");
 			script.type = "text/javascript";
 			script.async = true;
 			script.src = _this.js[i];
-			var loadNextScript = function() {
+			var loadNextScript = function () {
 				if (++i < _this.js[_length]) {
 					_this.loadScript(i);
 				} else {
 					_this.callback();
 				}
 			};
-			script.onload = function() {
+			script.onload = function () {
 				loadNextScript();
 			};
 			_this.head[appendChild](script);
@@ -61,7 +61,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 			(_this.body || _this.head)[appendChild](script);
 		};
 		var i,
-			l;
+		l;
 		for (i = 0, l = _this.files[_length]; i < l; i += 1) {
 			if ((/\.js$|\.js\?/).test(_this.files[i])) {
 				_this.js.push(_this.files[i]);
@@ -82,9 +82,9 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 /*!
  * throttle
  */
-(function(root) {
+(function (root) {
 	"use strict";
-	var throttle = function(func, wait) {
+	var throttle = function (func, wait) {
 		var ctx;
 		var args;
 		var rtn;
@@ -146,7 +146,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 /*!
  *
  */
-(function(root){
+(function (root) {
 	"use strict";
 	var isNodejs = "undefined" !== typeof process && "undefined" !== typeof require || "";
 	var isElectron = "undefined" !== typeof root && root.process && "renderer" === root.process.type || "";
@@ -324,30 +324,30 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 /*!
  * Macy
  */
-(function(root) {
+(function (root) {
 	"use strict";
 	var classList = "classList";
 	var getElementsByClassName = "getElementsByClassName";
 	var isActiveClass = "is-active";
 	var macy;
-	var updateMacy = function(delay) {
+	var updateMacy = function (delay) {
 		var timeout = delay || 100;
 		var logThis;
-		logThis = function() {
+		logThis = function () {
 			console.log("updateMacy");
 		};
 		if (macy) {
-			var timer = setTimeout(function() {
-				clearTimeout(timer);
-				timer = null;
-				logThis();
-				macy.recalculate(true, true);
-			}, timeout);
+			var timer = setTimeout(function () {
+					clearTimeout(timer);
+					timer = null;
+					logThis();
+					macy.recalculate(true, true);
+				}, timeout);
 		}
 	};
 	var updateMacyThrottled = throttle(updateMacy, 2000);
 	/* var macyContainerClass = "ac-grid"; */
-	var initMacy = function(macyContainerClass, options) {
+	var initMacy = function (macyContainerClass, options) {
 		var defaultSettings = {
 			/* container: ".macy-container", */
 			trueOrder: false,
@@ -385,9 +385,9 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 			}
 		}
 	};
-	var manageMacy = function(macyContainerClass, options) {
+	var manageMacy = function (macyContainerClass, options) {
 		var macyContainer = document[getElementsByClassName](macyContainerClass)[0] || "";
-		var handleMacyContainer = function() {
+		var handleMacyContainer = function () {
 			if (!macyContainer[classList].contains(isActiveClass)) {
 				initMacy(macyContainerClass, options);
 			}
@@ -402,10 +402,10 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 /*!
  * AdaptiveCards
  */
-(function(root) {
+(function (root) {
 	"use strict";
 	var appendChild = "appendChild";
-	var renderAdaptiveCard = function(acGrid, cardObj, renderOptions, onExecute, callback) {
+	var renderAdaptiveCard = function (acGrid, cardObj, renderOptions, onExecute, callback) {
 		if (root.AdaptiveCards && acGrid) {
 			var adaptiveCard = new AdaptiveCards.AdaptiveCard();
 			adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(renderOptions);
@@ -424,39 +424,39 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 /*!
  * UWP layout
  */
-(function(root) {
+(function (root) {
 	"use strict";
 
-	root.layoutTypeToTabs = function(event) {
+	root.layoutTypeToTabs = function (event) {
 		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function(el) {
+		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
 			return (el.disabled = false);
 		});
 		event.target.disabled = true;
 		document.body.setAttribute("data-layout-type", "tabs");
 	};
 
-	root.layoutTypeToOverlay = function(event) {
+	root.layoutTypeToOverlay = function (event) {
 		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function(el) {
+		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
 			return (el.disabled = false);
 		});
 		event.target.disabled = true;
 		document.body.setAttribute("data-layout-type", "overlay");
 	};
 
-	root.layoutTypeToDockedMinimized = function(event) {
+	root.layoutTypeToDockedMinimized = function (event) {
 		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function(el) {
+		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
 			return (el.disabled = false);
 		});
 		event.target.disabled = true;
 		document.body.setAttribute("data-layout-type", "docked-minimized");
 	};
 
-	root.layoutTypeToDocked = function(event) {
+	root.layoutTypeToDocked = function (event) {
 		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function(el) {
+		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
 			return (el.disabled = false);
 		});
 		event.target.disabled = true;
@@ -466,7 +466,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 /*!
  * app logic
  */
-(function(root, document) {
+(function (root, document) {
 	"use strict";
 
 	var docElem = document.documentElement || "";
@@ -482,7 +482,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 
 	docElem[classList].add("no-js");
 
-	var run = function() {
+	var run = function () {
 
 		if (root.UWP) {
 			root.UWP.init({
@@ -499,7 +499,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 				hashNavKey: "page"
 			});
 		}
-		var switchLayoutType = function(x) {
+		var switchLayoutType = function (x) {
 			if (x.matches) { // If media query matches
 				document.body.dataset.layouttype = "overlay";
 			} else {
@@ -513,9 +513,9 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	};
 
 	/* var scripts = [
-				"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
-				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
-				"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
+	"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
+	"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
+	"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
 	]; */
 
 	var scripts = [
@@ -523,44 +523,44 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 		"./libs/serguei-uwp/css/bundle.min.css"
 	];
 
-	var supportsPassive = (function() {
+	var supportsPassive = (function () {
 		var support = false;
 		try {
 			var opts = Object[defineProperty] && Object[defineProperty]({}, "passive", {
-				get: function() {
-					support = true;
-				}
-			});
-			root[_addEventListener]("test", function() {}, opts);
+					get: function () {
+						support = true;
+					}
+				});
+			root[_addEventListener]("test", function () {}, opts);
 		} catch (err) {}
 		return support;
 	})();
 
-	var needsPolyfills = (function() {
+	var needsPolyfills = (function () {
 		return !String.prototype.startsWith ||
-			!supportsPassive ||
-			!root.requestAnimationFrame ||
-			!root.matchMedia ||
-			("undefined" === typeof root.Element && !("dataset" in docElem)) ||
-			!("classList" in document[createElement]("_")) ||
-			document[createElementNS] && !("classList" in document[createElementNS]("http://www.w3.org/2000/svg", "g")) ||
-			/* !document.importNode || */
-			/* !("content" in document[createElement]("template")) || */
-			(root.attachEvent && !root[_addEventListener]) ||
-			!("onhashchange" in root) ||
-			!Array.prototype.indexOf ||
-			!root.Promise ||
-			!root.fetch ||
-			!document[querySelectorAll] ||
-			!document[querySelector] ||
-			!Function.prototype.bind ||
-			(Object[defineProperty] &&
-				Object[getOwnPropertyDescriptor] &&
-				Object[getOwnPropertyDescriptor](Element.prototype, "textContent") &&
-				!Object[getOwnPropertyDescriptor](Element.prototype, "textContent").get) ||
-			!("undefined" !== typeof root.localStorage && "undefined" !== typeof root.sessionStorage) ||
-			!root.WeakMap ||
-			!root.MutationObserver;
+		!supportsPassive ||
+		!root.requestAnimationFrame ||
+		!root.matchMedia ||
+		("undefined" === typeof root.Element && !("dataset" in docElem)) ||
+		!("classList" in document[createElement]("_")) ||
+		document[createElementNS] && !("classList" in document[createElementNS]("http://www.w3.org/2000/svg", "g")) ||
+		/* !document.importNode || */
+		/* !("content" in document[createElement]("template")) || */
+		(root.attachEvent && !root[_addEventListener]) ||
+		!("onhashchange" in root) ||
+		!Array.prototype.indexOf ||
+		!root.Promise ||
+		!root.fetch ||
+		!document[querySelectorAll] ||
+		!document[querySelector] ||
+		!Function.prototype.bind ||
+		(Object[defineProperty] &&
+			Object[getOwnPropertyDescriptor] &&
+			Object[getOwnPropertyDescriptor](Element.prototype, "textContent") &&
+			!Object[getOwnPropertyDescriptor](Element.prototype, "textContent").get) ||
+		!("undefined" !== typeof root.localStorage && "undefined" !== typeof root.sessionStorage) ||
+		!root.WeakMap ||
+		!root.MutationObserver;
 	})();
 
 	if (needsPolyfills) {
@@ -568,11 +568,11 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	}
 
 	/* var scripts = [
-				"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
-				"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
-				"./node_modules/any-resize-event/dist/any-resize-event.js",
-				"./node_modules/adaptivecards/dist/adaptivecards.js",
-				"./node_modules/macy/dist/macy.js"
+	"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
+	"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
+	"./node_modules/any-resize-event/dist/any-resize-event.js",
+	"./node_modules/adaptivecards/dist/adaptivecards.js",
+	"./node_modules/macy/dist/macy.js"
 	]; */
 
 	scripts.push("./libs/serguei-uwp/js/vendors.min.js");
@@ -582,16 +582,16 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	 */
 
 	var supportsCanvas;
-	supportsCanvas = (function() {
+	supportsCanvas = (function () {
 		var elem = document[createElement]("canvas");
 		return !!(elem.getContext && elem.getContext("2d"));
 	})();
 
-	var onFontsLoadedCallback = function() {
+	var onFontsLoadedCallback = function () {
 
 		var slot;
 
-		var onFontsLoaded = function() {
+		var onFontsLoaded = function () {
 			if (slot) {
 				clearInterval(slot);
 				slot = null;
@@ -604,38 +604,38 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 		};
 
 		var checkFontIsLoaded;
-		checkFontIsLoaded = function() {
+		checkFontIsLoaded = function () {
 			/*!
 			 * check only for fonts that are used in current page
 			 */
-			if (doesFontExist("Roboto") /* && doesFontExist("Roboto Mono") */ ) {
+			if (doesFontExist("Roboto") /* && doesFontExist("Roboto Mono") */) {
 				onFontsLoaded();
 			}
 		};
 
 		/* if (supportsCanvas) {
-			slot = setInterval(checkFontIsLoaded, 100);
+		slot = setInterval(checkFontIsLoaded, 100);
 		} else {
-			slot = null;
-			onFontsLoaded();
+		slot = null;
+		onFontsLoaded();
 		} */
 		onFontsLoaded();
 	};
 
-	var loadDeferred = function() {
+	var loadDeferred = function () {
 		var timer;
-		var logic = function() {
+		var logic = function () {
 			clearTimeout(timer);
 			timer = null;
 			var load;
 			load = new loadJsCss([
-					/* forcedHTTP + "://fonts.googleapis.com/css?family=Roboto+Mono%7CRoboto:300,400,500,700&subset=cyrillic,latin-ext", */
-					"./libs/serguei-uwp/css/vendors.min.css"
-				],
-				onFontsLoadedCallback);
+						/* forcedHTTP + "://fonts.googleapis.com/css?family=Roboto+Mono%7CRoboto:300,400,500,700&subset=cyrillic,latin-ext", */
+						"./libs/serguei-uwp/css/vendors.min.css"
+					],
+					onFontsLoadedCallback);
 		};
 		var req;
-		var raf = function() {
+		var raf = function () {
 			cancelAnimationFrame(req);
 			timer = setTimeout(logic, 0);
 		};
@@ -652,45 +652,45 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	 */
 
 	/* root.WebFontConfig = {
-		google: {
-			families: [
-				"Roboto:300,400,500,700:cyrillic",
-				"Roboto Mono:400:cyrillic,latin-ext"
-			]
-		},
-		listeners: [],
-		active: function () {
-			this.called_ready = true;
-			var i;
-			for (i = 0; i < this.listeners[_length]; i++) {
-				this.listeners[i]();
-			}
-			i = null;
-		},
-		ready: function (callback) {
-			if (this.called_ready) {
-				callback();
-			} else {
-				this.listeners.push(callback);
-			}
-		}
+	google: {
+	families: [
+	"Roboto:300,400,500,700:cyrillic",
+	"Roboto Mono:400:cyrillic,latin-ext"
+	]
+	},
+	listeners: [],
+	active: function () {
+	this.called_ready = true;
+	var i;
+	for (i = 0; i < this.listeners[_length]; i++) {
+	this.listeners[i]();
+	}
+	i = null;
+	},
+	ready: function (callback) {
+	if (this.called_ready) {
+	callback();
+	} else {
+	this.listeners.push(callback);
+	}
+	}
 	};
 
 	var onFontsLoadedCallback = function () {
 
-		var onFontsLoaded = function () {
-			progressBar.increase(20);
+	var onFontsLoaded = function () {
+	progressBar.increase(20);
 
-			var load;
-			load = new loadJsCss(scripts, run);
-		};
+	var load;
+	load = new loadJsCss(scripts, run);
+	};
 
-		root.WebFontConfig.ready(onFontsLoaded);
+	root.WebFontConfig.ready(onFontsLoaded);
 	};
 
 	var load;
 	load = new loadJsCss(
-			[forcedHTTP + "://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js"],
-			onFontsLoadedCallback
-		); */
+	[forcedHTTP + "://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js"],
+	onFontsLoadedCallback
+	); */
 })("undefined" !== typeof window ? window : this, document);

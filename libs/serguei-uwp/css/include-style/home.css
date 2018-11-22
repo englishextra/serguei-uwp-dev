@@ -2,26 +2,26 @@
  * adaptivecards
  */
 
-.ac-grid.cards {
+.macy-grid {
 	width: calc(100% - 40px);
 	height: 100%;
 	background-color: transparent;
 	margin: 20px 20px 0 20px;
 }
 
-.ac-grid.cards:after {
+.macy-grid:after {
 	content: "";
 	display: table;
 	clear: both;
 }
 
-.ac-grid.cards > .ac-container {
+.macy-grid > .ac-container {
 	border: none;
 	padding: 15px !important;
 }
 
 @media screen and (max-width: 480px) {
-	.ac-grid.cards {
+	.macy-grid {
 		width: 100%;
 		margin: 20px 0 0 0;
 	}

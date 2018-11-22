@@ -36,7 +36,9 @@ module.exports = {
 				//"./node_modules/minigrid/dist/minigrid.min.js",
 				//"./node_modules/mustache/mustache.js",
 				//"./node_modules/wolfy87-eventemitter/EventEmitter.js",
+				"../../cdn/glightbox/1.0.8/js/glightbox.fixed.js",
 				"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
+				"../../cdn/lightgallery.js/1.1.1/js/lightgallery.fixed.js",
 				"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
 				"./node_modules/any-resize-event/dist/any-resize-event.js",
 				"./node_modules/adaptivecards/dist/adaptivecards.js",
@@ -86,7 +88,9 @@ module.exports = {
 				//"./node_modules/minigrid/dist/minigrid.min.js",
 				//"./node_modules/mustache/mustache.js",
 				//"./node_modules/wolfy87-eventemitter/EventEmitter.js",
+				"../../cdn/glightbox/1.0.8/js/glightbox.fixed.js",
 				"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
+				"../../cdn/lightgallery.js/1.1.1/js/lightgallery.fixed.js",
 				"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
 				"./node_modules/any-resize-event/dist/any-resize-event.js",
 				"./node_modules/adaptivecards/dist/adaptivecards.js",
@@ -120,6 +124,8 @@ module.exports = {
 				//"./node_modules/normalize.css/normalize.css",
 				"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
 				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
+				"../../cdn/glightbox/1.0.8/css/glightbox.fixed.css",
+				"../../cdn/lightgallery.js/1.1.1/css/lightgallery.fixed.css",
 				"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
 			],
 			"options": {
@@ -151,6 +157,8 @@ module.exports = {
 				//"./node_modules/normalize.css/normalize.css",
 				"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
 				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
+				"../../cdn/glightbox/1.0.8/css/glightbox.fixed.css",
+				"../../cdn/lightgallery.js/1.1.1/css/lightgallery.fixed.css",
 				"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
 			],
 			"options": {

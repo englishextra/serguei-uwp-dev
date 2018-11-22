@@ -7,7 +7,6 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
  */
 (function (root, document) {
 	"use strict";
-
 	var loadJsCss = function (files, callback) {
 		var _this = this;
 		var appendChild = "appendChild";
@@ -55,18 +54,19 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 			};
 			_this.head[appendChild](script);
 			/* if (_this.ref[parentNode]) {
-   _this.ref[parentNode][insertBefore](script, _this.ref);
-   } else {
-   (_this.body || _this.head)[appendChild](script);
-   } */
+			_this.ref[parentNode][insertBefore](script, _this.ref);
+			} else {
+			(_this.body || _this.head)[appendChild](script);
+			} */
 			(_this.body || _this.head)[appendChild](script);
 		};
-		var i, l;
+		var i,
+		l;
 		for (i = 0, l = _this.files[_length]; i < l; i += 1) {
-			if (/\.js$|\.js\?/.test(_this.files[i])) {
+			if ((/\.js$|\.js\?/).test(_this.files[i])) {
 				_this.js.push(_this.files[i]);
 			}
-			if (/\.css$|\.css\?|\/css\?/.test(_this.files[i])) {
+			if ((/\.css$|\.css\?|\/css\?/).test(_this.files[i])) {
 				_this.loadStyle(_this.files[i]);
 			}
 		}
@@ -84,7 +84,6 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
  */
 (function (root) {
 	"use strict";
-
 	var throttle = function (func, wait) {
 		var ctx;
 		var args;
@@ -119,7 +118,6 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
  */
 (function (root) {
 	"use strict";
-
 	var debounce = function (func, wait) {
 		var timeout;
 		var args;
@@ -130,7 +128,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 			args = [].slice.call(arguments, 0);
 			timestamp = new Date();
 			var later = function () {
-				var last = new Date() - timestamp;
+				var last = (new Date()) - timestamp;
 				if (last < wait) {
 					timeout = setTimeout(later, wait - last);
 				} else {
@@ -150,10 +148,9 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
  */
 (function (root) {
 	"use strict";
-
 	var isNodejs = "undefined" !== typeof process && "undefined" !== typeof require || "";
 	var isElectron = "undefined" !== typeof root && root.process && "renderer" === root.process.type || "";
-	var isNwjs = function () {
+	var isNwjs = (function () {
 		if ("undefined" !== typeof isNodejs && isNodejs) {
 			try {
 				if ("undefined" !== typeof require("nw.gui")) {
@@ -164,7 +161,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 			}
 		}
 		return false;
-	}();
+	})();
 	root.isNodejs = isNodejs;
 	root.isElectron = isElectron;
 	root.isNwjs = isNwjs;
@@ -174,7 +171,6 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
  */
 (function (root) {
 	"use strict";
-
 	var openDeviceBrowser = function (url) {
 		var triggerForElectron = function () {
 			var es = isElectron ? require("electron").shell : "";
@@ -196,7 +192,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 			triggerForNwjs();
 		} else {
 			var locationProtocol = root.location.protocol || "",
-			    hasHTTP = locationProtocol ? "http:" === locationProtocol ? "http" : "https:" === locationProtocol ? "https" : "" : "";
+			hasHTTP = locationProtocol ? "http:" === locationProtocol ? "http" : "https:" === locationProtocol ? "https" : "" : "";
 			if (hasHTTP) {
 				triggerForHTTP();
 			} else {
@@ -211,7 +207,6 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
  */
 (function (root) {
 	"use strict";
-
 	var getHTTP = function (force) {
 		var any = force || "";
 		var locationProtocol = root.location.protocol || "";
@@ -225,26 +220,25 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 (function (root, document) {
 	"use strict";
 	/*jshint bitwise: false */
-
 	var createElement = "createElement";
 	var parseLink = function (url, full) {
 		var _full = full || "";
-		return function () {
+		return (function () {
 			var _replace = function (s) {
 				return s.replace(/^(#|\?)/, "").replace(/\:$/, "");
 			};
 			var _location = location || "";
 			var _protocol = function (protocol) {
 				switch (protocol) {
-					case "http:":
-						return _full ? ":" + 80 : 80;
-					case "https:":
-						return _full ? ":" + 443 : 443;
-					default:
-						return _full ? ":" + _location.port : _location.port;
+				case "http:":
+					return _full ? ":" + 80 : 80;
+				case "https:":
+					return _full ? ":" + 443 : 443;
+				default:
+					return _full ? ":" + _location.port : _location.port;
 				}
 			};
-			var _isAbsolute = 0 === url.indexOf("//") || !!~url.indexOf("://");
+			var _isAbsolute = (0 === url.indexOf("//") || !!~url.indexOf("://"));
 			var _locationHref = root.location || "";
 			var _origin = function () {
 				var o = _locationHref.protocol + "//" + _locationHref.hostname + (_locationHref.port ? ":" + _locationHref.port : "");
@@ -262,19 +256,19 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 				href: _link.href,
 				origin: _origin(),
 				host: _link.host || _location.host,
-				port: "0" === _link.port || "" === _link.port ? _protocol(_link.protocol) : _full ? _link.port : _replace(_link.port),
+				port: ("0" === _link.port || "" === _link.port) ? _protocol(_link.protocol) : (_full ? _link.port : _replace(_link.port)),
 				hash: _full ? _link.hash : _replace(_link.hash),
 				hostname: _link.hostname || _location.hostname,
-				pathname: _link.pathname.charAt(0) !== "/" ? _full ? "/" + _link.pathname : _link.pathname : _full ? _link.pathname : _link.pathname.slice(1),
-				protocol: !_link.protocol || ":" === _link.protocol ? _full ? _location.protocol : _replace(_location.protocol) : _full ? _link.protocol : _replace(_link.protocol),
+				pathname: _link.pathname.charAt(0) !== "/" ? (_full ? "/" + _link.pathname : _link.pathname) : (_full ? _link.pathname : _link.pathname.slice(1)),
+				protocol: !_link.protocol || ":" === _link.protocol ? (_full ? _location.protocol : _replace(_location.protocol)) : (_full ? _link.protocol : _replace(_link.protocol)),
 				search: _full ? _link.search : _replace(_link.search),
 				query: _full ? _link.search : _replace(_link.search),
 				isAbsolute: _isAbsolute,
 				isRelative: !_isAbsolute,
 				isCrossDomain: _isCrossDomain(),
-				hasHTTP: /^(http|https):\/\//i.test(url) ? true : false
+				hasHTTP: (/^(http|https):\/\//i).test(url) ? true : false
 			};
-		}();
+		})();
 	};
 	/*jshint bitwise: true */
 	root.parseLink = parseLink;
@@ -284,7 +278,6 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
  */
 (function (root, document) {
 	"use strict";
-
 	var classList = "classList";
 	var getAttribute = "getAttribute";
 	var getElementsByTagName = "getElementsByTagName";
@@ -318,7 +311,8 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 			}
 		};
 		if (linkAll) {
-			var i, l;
+			var i,
+			l;
 			for (i = 0, l = linkAll[_length]; i < l; i += 1) {
 				arrange(linkAll[i]);
 			}
@@ -332,7 +326,6 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
  */
 (function (root) {
 	"use strict";
-
 	var classList = "classList";
 	var getElementsByClassName = "getElementsByClassName";
 	var isActiveClass = "is-active";
@@ -345,11 +338,11 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 		};
 		if (macy) {
 			var timer = setTimeout(function () {
-				clearTimeout(timer);
-				timer = null;
-				logThis();
-				macy.recalculate(true, true);
-			}, timeout);
+					clearTimeout(timer);
+					timer = null;
+					logThis();
+					macy.recalculate(true, true);
+				}, timeout);
 		}
 	};
 	var updateMacyThrottled = throttle(updateMacy, 2000);
@@ -411,7 +404,6 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
  */
 (function (root) {
 	"use strict";
-
 	var appendChild = "appendChild";
 	var renderAdaptiveCard = function (acGrid, cardObj, renderOptions, onExecute, callback) {
 		if (root.AdaptiveCards && acGrid) {
@@ -438,37 +430,37 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	root.layoutTypeToTabs = function (event) {
 		event.preventDefault();
 		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
-			return el.disabled = false;
+			return (el.disabled = false);
 		});
 		event.target.disabled = true;
-		document.body.setAttribute("data-layouttype", "tabs");
+		document.body.setAttribute("data-layout-type", "tabs");
 	};
 
 	root.layoutTypeToOverlay = function (event) {
 		event.preventDefault();
 		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
-			return el.disabled = false;
+			return (el.disabled = false);
 		});
 		event.target.disabled = true;
-		document.body.setAttribute("data-layouttype", "overlay");
+		document.body.setAttribute("data-layout-type", "overlay");
 	};
 
 	root.layoutTypeToDockedMinimized = function (event) {
 		event.preventDefault();
 		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
-			return el.disabled = false;
+			return (el.disabled = false);
 		});
 		event.target.disabled = true;
-		document.body.setAttribute("data-layouttype", "docked-minimized");
+		document.body.setAttribute("data-layout-type", "docked-minimized");
 	};
 
 	root.layoutTypeToDocked = function (event) {
 		event.preventDefault();
 		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
-			return el.disabled = false;
+			return (el.disabled = false);
 		});
 		event.target.disabled = true;
-		document.body.setAttribute("data-layouttype", "docked");
+		document.body.setAttribute("data-layout-type", "docked");
 	};
 })("undefined" !== typeof window ? window : this);
 /*!
@@ -508,8 +500,7 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 			});
 		}
 		var switchLayoutType = function (x) {
-			if (x.matches) {
-				// If media query matches
+			if (x.matches) { // If media query matches
 				document.body.dataset.layouttype = "overlay";
 			} else {
 				document.body.dataset.layouttype = "docked-minimized";
@@ -518,60 +509,83 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 		var layoutTypeTreshold = root.matchMedia("(max-width: 360px)");
 		switchLayoutType(layoutTypeTreshold); // Call listener function at run time
 		layoutTypeTreshold.addListener(switchLayoutType); // Attach listener function on state changes
+
 	};
 
 	/* var scripts = [
- 			"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css",
- 			"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
- 			"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css"
- ]; */
+	"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
+	"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
+	"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
+	]; */
 
 	var scripts = [
-	/* "./libs/serguei-uwp/css/vendors.min.css", */
-	"./libs/serguei-uwp/css/bundle.min.css"];
+		/* "./libs/serguei-uwp/css/vendors.min.css", */
+		"./libs/serguei-uwp/css/bundle.min.css"
+	];
 
-	var supportsPassive = function () {
+	var supportsPassive = (function () {
 		var support = false;
 		try {
 			var opts = Object[defineProperty] && Object[defineProperty]({}, "passive", {
-				get: function () {
-					support = true;
-				}
-			});
+					get: function () {
+						support = true;
+					}
+				});
 			root[_addEventListener]("test", function () {}, opts);
 		} catch (err) {}
 		return support;
-	}();
+	})();
 
-	var needsPolyfills = function () {
-		return !String.prototype.startsWith || !supportsPassive || !root.requestAnimationFrame || !root.matchMedia || "undefined" === typeof root.Element && !("dataset" in docElem) || !("classList" in document[createElement]("_")) || document[createElementNS] && !("classList" in document[createElementNS]("http://www.w3.org/2000/svg", "g")) ||
+	var needsPolyfills = (function () {
+		return !String.prototype.startsWith ||
+		!supportsPassive ||
+		!root.requestAnimationFrame ||
+		!root.matchMedia ||
+		("undefined" === typeof root.Element && !("dataset" in docElem)) ||
+		!("classList" in document[createElement]("_")) ||
+		document[createElementNS] && !("classList" in document[createElementNS]("http://www.w3.org/2000/svg", "g")) ||
 		/* !document.importNode || */
 		/* !("content" in document[createElement]("template")) || */
-		root.attachEvent && !root[_addEventListener] || !("onhashchange" in root) || !Array.prototype.indexOf || !root.Promise || !root.fetch || !document[querySelectorAll] || !document[querySelector] || !Function.prototype.bind || Object[defineProperty] && Object[getOwnPropertyDescriptor] && Object[getOwnPropertyDescriptor](Element.prototype, "textContent") && !Object[getOwnPropertyDescriptor](Element.prototype, "textContent").get || !("undefined" !== typeof root.localStorage && "undefined" !== typeof root.sessionStorage) || !root.WeakMap || !root.MutationObserver;
-	}();
+		(root.attachEvent && !root[_addEventListener]) ||
+		!("onhashchange" in root) ||
+		!Array.prototype.indexOf ||
+		!root.Promise ||
+		!root.fetch ||
+		!document[querySelectorAll] ||
+		!document[querySelector] ||
+		!Function.prototype.bind ||
+		(Object[defineProperty] &&
+			Object[getOwnPropertyDescriptor] &&
+			Object[getOwnPropertyDescriptor](Element.prototype, "textContent") &&
+			!Object[getOwnPropertyDescriptor](Element.prototype, "textContent").get) ||
+		!("undefined" !== typeof root.localStorage && "undefined" !== typeof root.sessionStorage) ||
+		!root.WeakMap ||
+		!root.MutationObserver;
+	})();
 
 	if (needsPolyfills) {
 		scripts.push("./cdn/polyfills/js/polyfills.fixed.min.js");
 	}
 
 	/* var scripts = [
- 			"../../cdn/imagesloaded/4.1.4/js/imagesloaded.fixed.js",
- 			"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
- 			"./node_modules/adaptivecards/dist/adaptivecards.js",
- 			"./node_modules/macy/dist/macy.js"
- ]; */
+	"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
+	"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
+	"./node_modules/any-resize-event/dist/any-resize-event.js",
+	"./node_modules/adaptivecards/dist/adaptivecards.js",
+	"./node_modules/macy/dist/macy.js"
+	]; */
 
 	scripts.push("./libs/serguei-uwp/js/vendors.min.js");
 
 	/*!
-  * load scripts after webfonts loaded using doesFontExist
-  */
+	 * load scripts after webfonts loaded using doesFontExist
+	 */
 
 	var supportsCanvas;
-	supportsCanvas = function () {
+	supportsCanvas = (function () {
 		var elem = document[createElement]("canvas");
 		return !!(elem.getContext && elem.getContext("2d"));
-	}();
+	})();
 
 	var onFontsLoadedCallback = function () {
 
@@ -592,19 +606,19 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 		var checkFontIsLoaded;
 		checkFontIsLoaded = function () {
 			/*!
-    * check only for fonts that are used in current page
-    */
+			 * check only for fonts that are used in current page
+			 */
 			if (doesFontExist("Roboto") /* && doesFontExist("Roboto Mono") */) {
-					onFontsLoaded();
-				}
+				onFontsLoaded();
+			}
 		};
 
 		/* if (supportsCanvas) {
-  	slot = setInterval(checkFontIsLoaded, 100);
-  } else {
-  	slot = null;
-  	onFontsLoaded();
-  } */
+		slot = setInterval(checkFontIsLoaded, 100);
+		} else {
+		slot = null;
+		onFontsLoaded();
+		} */
 		onFontsLoaded();
 	};
 
@@ -615,8 +629,10 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 			timer = null;
 			var load;
 			load = new loadJsCss([
-			/* forcedHTTP + "://fonts.googleapis.com/css?family=Roboto+Mono%7CRoboto:300,400,500,700&subset=cyrillic,latin-ext", */
-			"./libs/serguei-uwp/css/vendors.min.css"], onFontsLoadedCallback);
+						/* forcedHTTP + "://fonts.googleapis.com/css?family=Roboto+Mono%7CRoboto:300,400,500,700&subset=cyrillic,latin-ext", */
+						"./libs/serguei-uwp/css/vendors.min.css"
+					],
+					onFontsLoadedCallback);
 		};
 		var req;
 		var raf = function () {
@@ -632,46 +648,49 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	loadDeferred();
 
 	/*!
-  * load scripts after webfonts loaded using webfontloader
-  */
+	 * load scripts after webfonts loaded using webfontloader
+	 */
 
 	/* root.WebFontConfig = {
- 	google: {
- 		families: [
- 			"Roboto:300,400,500,700:cyrillic",
- 			"Roboto Mono:400:cyrillic,latin-ext"
- 		]
- 	},
- 	listeners: [],
- 	active: function () {
- 		this.called_ready = true;
- 		var i;
- 		for (i = 0; i < this.listeners[_length]; i++) {
- 			this.listeners[i]();
- 		}
- 		i = null;
- 	},
- 	ready: function (callback) {
- 		if (this.called_ready) {
- 			callback();
- 		} else {
- 			this.listeners.push(callback);
- 		}
- 	}
- };
- 	var onFontsLoadedCallback = function () {
- 		var onFontsLoaded = function () {
- 		progressBar.increase(20);
- 			var load;
- 		load = new loadJsCss(scripts, run);
- 	};
- 		root.WebFontConfig.ready(onFontsLoaded);
- };
- 	var load;
- load = new loadJsCss(
- 		[forcedHTTP + "://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js"],
- 		onFontsLoadedCallback
- 	); */
-})("undefined" !== typeof window ? window : this, document);
+	google: {
+	families: [
+	"Roboto:300,400,500,700:cyrillic",
+	"Roboto Mono:400:cyrillic,latin-ext"
+	]
+	},
+	listeners: [],
+	active: function () {
+	this.called_ready = true;
+	var i;
+	for (i = 0; i < this.listeners[_length]; i++) {
+	this.listeners[i]();
+	}
+	i = null;
+	},
+	ready: function (callback) {
+	if (this.called_ready) {
+	callback();
+	} else {
+	this.listeners.push(callback);
+	}
+	}
+	};
 
-//# sourceMappingURL=bundle.js.map
+	var onFontsLoadedCallback = function () {
+
+	var onFontsLoaded = function () {
+	progressBar.increase(20);
+
+	var load;
+	load = new loadJsCss(scripts, run);
+	};
+
+	root.WebFontConfig.ready(onFontsLoaded);
+	};
+
+	var load;
+	load = new loadJsCss(
+	[forcedHTTP + "://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js"],
+	onFontsLoadedCallback
+	); */
+})("undefined" !== typeof window ? window : this, document);

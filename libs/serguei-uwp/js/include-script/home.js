@@ -18,7 +18,7 @@ updateMacyThrottled*/
 		 * @see {@link https://adaptivecards.io/samples/}
 		 * @see {@link https://github.com/Microsoft/AdaptiveCards/issues/1984}
 		 */
-		var acRenderIntro = {
+		var renderACIntro = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
@@ -42,7 +42,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/c599a30aa1744c200a159bc418635d46.jpg",
 									"size": "stretch",
 									"style": "person"
@@ -86,7 +86,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/3b60033301b54ab6552f06ac61902749.jpg",
 									"size": "stretch"
 								}
@@ -96,7 +96,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/6a6e4f6198cc19aaf08995bfbf390908.jpg",
 									"size": "stretch"
 								}
@@ -106,7 +106,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/69861f6b540bc9377ea193dc043e991d.jpg",
 									"size": "stretch"
 								}
@@ -118,7 +118,7 @@ updateMacyThrottled*/
 			]
 		};
 
-		var acRenderBackground = {
+		var renderACBackground = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
@@ -153,7 +153,7 @@ updateMacyThrottled*/
 			]
 		};
 
-		var acRenderInPerson = {
+		var renderACInPerson = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
@@ -171,7 +171,7 @@ updateMacyThrottled*/
 			]
 		};
 
-		var acRenderDiploma1 = {
+		var renderACDiploma1 = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
@@ -192,7 +192,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/e58495540679687089b9f86c4b94b5dc.jpg",
 									"size": "stretch",
 									"selectAction": {
@@ -208,7 +208,7 @@ updateMacyThrottled*/
 			]
 		};
 
-		var acRenderDiploma2 = {
+		var renderACDiploma2 = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
@@ -229,7 +229,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/29c50626a6dac85aaa355bacfca2929d.jpg",
 									"size": "stretch",
 									"selectAction": {
@@ -245,7 +245,7 @@ updateMacyThrottled*/
 			]
 		};
 
-		var acRenderDiploma3 = {
+		var renderACDiploma3 = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
@@ -266,8 +266,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/9d063d1fec85960f81275a0ed1f1529b.jpg",
 									"size": "stretch",
 									"selectAction": {
@@ -283,7 +282,7 @@ updateMacyThrottled*/
 			]
 		};
 
-		var acRenderDiploma4 = {
+		var renderACDiploma4 = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
@@ -304,7 +303,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/shimanskybiz-instagram/@1x/799463f7476954257d5b45671dc76e0b.jpg",
 									"size": "stretch",
 									"selectAction": {
@@ -320,7 +319,7 @@ updateMacyThrottled*/
 			]
 		};
 
-		var acRenderContacts = {
+		var renderACContacts = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
@@ -338,7 +337,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-email-640x640.png",
 									"size": "stretch",
 									"selectAction": {
@@ -353,7 +352,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-phone-640x640.png",
 									"size": "stretch",
 									"selectAction": {
@@ -368,7 +367,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-telegram-640x640.png",
 									"size": "stretch",
 									"selectAction": {
@@ -383,7 +382,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-viber-640x640.png",
 									"size": "stretch",
 									"selectAction": {
@@ -398,7 +397,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-whatsapp-640x640.png",
 									"size": "stretch",
 									"selectAction": {
@@ -413,7 +412,7 @@ updateMacyThrottled*/
 							"width": 1,
 							"items": [{
 									"type": "Image",
-									"altText" : "",
+									"altText": "",
 									"url": "./libs/serguei-uwp/img/sprite-contacts/@1x/sprite-contacts-banner-skype-640x640.png",
 									"size": "stretch",
 									"selectAction": {
@@ -436,7 +435,7 @@ updateMacyThrottled*/
 		 * @see {@link https://docs.microsoft.com/en-us/adaptive-cards/rendering-cards/host-config#adaptivecardconfig}
 		 * @see {@link https://material.io/tools/color/#!/?view.left=0&view.right=0&secondary.color=BDBDBD&primary.color=F06292}
 		 */
-		var acRenderOptions = {
+		var renderACOptions = {
 			"fontFamily": "Roboto, Segoe UI, Segoe MDL2 Assets, Helvetica Neue, sans-serif",
 			"containerStyles": {
 				"default": {
@@ -475,24 +474,24 @@ updateMacyThrottled*/
 			}
 		};
 
-		var acRenderArray = [
-			acRenderIntro,
-			acRenderBackground,
-			acRenderInPerson,
-			acRenderDiploma1,
-			acRenderDiploma2,
-			acRenderDiploma3,
-			acRenderDiploma4,
-			acRenderContacts
+		var renderACItems = [
+			renderACIntro,
+			renderACBackground,
+			renderACInPerson,
+			renderACDiploma1,
+			renderACDiploma2,
+			renderACDiploma3,
+			renderACDiploma4,
+			renderACContacts
 		];
 
-		var acOnExecute = function (action) {
+		var onACExecute = function (action) {
 			if (action.url) {
 				root[location].href = action.url;
 			}
 		};
 
-		var acOnRender = function () {
+		var onACRender = function () {
 			if (root.updateMacyThrottled) {
 				updateMacyThrottled();
 			}
@@ -501,58 +500,12 @@ updateMacyThrottled*/
 			}
 		};
 
-		var isBindedAdaptiveCardClass = "is-binded-adaptive-card";
-
-		var acGridClass = "ac-grid";
-
-		var acGrid = document[getElementsByClassName](acGridClass)[0] || "";
-
-		var acOnResize = function () {
-			try {
-				var acContainer = acGrid ? (acGrid.children || acGrid[querySelectorAll]("." + acGridClass + " > div") || "") : "";
-				if (acContainer) {
-					var i,
-					l;
-					for (i = 0, l = acContainer[_length]; i < l; i += 1) {
-						if (!acContainer[i][classList].contains(isBindedAdaptiveCardClass)) {
-							acContainer[i][classList].add(isBindedAdaptiveCardClass);
-							acContainer[i][_addEventListener]("onresize", updateMacyThrottled, {
-								passive: true
-							});
-						}
-					}
-					i = l = null;
-				}
-			} catch (err) {
-				throw new Error("cannot acOnResize " + err);
-			}
-		};
-
-		var acOnManage = function () {
-			if (root.imagesLoaded) {
-				/*!
-				 * @see {@link https://imagesloaded.desandro.com/}
-				 * Triggered after all images have been either loaded or confirmed broken.
-				 */
-				var imgLoad;
-				imgLoad = new imagesLoaded(acGrid);
-				var onAlways = function (instance) {
-					if (root.updateMacyThrottled) {
-						updateMacyThrottled();
-					}
-					console.log("imagesLoaded: found " + instance.images[_length] + " images");
-				};
-				imgLoad.on("always", onAlways);
-			}
-			acOnResize();
-		};
-
-		var manageAdaptiveCards = function (acGrid, callback) {
+		var manageAC = function (macyGrid, callback) {
 			if (root.renderAdaptiveCard) {
 				var i,
 				l;
-				for (i = 0, l = acRenderArray[_length]; i < l; i += 1) {
-					renderAdaptiveCard(acGrid, acRenderArray[i], acRenderOptions, acOnExecute, acOnRender);
+				for (i = 0, l = renderACItems[_length]; i < l; i += 1) {
+					renderAdaptiveCard(macyGrid, renderACItems[i], renderACOptions, onACExecute, onACRender);
 				}
 				i = l = null;
 				if ("function" === typeof callback) {
@@ -561,8 +514,54 @@ updateMacyThrottled*/
 			}
 		};
 
-		if (acGrid) {
-			manageMacy(acGridClass, {
+		var isBindedMacyItemClass = "is-binded-macy-item";
+
+		var macyGridClass = "macy-grid";
+
+		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
+
+		var onMacyResize = function () {
+			try {
+				var container = macyGrid ? (macyGrid.children || macyGrid[querySelectorAll]("." + macyGridClass + " > *") || "") : "";
+				if (container) {
+					var i,
+					l;
+					for (i = 0, l = container[_length]; i < l; i += 1) {
+						if (!container[i][classList].contains(isBindedMacyItemClass)) {
+							container[i][classList].add(isBindedMacyItemClass);
+							container[i][_addEventListener]("onresize", updateMacyThrottled, {
+								passive: true
+							});
+						}
+					}
+					i = l = null;
+				}
+			} catch (err) {
+				throw new Error("cannot onMacyResize " + err);
+			}
+		};
+
+		var onMacyManage = function () {
+			if (root.imagesLoaded) {
+				/*!
+				 * @see {@link https://imagesloaded.desandro.com/}
+				 * Triggered after all images have been either loaded or confirmed broken.
+				 */
+				var imgLoad;
+				imgLoad = new imagesLoaded(macyGrid);
+				var onAlways = function (instance) {
+					if (root.updateMacyThrottled) {
+						updateMacyThrottled();
+					}
+					console.log("imagesLoaded: found " + instance.images[_length] + " images");
+				};
+				imgLoad.on("always", onAlways);
+			}
+			onMacyResize();
+		};
+
+		if (macyGrid) {
+			manageMacy(macyGridClass, {
 				trueOrder: false,
 				waitForImages: false,
 				margin: 20,
@@ -571,13 +570,13 @@ updateMacyThrottled*/
 					1280: 4,
 					1024: 3,
 					960: 2,
-					640: 1,
+					640: 2,
 					480: 1,
 					360: 1
 				}
 			});
 
-			manageAdaptiveCards(acGrid, acOnManage);
+			manageAC(macyGrid, onMacyManage);
 		}
 
 		if (root.manageExternalLinkAll) {
