@@ -1,4 +1,5 @@
-/*global console, imagesLoaded, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
+/*global console, imagesLoaded, LazyLoad, manageExternalLinkAll,
+manageMacy, updateMacyThrottled*/
 (function (root, document) {
 	"use strict";
 
@@ -10,12 +11,17 @@
 		var _addEventListener = "addEventListener";
 		var _length = "length";
 
-		var onMacyRender = function () {
-			if (root.updateMacyThrottled) {
-				updateMacyThrottled();
-			}
-			if (root.manageExternalLinkAll) {
-				manageExternalLinkAll();
+		var dataSrcImgClass = "data-src-img";
+
+		/*!
+		 * @see {@link https://github.com/verlok/lazyload}
+		 */
+		var manageLazyLoad = function (dataSrcImgClass) {
+			if (root.LazyLoad) {
+				var lzld;
+				lzld = new LazyLoad({
+						elements_selector: "." + dataSrcImgClass
+					});
 			}
 		};
 
@@ -24,6 +30,15 @@
 		var macyGridClass = "macy-grid";
 
 		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
+
+		var onMacyRender = function () {
+			if (root.updateMacyThrottled) {
+				updateMacyThrottled();
+			}
+			if (root.manageExternalLinkAll) {
+				manageExternalLinkAll();
+			}
+		};
 
 		var onMacyResize = function () {
 			try {
@@ -62,67 +77,71 @@
 				};
 				imgLoad.on("always", onAlways);
 			}
+			onMacyRender();
 			onMacyResize();
+			manageLazyLoad(dataSrcImgClass);
 		};
 
 		var macyItems = [{
-				"url": "https://build.phonegap.com/apps/1824701/share",
+				"href": "https://build.phonegap.com/apps/1824701/share",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/build.phonegap.com-apps-1824701-share.jpg"
 			}, {
-				"url": "https://englishextra.github.io/403.html",
+				"href": "https://englishextra.github.io/403.html",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/englishextra.github.io-403-html.jpg"
 			}, {
-				"url": "https://englishextra.github.io/404.html",
+				"href": "https://englishextra.github.io/404.html",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/englishextra.github.io-404-html.jpg"
 			}, {
-				"url": "https://englishextra.github.io/pages/more/more_irregular_verbs.html",
+				"href": "https://englishextra.github.io/pages/more/more_irregular_verbs.html",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/englishextra.github.io-pages-more-more_irregular_verbs-html.jpg"
 			}, {
-				"url": "https://englishextra.github.io/pages/more/more_newsletter_can_get_english_for_free.html",
+				"href": "https://englishextra.github.io/pages/more/more_newsletter_can_get_english_for_free.html",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/englishextra.github.io-pages-more-more_newsletter_can_get_english_for_free-html.jpg"
 			}, {
-				"url": "https://englishextra.github.io/serguei/about.html",
+				"href": "https://englishextra.github.io/serguei/about.html",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/englishextra.github.io-serguei-about-html.jpg"
 			}, {
-				"url": "https://englishextra.github.io/serguei/slides.html",
+				"href": "https://englishextra.github.io/serguei/slides.html",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/englishextra.github.io-serguei-slides-html.jpg"
 			}, {
-				"url": "https://englishextra.github.io/",
+				"href": "https://englishextra.github.io/",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/englishextra.github.io.jpg"
 			}, {
-				"url": "https://englishextra.gitlab.io/",
+				"href": "https://englishextra.gitlab.io/",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/englishextra.gitlab.io.jpg"
 			}, {
-				"url": "https://github.com/englishextra",
+				"href": "https://github.com/englishextra",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/github.com-englishextra.jpg"
 			}, {
-				"url": "https://mytushino.github.io/",
+				"href": "https://mytushino.github.io/",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/mytushino.github.io.jpg"
 			}, {
-				"url": "https://noushevr.github.io/",
+				"href": "https://noushevr.github.io/",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/noushevr.github.io.jpg"
 			}, {
-				"url": "https://www.behance.net/englishextra",
+				"href": "https://www.behance.net/englishextra",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/www.behance.net-englishextra.jpg"
 			}, {
-				"url": "https://www.domestika.org/en/englishextra",
+				"href": "https://www.domestika.org/en/englishextra",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/www.domestika.org-en-englishextra.jpg"
 			}, {
-				"url": "https://www.npmjs.com/~englishextra",
+				"href": "https://www.npmjs.com/~englishextra",
 				"src": "./libs/serguei-uwp/img/works-screenshots/@1x/www.npmjs.com-englishextra.jpg"
 			}
 		];
+
+		var dataSrcImgKeyName = "src";
+		var transparentPixel = "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%201%201%27%2F%3E";
 
 		var addMacyItems = function (macyGrid, callback) {
 			var html = "";
 			var i,
 			l;
 			for (i = 0, l = macyItems.length; i < l; i += 1) {
-				html += '<a href="' + macyItems[i].url + '" aria-label="Ссылка"><img src="' + macyItems[i].src + '" alt="" /></a>\n';
+				html += '<a href="' + macyItems[i].href + '" aria-label="Ссылка"><img src="' + transparentPixel + '" class="' + dataSrcImgClass + '" data-' + dataSrcImgKeyName + '="' + macyItems[i].src + '" alt="" /></a>\n';
 			}
 			i = l = null;
 			macyGrid.innerHTML = html;
-			onMacyRender();
 			if ("function" === typeof callback) {
 				callback();
 			}

@@ -2335,6 +2335,451 @@
 
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var LazyLoad = function () {
+	'use strict';
+
+	var defaultSettings = {
+		elements_selector: "img",
+		container: document,
+		threshold: 300,
+		thresholds: null,
+		data_src: "src",
+		data_srcset: "srcset",
+		data_sizes: "sizes",
+		data_bg: "bg",
+		class_loading: "loading",
+		class_loaded: "loaded",
+		class_error: "error",
+		load_delay: 0,
+		callback_load: null,
+		callback_error: null,
+		callback_set: null,
+		callback_enter: null,
+		callback_finish: null,
+		to_webp: false
+	};
+
+	var getInstanceSettings = function getInstanceSettings(customSettings) {
+		return _extends({}, defaultSettings, customSettings);
+	};
+
+	var dataPrefix = "data-";
+	var processedDataName = "was-processed";
+	var timeoutDataName = "ll-timeout";
+	var trueString = "true";
+
+	var getData = function getData(element, attribute) {
+		return element.getAttribute(dataPrefix + attribute);
+	};
+
+	var setData = function setData(element, attribute, value) {
+		var attrName = dataPrefix + attribute;
+		if (value === null) {
+			element.removeAttribute(attrName);
+			return;
+		}
+		element.setAttribute(attrName, value);
+	};
+
+	var setWasProcessedData = function setWasProcessedData(element) {
+		return setData(element, processedDataName, trueString);
+	};
+
+	var getWasProcessedData = function getWasProcessedData(element) {
+		return getData(element, processedDataName) === trueString;
+	};
+
+	var setTimeoutData = function setTimeoutData(element, value) {
+		return setData(element, timeoutDataName, value);
+	};
+
+	var getTimeoutData = function getTimeoutData(element) {
+		return getData(element, timeoutDataName);
+	};
+
+	var purgeProcessedElements = function purgeProcessedElements(elements) {
+		return elements.filter(function (element) {
+			return !getWasProcessedData(element);
+		});
+	};
+
+	var purgeOneElement = function purgeOneElement(elements, elementToPurge) {
+		return elements.filter(function (element) {
+			return element !== elementToPurge;
+		});
+	};
+
+	/* Creates instance and notifies it through the window element */
+	var createInstance = function createInstance(classObj, options) {
+		var event;
+		var eventString = "LazyLoad::Initialized";
+		var instance = new classObj(options);
+		try {
+			// Works in modern browsers
+			event = new CustomEvent(eventString, { detail: { instance: instance } });
+		} catch (err) {
+			// Works in Internet Explorer (all versions)
+			event = document.createEvent("CustomEvent");
+			event.initCustomEvent(eventString, false, false, { instance: instance });
+		}
+		window.dispatchEvent(event);
+	};
+
+	/* Auto initialization of one or more instances of lazyload, depending on the
+     options passed in (plain object or an array) */
+	function autoInitialize(classObj, options) {
+		if (!options) {
+			return;
+		}
+		if (!options.length) {
+			// Plain object
+			createInstance(classObj, options);
+		} else {
+			// Array of objects
+			for (var i = 0, optionsItem; (optionsItem = options[i]); i += 1) {
+				createInstance(classObj, optionsItem);
+			}
+		}
+	}
+
+	var replaceExtToWebp = function replaceExtToWebp(value, condition) {
+		return condition ? value.replace(/\.(jpe?g|png)/gi, ".webp") : value;
+	};
+
+	var detectWebp = function detectWebp() {
+		var webpString = "image/webp";
+		var canvas = document.createElement("canvas");
+
+		if (canvas.getContext && canvas.getContext("2d")) {
+			return canvas.toDataURL(webpString).indexOf("data:" + webpString) === 0;
+		}
+
+		return false;
+	};
+
+	var runningOnBrowser = typeof window !== "undefined";
+
+	var isBot = runningOnBrowser && !("onscroll" in window) || /(gle|ing|ro)bot|crawl|spider/i.test(navigator.userAgent);
+
+	var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+
+	var supportsClassList = runningOnBrowser && "classList" in document.createElement("p");
+
+	var supportsWebp = runningOnBrowser && detectWebp();
+
+	var setSourcesInChildren = function setSourcesInChildren(parentTag, attrName, dataAttrName, toWebpFlag) {
+		for (var i = 0, childTag; (childTag = parentTag.children[i]); i += 1) {
+			if (childTag.tagName === "SOURCE") {
+				var attrValue = getData(childTag, dataAttrName);
+				setAttributeIfValue(childTag, attrName, attrValue, toWebpFlag);
+			}
+		}
+	};
+
+	var setAttributeIfValue = function setAttributeIfValue(element, attrName, value, toWebpFlag) {
+		if (!value) {
+			return;
+		}
+		element.setAttribute(attrName, replaceExtToWebp(value, toWebpFlag));
+	};
+
+	var setSourcesImg = function setSourcesImg(element, settings) {
+		var toWebpFlag = supportsWebp && settings.to_webp;
+		var srcsetDataName = settings.data_srcset;
+		var parent = element.parentNode;
+
+		if (parent && parent.tagName === "PICTURE") {
+			setSourcesInChildren(parent, "srcset", srcsetDataName, toWebpFlag);
+		}
+		var sizesDataValue = getData(element, settings.data_sizes);
+		setAttributeIfValue(element, "sizes", sizesDataValue);
+		var srcsetDataValue = getData(element, srcsetDataName);
+		setAttributeIfValue(element, "srcset", srcsetDataValue, toWebpFlag);
+		var srcDataValue = getData(element, settings.data_src);
+		setAttributeIfValue(element, "src", srcDataValue, toWebpFlag);
+	};
+
+	var setSourcesIframe = function setSourcesIframe(element, settings) {
+		var srcDataValue = getData(element, settings.data_src);
+
+		setAttributeIfValue(element, "src", srcDataValue);
+	};
+
+	var setSourcesVideo = function setSourcesVideo(element, settings) {
+		var srcDataName = settings.data_src;
+		var srcDataValue = getData(element, srcDataName);
+
+		setSourcesInChildren(element, "src", srcDataName);
+		setAttributeIfValue(element, "src", srcDataValue);
+		element.load();
+	};
+
+	var setSourcesBgImage = function setSourcesBgImage(element, settings) {
+		var toWebpFlag = supportsWebp && settings.to_webp;
+		var srcDataValue = getData(element, settings.data_src);
+		var bgDataValue = getData(element, settings.data_bg);
+
+		if (srcDataValue) {
+			var setValue = replaceExtToWebp(srcDataValue, toWebpFlag);
+			element.style.backgroundImage = "url(\"" + setValue + "\")";
+		}
+
+		if (bgDataValue) {
+			var _setValue = replaceExtToWebp(bgDataValue, toWebpFlag);
+			element.style.backgroundImage = _setValue;
+		}
+	};
+
+	var setSourcesFunctions = {
+		IMG: setSourcesImg,
+		IFRAME: setSourcesIframe,
+		VIDEO: setSourcesVideo
+	};
+
+	var setSources = function setSources(element, instance) {
+		var settings = instance._settings;
+		var tagName = element.tagName;
+		var setSourcesFunction = setSourcesFunctions[tagName];
+		if (setSourcesFunction) {
+			setSourcesFunction(element, settings);
+			instance._updateLoadingCount(1);
+			instance._elements = purgeOneElement(instance._elements, element);
+			return;
+		}
+		setSourcesBgImage(element, settings);
+	};
+
+	var addClass = function addClass(element, className) {
+		if (supportsClassList) {
+			element.classList.add(className);
+			return;
+		}
+		element.className += (element.className ? " " : "") + className;
+	};
+
+	var removeClass = function removeClass(element, className) {
+		if (supportsClassList) {
+			element.classList.remove(className);
+			return;
+		}
+		element.className = element.className.replace(new RegExp("(^|\\s+)" + className + "(\\s+|$)"), " ").replace(/^\s+/, "").replace(/\s+$/, "");
+	};
+
+	var callbackIfSet = function callbackIfSet(callback, argument) {
+		if (callback) {
+			callback(argument);
+		}
+	};
+
+	var genericLoadEventName = "load";
+	var mediaLoadEventName = "loadeddata";
+	var errorEventName = "error";
+
+	var addEventListener = function addEventListener(element, eventName, handler) {
+		element.addEventListener(eventName, handler);
+	};
+
+	var removeEventListener = function removeEventListener(element, eventName, handler) {
+		element.removeEventListener(eventName, handler);
+	};
+
+	var addEventListeners = function addEventListeners(element, loadHandler, errorHandler) {
+		addEventListener(element, genericLoadEventName, loadHandler);
+		addEventListener(element, mediaLoadEventName, loadHandler);
+		addEventListener(element, errorEventName, errorHandler);
+	};
+
+	var removeEventListeners = function removeEventListeners(element, loadHandler, errorHandler) {
+		removeEventListener(element, genericLoadEventName, loadHandler);
+		removeEventListener(element, mediaLoadEventName, loadHandler);
+		removeEventListener(element, errorEventName, errorHandler);
+	};
+
+	var eventHandler = function eventHandler(event, success, instance) {
+		var settings = instance._settings;
+		var className = success ? settings.class_loaded : settings.class_error;
+		var callback = success ? settings.callback_load : settings.callback_error;
+		var element = event.target;
+
+		removeClass(element, settings.class_loading);
+		addClass(element, className);
+		callbackIfSet(callback, element);
+
+		instance._updateLoadingCount(-1);
+	};
+
+	var addOneShotEventListeners = function addOneShotEventListeners(element, instance) {
+		var loadHandler = function loadHandler(event) {
+			eventHandler(event, true, instance);
+			removeEventListeners(element, loadHandler, errorHandler);
+		};
+		var errorHandler = function errorHandler(event) {
+			eventHandler(event, false, instance);
+			removeEventListeners(element, loadHandler, errorHandler);
+		};
+		addEventListeners(element, loadHandler, errorHandler);
+	};
+
+	var managedTags = ["IMG", "IFRAME", "VIDEO"];
+
+	var loadAndUnobserve = function loadAndUnobserve(element, observer, instance) {
+		revealElement(element, instance);
+		observer.unobserve(element);
+	};
+
+	var cancelDelayLoad = function cancelDelayLoad(element) {
+		var timeoutId = getTimeoutData(element);
+		if (!timeoutId) {
+			return; // do nothing if timeout doesn't exist
+		}
+		clearTimeout(timeoutId);
+		setTimeoutData(element, null);
+	};
+
+	var delayLoad = function delayLoad(element, observer, instance) {
+		var loadDelay = instance._settings.load_delay;
+		var timeoutId = getTimeoutData(element);
+		if (timeoutId) {
+			return; // do nothing if timeout already set
+		}
+		timeoutId = setTimeout(function () {
+			loadAndUnobserve(element, observer, instance);
+			cancelDelayLoad(element);
+		}, loadDelay);
+		setTimeoutData(element, timeoutId);
+	};
+
+	function revealElement(element, instance, force) {
+		var settings = instance._settings;
+		if (!force && getWasProcessedData(element)) {
+			return; // element has already been processed and force wasn't true
+		}
+		callbackIfSet(settings.callback_enter, element);
+		if (managedTags.indexOf(element.tagName) > -1) {
+			addOneShotEventListeners(element, instance);
+			addClass(element, settings.class_loading);
+		}
+		setSources(element, instance);
+		setWasProcessedData(element);
+		callbackIfSet(settings.callback_set, element);
+	}
+
+	/* entry.isIntersecting needs fallback because is null on some versions of MS Edge, and
+    entry.intersectionRatio is not enough alone because it could be 0 on some intersecting elements */
+	var isIntersecting = function isIntersecting(entry) {
+		return entry.isIntersecting || entry.intersectionRatio > 0;
+	};
+
+	var getObserverSettings = function getObserverSettings(settings) {
+		return {
+			root: settings.container === document ? null : settings.container,
+			rootMargin: settings.thresholds || settings.threshold + "px"
+		};
+	};
+
+	var LazyLoad = function LazyLoad(customSettings, elements) {
+		this._settings = getInstanceSettings(customSettings);
+		this._setObserver();
+		this._loadingCount = 0;
+		this.update(elements);
+	};
+
+	LazyLoad.prototype = {
+		_manageIntersection: function _manageIntersection(entry) {
+			var observer = this._observer;
+			var loadDelay = this._settings.load_delay;
+			var element = entry.target;
+
+			// WITHOUT LOAD DELAY
+			if (!loadDelay) {
+				if (isIntersecting(entry)) {
+					loadAndUnobserve(element, observer, this);
+				}
+				return;
+			}
+
+			// WITH LOAD DELAY
+			if (isIntersecting(entry)) {
+				delayLoad(element, observer, this);
+			} else {
+				cancelDelayLoad(element);
+			}
+		},
+
+		_onIntersection: function _onIntersection(entries) {
+			entries.forEach(this._manageIntersection.bind(this));
+		},
+
+		_setObserver: function _setObserver() {
+			if (!supportsIntersectionObserver) {
+				return;
+			}
+			this._observer = new IntersectionObserver(this._onIntersection.bind(this), getObserverSettings(this._settings));
+		},
+
+		_updateLoadingCount: function _updateLoadingCount(plusMinus) {
+			this._loadingCount += plusMinus;
+			if (this._elements.length === 0 && this._loadingCount === 0) {
+				callbackIfSet(this._settings.callback_finish);
+			}
+		},
+
+		update: function update(elements) {
+			var _this = this;
+
+			var settings = this._settings;
+			var nodeSet = elements || settings.container.querySelectorAll(settings.elements_selector);
+
+			this._elements = purgeProcessedElements(Array.prototype.slice.call(nodeSet) // NOTE: nodeset to array for IE compatibility
+			);
+
+			if (isBot || !this._observer) {
+				this.loadAll();
+				return;
+			}
+
+			this._elements.forEach(function (element) {
+				_this._observer.observe(element);
+			});
+		},
+
+		destroy: function destroy() {
+			var _this2 = this;
+
+			if (this._observer) {
+				this._elements.forEach(function (element) {
+					_this2._observer.unobserve(element);
+				});
+				this._observer = null;
+			}
+			this._elements = null;
+			this._settings = null;
+		},
+
+		load: function load(element, force) {
+			revealElement(element, this, force);
+		},
+
+		loadAll: function loadAll() {
+			var _this3 = this;
+
+			var elements = this._elements;
+			elements.forEach(function (element) {
+				_this3.load(element);
+			});
+		}
+	};
+
+	/* Automatic instances creation if required (useful for async script loading) */
+	if (runningOnBrowser) {
+		autoInitialize(LazyLoad, window.lazyLoadOptions);
+	}
+
+	return LazyLoad;
+}();
+
 /*global define, global, module, require, self, picturefill */
 /**!
  * lightgallery.js | 1.0.3 | August 8th 2018
@@ -3864,230 +4309,6 @@
 });
 
 /*global define, global, module, require, self, utils */
-(function (f) {
-	if (typeof exports === "object" && typeof module !== "undefined") {
-		module.exports = f();
-	} else if (typeof define === "function" && define.amd) {
-		define([], f);
-	} else {
-		var g;
-		if (typeof window !== "undefined") {
-			g = window;
-		} else if (typeof global !== "undefined") {
-			g = global;
-		} else if (typeof self !== "undefined") {
-			g = self;
-		} else {
-			g = this;
-		}
-		g.LgAutoplay = f();
-	}
-})(function () {
-	var define,
-	module,
-	exports;
-	return (function e(t, n, r) {
-		function s(o, u) {
-			if (!n[o]) {
-				if (!t[o]) {
-					var a = typeof require == "function" && require;
-					if (!u && a)
-						return a(o, !0);
-					if (i)
-						return i(o, !0);
-					var f = new Error("Cannot find module '" + o + "'");
-					throw (f.code = "MODULE_NOT_FOUND",
-					f);
-				}
-				var l = n[o] = {
-					exports: {}
-				};
-				t[o][0].call(l.exports, function (e) {
-					var n = t[o][1][e];
-					return s(n ? n : e);
-				}, l, l.exports, e, t, n, r);
-			}
-			return n[o].exports;
-		}
-		var i = typeof require == "function" && require;
-		for (var o = 0; o < r.length; o++)
-			s(r[o]);
-		return s;
-	})({
-		1: [function (require, module, exports) {
-				(function (global, factory) {
-					if (typeof define === "function" && define.amd) {
-						define([], factory);
-					} else if (typeof exports !== "undefined") {
-						factory();
-					} else {
-						var mod = {
-							exports: {}
-						};
-						factory();
-						global.lgAutoplay = mod.exports;
-					}
-				})(this, function () {
-					'use strict';
-					var _extends = Object.assign || function (target) {
-						for (var i = 1; i < arguments.length; i++) {
-							var source = arguments[i];
-							for (var key in source) {
-								if (Object.prototype.hasOwnProperty.call(source, key)) {
-									target[key] = source[key];
-								}
-							}
-						}
-						return target;
-					};
-					var autoplayDefaults = {
-						autoplay: false,
-						pause: 5000,
-						progressBar: true,
-						fourceAutoplay: false,
-						autoplayControls: true,
-						appendAutoplayControlsTo: '.lg-toolbar'
-					};
-					/**
-					 * Creates the autoplay plugin.
-					 * @param {object} element - lightGallery element
-					 */
-					var Autoplay = function Autoplay(element) {
-						this.el = element;
-						this.core = window.lgData[this.el.getAttribute('lg-uid')];
-						// Execute only if items are above 1
-						if (this.core.items.length < 2) {
-							return false;
-						}
-						this.core.s = _extends({}, autoplayDefaults, this.core.s);
-						this.interval = false;
-						// Identify if slide happened from autoplay
-						this.fromAuto = true;
-						// Identify if autoplay canceled from touch/drag
-						this.canceledOnTouch = false;
-						// save fourceautoplay value
-						this.fourceAutoplayTemp = this.core.s.fourceAutoplay;
-						// do not allow progress bar if browser does not support css3 transitions
-						if (!this.core.doCss()) {
-							this.core.s.progressBar = false;
-						}
-						this.init();
-						return this;
-					};
-					Autoplay.prototype.init = function () {
-						var _this = this;
-						// append autoplay controls
-						if (_this.core.s.autoplayControls) {
-							_this.controls();
-						}
-						// Create progress bar
-						if (_this.core.s.progressBar) {
-							_this.core.outer.querySelector('.lg').insertAdjacentHTML('beforeend', '<div class="lg-progress-bar"><div class="lg-progress"></div></div>');
-						}
-						// set progress
-						_this.progress();
-						// Start autoplay
-						if (_this.core.s.autoplay) {
-							_this.startlAuto();
-						}
-						// cancel interval on touchstart and dragstart
-						utils.on(_this.el, 'onDragstart.lgtm touchstart.lgtm', function () {
-							if (_this.interval) {
-								_this.cancelAuto();
-								_this.canceledOnTouch = true;
-							}
-						});
-						// restore autoplay if autoplay canceled from touchstart / dragstart
-						utils.on(_this.el, 'onDragend.lgtm touchend.lgtm onSlideClick.lgtm', function () {
-							if (!_this.interval && _this.canceledOnTouch) {
-								_this.startlAuto();
-								_this.canceledOnTouch = false;
-							}
-						});
-					};
-					Autoplay.prototype.progress = function () {
-						var _this = this;
-						var _progressBar;
-						var _progress;
-						utils.on(_this.el, 'onBeforeSlide.lgtm', function () {
-							// start progress bar animation
-							if (_this.core.s.progressBar && _this.fromAuto) {
-								_progressBar = _this.core.outer.querySelector('.lg-progress-bar');
-								_progress = _this.core.outer.querySelector('.lg-progress');
-								if (_this.interval) {
-									_progress.removeAttribute('style');
-									utils.removeClass(_progressBar, 'lg-start');
-									setTimeout(function () {
-										utils.setVendor(_progress, 'Transition', 'width ' + (_this.core.s.speed + _this.core.s.pause) + 'ms ease 0s');
-										utils.addClass(_progressBar, 'lg-start');
-									}, 20);
-								}
-							}
-							// Remove setinterval if slide is triggered manually and fourceautoplay is false
-							if (!_this.fromAuto && !_this.core.s.fourceAutoplay) {
-								_this.cancelAuto();
-							}
-							_this.fromAuto = false;
-						});
-					};
-					// Manage autoplay via play/stop buttons
-					Autoplay.prototype.controls = function () {
-						var _this = this;
-						var _html = '<span class="lg-autoplay-button lg-icon"></span>';
-						// Append autoplay controls
-						_this.core.outer.querySelector(this.core.s.appendAutoplayControlsTo).insertAdjacentHTML('beforeend', _html);
-						utils.on(_this.core.outer.querySelector('.lg-autoplay-button'), 'click.lg', function () {
-							if (utils.hasClass(_this.core.outer, 'lg-show-autoplay')) {
-								_this.cancelAuto();
-								_this.core.s.fourceAutoplay = false;
-							} else {
-								if (!_this.interval) {
-									_this.startlAuto();
-									_this.core.s.fourceAutoplay = _this.fourceAutoplayTemp;
-								}
-							}
-						});
-					};
-					// Autostart gallery
-					Autoplay.prototype.startlAuto = function () {
-						var _this = this;
-						utils.setVendor(_this.core.outer.querySelector('.lg-progress'), 'Transition', 'width ' + (_this.core.s.speed + _this.core.s.pause) + 'ms ease 0s');
-						utils.addClass(_this.core.outer, 'lg-show-autoplay');
-						utils.addClass(_this.core.outer.querySelector('.lg-progress-bar'), 'lg-start');
-						_this.interval = setInterval(function () {
-								if (_this.core.index + 1 < _this.core.items.length) {
-									_this.core.index++;
-								} else {
-									_this.core.index = 0;
-								}
-								_this.fromAuto = true;
-								_this.core.slide(_this.core.index, false, false);
-							}, _this.core.s.speed + _this.core.s.pause);
-					};
-					// cancel Autostart
-					Autoplay.prototype.cancelAuto = function () {
-						clearInterval(this.interval);
-						this.interval = false;
-						if (this.core.outer.querySelector('.lg-progress')) {
-							this.core.outer.querySelector('.lg-progress').removeAttribute('style');
-						}
-						utils.removeClass(this.core.outer, 'lg-show-autoplay');
-						utils.removeClass(this.core.outer.querySelector('.lg-progress-bar'), 'lg-start');
-					};
-					Autoplay.prototype.destroy = function () {
-						this.cancelAuto();
-						if (this.core.outer.querySelector('.lg-progress-bar')) {
-							this.core.outer.querySelector('.lg-progress-bar').parentNode.removeChild(this.core.outer.querySelector('.lg-progress-bar'));
-						}
-					};
-					window.lgModules.autoplay = Autoplay;
-				});
-			}, {}
-		]
-	}, {}, [1])(1);
-});
-
-/*global define, global, module, require, self, utils */
 /**!
  * lg-fullscreen.js | 0.0.1 | July 25th 2016
  * http://sachinchoolur.github.io/lightGallery/
@@ -4378,175 +4599,6 @@
 						utils.off(this.core.el, '.lghash');
 					};
 					window.lgModules.hash = Hash;
-				});
-			}, {}
-		]
-	}, {}, [1])(1);
-});
-
-/*global define, global, module, require, self, utils */
-/**!
- * lg-share.js | 1.2.0 | January 14th 2018
- * http://sachinchoolur.github.io/lg-share.js
- * Copyright (c) 2016 Sachin N;
- * @license GPLv3
- */
-(function (f) {
-	if (typeof exports === "object" && typeof module !== "undefined") {
-		module.exports = f();
-	} else if (typeof define === "function" && define.amd) {
-		define([], f);
-	} else {
-		var g;
-		if (typeof window !== "undefined") {
-			g = window;
-		} else if (typeof global !== "undefined") {
-			g = global;
-		} else if (typeof self !== "undefined") {
-			g = self;
-		} else {
-			g = this;
-		}
-		g.LgShare = f();
-	}
-})(function () {
-	var define,
-	module,
-	exports;
-	return (function e(t, n, r) {
-		function s(o, u) {
-			if (!n[o]) {
-				if (!t[o]) {
-					var a = typeof require == "function" && require;
-					if (!u && a)
-						return a(o, !0);
-					if (i)
-						return i(o, !0);
-					var f = new Error("Cannot find module '" + o + "'");
-					throw (f.code = "MODULE_NOT_FOUND",
-					f);
-				}
-				var l = n[o] = {
-					exports: {}
-				};
-				t[o][0].call(l.exports, function (e) {
-					var n = t[o][1][e];
-					return s(n ? n : e);
-				}, l, l.exports, e, t, n, r);
-			}
-			return n[o].exports;
-		}
-		var i = typeof require == "function" && require;
-		for (var o = 0; o < r.length; o++)
-			s(r[o]);
-		return s;
-	})({
-		1: [function (require, module, exports) {
-				(function (global, factory) {
-					if (typeof define === "function" && define.amd) {
-						define([], factory);
-					} else if (typeof exports !== "undefined") {
-						factory();
-					} else {
-						var mod = {
-							exports: {}
-						};
-						factory();
-						global.lgShare = mod.exports;
-					}
-				})(this, function () {
-					'use strict';
-					var _extends = Object.assign || function (target) {
-						for (var i = 1; i < arguments.length; i++) {
-							var source = arguments[i];
-							for (var key in source) {
-								if (Object.prototype.hasOwnProperty.call(source, key)) {
-									target[key] = source[key];
-								}
-							}
-						}
-						return target;
-					};
-					var shareSefaults = {
-						share: true,
-						facebook: true,
-						facebookDropdownText: 'Facebook',
-						twitter: true,
-						twitterDropdownText: 'Twitter',
-						googlePlus: true,
-						googlePlusDropdownText: 'GooglePlus',
-						pinterest: true,
-						pinterestDropdownText: 'Pinterest'
-					};
-					function toCamelCase(input) {
-						return input.toLowerCase().replace(/-(.)/g, function (match, group1) {
-							return group1.toUpperCase();
-						});
-					}
-					var Share = function Share(element) {
-						this.el = element;
-						this.core = window.lgData[this.el.getAttribute('lg-uid')];
-						this.core.s = _extends({}, shareSefaults, this.core.s);
-						if (this.core.s.share) {
-							this.init();
-						}
-						return this;
-					};
-					Share.prototype.init = function () {
-						var _this = this;
-						var shareHtml = '<span id="lg-share" class="lg-icon">' + '<ul class="lg-dropdown" style="position: absolute;">';
-						shareHtml += _this.core.s.facebook ? '<li><a id="lg-share-facebook" target="_blank"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.facebookDropdownText + '</span></a></li>' : '';
-						shareHtml += _this.core.s.twitter ? '<li><a id="lg-share-twitter" target="_blank"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.twitterDropdownText + '</span></a></li>' : '';
-						shareHtml += _this.core.s.googlePlus ? '<li><a id="lg-share-googleplus" target="_blank"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.googlePlusDropdownText + '</span></a></li>' : '';
-						shareHtml += _this.core.s.pinterest ? '<li><a id="lg-share-pinterest" target="_blank"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.pinterestDropdownText + '</span></a></li>' : '';
-						shareHtml += '</ul></span>';
-						this.core.outer.querySelector('.lg-toolbar').insertAdjacentHTML('beforeend', shareHtml);
-						this.core.outer.querySelector('.lg').insertAdjacentHTML('beforeend', '<div id="lg-dropdown-overlay"></div>');
-						utils.on(document.getElementById('lg-share'), 'click.lg', function () {
-							if (utils.hasClass(_this.core.outer, 'lg-dropdown-active')) {
-								utils.removeClass(_this.core.outer, 'lg-dropdown-active');
-							} else {
-								utils.addClass(_this.core.outer, 'lg-dropdown-active');
-							}
-						});
-						utils.on(document.getElementById('lg-dropdown-overlay'), 'click.lg', function () {
-							utils.removeClass(_this.core.outer, 'lg-dropdown-active');
-						});
-						utils.on(_this.core.el, 'onAfterSlide.lgtm', function (event) {
-							setTimeout(function () {
-								if (_this.core.s.facebook) {
-									document.getElementById('lg-share-facebook').setAttribute('href', 'https://www.facebook.com/sharer/sharer.php?u=' + _this.getSharePropsUrl(event.detail.index, 'data-facebook-share-url'));
-								}
-								if (_this.core.s.twitter) {
-									document.getElementById('lg-share-twitter').setAttribute('href', 'https://twitter.com/intent/tweet?text=' + _this.getShareProps(event.detail.index, 'data-tweet-text') + '&url=' + _this.getSharePropsUrl(event.detail.index, 'data-twitter-share-url'));
-								}
-								if (_this.core.s.googlePlus) {
-									document.getElementById('lg-share-googleplus').setAttribute('href', 'https://plus.google.com/share?url=' + _this.getSharePropsUrl(event.detail.index, 'data-googleplus-share-url'));
-								}
-								if (_this.core.s.pinterest) {
-									document.getElementById('lg-share-pinterest').setAttribute('href', 'http://www.pinterest.com/pin/create/button/?url=' + _this.getSharePropsUrl(event.detail.index, 'data-pinterest-share-url') + '&media=' + encodeURIComponent(_this.getShareProps(event.detail.index, 'href') || _this.getShareProps(event.detail.index, 'data-src')) + '&description=' + _this.getShareProps(event.detail.index, 'data-pinterest-text'));
-								}
-							}, 100);
-						});
-					};
-					Share.prototype.getSharePropsUrl = function (index, prop) {
-						var shareProp = this.getShareProps(index, prop);
-						if (!shareProp) {
-							shareProp = window.location.href;
-						}
-						return encodeURIComponent(shareProp);
-					};
-					Share.prototype.getShareProps = function (index, prop) {
-						var shareProp = '';
-						if (this.core.s.dynamic) {
-							shareProp = this.core.items[index][toCamelCase(prop.replace('data-', ''))];
-						} else if (this.core.items[index].getAttribute(prop)) {
-							shareProp = this.core.items[index].getAttribute(prop);
-						}
-						return shareProp;
-					};
-					Share.prototype.destroy = function () {};
-					window.lgModules.share = Share;
 				});
 			}, {}
 		]

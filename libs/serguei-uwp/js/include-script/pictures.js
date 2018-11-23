@@ -1,4 +1,5 @@
-/*global console, GLightbox, imagesLoaded, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
+/*global console, GLightbox, imagesLoaded, LazyLoad, manageExternalLinkAll,
+manageMacy, updateMacyThrottled*/
 (function (root, document) {
 	"use strict";
 
@@ -10,12 +11,31 @@
 		var _addEventListener = "addEventListener";
 		var _length = "length";
 
-		var onMacyRender = function () {
-			if (root.updateMacyThrottled) {
-				updateMacyThrottled();
+		var glightboxClass = "glightbox";
+
+		/*!
+		 * @see {@link https://glightbox.mcstudios.com.mx/#options}
+		 */
+		var manageGlightbox = function (glightboxClass) {
+			if (root.GLightbox) {
+				var glightbox;
+				glightbox = GLightbox({
+						selector: glightboxClass
+					});
 			}
-			if (root.manageExternalLinkAll) {
-				manageExternalLinkAll();
+		};
+
+		var dataSrcImgClass = "data-src-img";
+
+		/*!
+		 * @see {@link https://github.com/verlok/lazyload}
+		 */
+		var manageLazyLoad = function (dataSrcImgClass) {
+			if (root.LazyLoad) {
+				var lzld;
+				lzld = new LazyLoad({
+						elements_selector: "." + dataSrcImgClass
+					});
 			}
 		};
 
@@ -24,6 +44,15 @@
 		var macyGridClass = "macy-grid";
 
 		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
+
+		var onMacyRender = function () {
+			if (root.updateMacyThrottled) {
+				updateMacyThrottled();
+			}
+			if (root.manageExternalLinkAll) {
+				manageExternalLinkAll();
+			}
+		};
 
 		var onMacyResize = function () {
 			try {
@@ -46,20 +75,6 @@
 			}
 		};
 
-		var glightboxClass = "glightbox";
-
-		/*!
-		 * @see {@link https://glightbox.mcstudios.com.mx/#options}
-		 */
-		var manageGlightbox = function (glightboxClass) {
-			if (root.GLightbox) {
-				var glightbox;
-				glightbox = GLightbox({
-						selector: glightboxClass
-					});
-			}
-		};
-
 		var onMacyManage = function () {
 			if (root.imagesLoaded) {
 				/*!
@@ -76,7 +91,9 @@
 				};
 				imgLoad.on("always", onAlways);
 			}
+			onMacyRender();
 			onMacyResize();
+			manageLazyLoad(dataSrcImgClass);
 			manageGlightbox(glightboxClass);
 		};
 
@@ -155,16 +172,18 @@
 			}
 		];
 
+		var dataSrcImgKeyName = "src";
+		var transparentPixel = "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%201%201%27%2F%3E";
+
 		var addMacyItems = function (macyGrid, callback) {
 			var html = "";
 			var i,
 			l;
 			for (i = 0, l = macyItems.length; i < l; i += 1) {
-				html += '<a href="' + macyItems[i].href + '" class="' + glightboxClass + '" aria-label="Ссылка"><img src="' + macyItems[i].src + '" alt="" /></a>\n';
+				html += '<a href="' + macyItems[i].href + '" class="' + glightboxClass + '" aria-label="Ссылка"><img src="' + transparentPixel + '" class="' + dataSrcImgClass + '" data-' + dataSrcImgKeyName + '="' + macyItems[i].src + '" alt="" /></a>\n';
 			}
 			i = l = null;
 			macyGrid.innerHTML = html;
-			onMacyRender();
 			if ("function" === typeof callback) {
 				callback();
 			}

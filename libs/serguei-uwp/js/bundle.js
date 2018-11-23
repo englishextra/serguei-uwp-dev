@@ -1,5 +1,6 @@
 /*global AdaptiveCards, console, debounce, doesFontExist, getHTTP, isElectron,
-isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
+isNwjs, loadJsCss, Macy, manageDataSrcImageAll, openDeviceBrowser, parseLink,
+require, throttle*/
 /*!
  * modified loadExt
  * @see {@link https://gist.github.com/englishextra/ff9dc7ab002312568742861cb80865c9}
@@ -274,6 +275,48 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 	root.parseLink = parseLink;
 })("undefined" !== typeof window ? window : this, document);
 /*!
+ * scroll2Top
+ */
+(function (root, document) {
+	"use strict";
+	var docElem = document.documentElement || "";
+	var scroll2Top = function (scrollTargetY, speed, easing) {
+		var scrollY = root.scrollY || docElem.scrollTop;
+		var posY = scrollTargetY || 0;
+		var rate = speed || 2000;
+		var soothing = easing || "easeOutSine";
+		var currentTime = 0;
+		var time = Math.max(0.1, Math.min(Math.abs(scrollY - posY) / rate, 0.8));
+		var easingEquations = {
+			easeOutSine: function (pos) {
+				return Math.sin(pos * (Math.PI / 2));
+			},
+			easeInOutSine: function (pos) {
+				return (-0.5 * (Math.cos(Math.PI * pos) - 1));
+			},
+			easeInOutQuint: function (pos) {
+				if ((pos /= 0.5) < 1) {
+					return 0.5 * Math.pow(pos, 5);
+				}
+				return 0.5 * (Math.pow((pos - 2), 5) + 2);
+			}
+		};
+		function tick() {
+			currentTime += 1 / 60;
+			var p = currentTime / time;
+			var t = easingEquations[soothing](p);
+			if (p < 1) {
+				requestAnimationFrame(tick);
+				root.scrollTo(0, scrollY + ((posY - scrollY) * t));
+			} else {
+				root.scrollTo(0, posY);
+			}
+		}
+		tick();
+	};
+	root.scroll2Top = scroll2Top;
+})("undefined" !== typeof window ? window : this, document);
+/*!
  * manageExternalLinkAll
  */
 (function (root, document) {
@@ -320,6 +363,60 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 		}
 	};
 	root.manageExternalLinkAll = manageExternalLinkAll;
+})("undefined" !== typeof window ? window : this, document);
+/*!
+ * manageDataSrcImageAll
+ */
+(function (root, document) {
+	"use strict";
+	var classList = "classList";
+	var dataset = "dataset";
+	var getElementsByClassName = "getElementsByClassName";
+	var _addEventListener = "addEventListener";
+	var _length = "length";
+	var isActiveClass = "is-active";
+	var handleDataSrcImageAll = function (callback) {
+		var cb = function () {
+			return callback && "function" === typeof callback && callback();
+		};
+		var images = document[getElementsByClassName]("data-src-img") || "";
+		var i = images[_length];
+		var isBindedDataSrcImgClass = "is-binded-data-src-img";
+		while (i--) {
+			var wH = root.innerHeight;
+			var boundingRect = images[i].getBoundingClientRect();
+			var offset = 100;
+			var yPositionTop = boundingRect.top - wH;
+			var yPositionBottom = boundingRect.bottom;
+			if (!images[i][classList].contains(isBindedDataSrcImgClass) && yPositionTop <= offset && yPositionBottom >= -offset) {
+				images[i][classList].add(isBindedDataSrcImgClass);
+				images[i].src = images[i][dataset].src || "";
+				images[i].srcset = images[i][dataset].srcset || "";
+				images[i][classList].add(isActiveClass);
+				cb();
+			}
+		}
+	};
+	var handleDataSrcImageAllWindow = function () {
+		var throttleHandleDataSrcImageAll = throttle(handleDataSrcImageAll, 100);
+		throttleHandleDataSrcImageAll();
+	};
+	var manageDataSrcImageAll = function () {
+		root[_addEventListener]("scroll", handleDataSrcImageAllWindow, {
+			passive: true
+		});
+		root[_addEventListener]("resize", handleDataSrcImageAllWindow, {
+			passive: true
+		});
+		var timer = setTimeout(function () {
+				clearTimeout(timer);
+				timer = null;
+				handleDataSrcImageAll();
+			}, 100);
+	};
+	root.handleDataSrcImageAll = handleDataSrcImageAll;
+	root.handleDataSrcImageAllWindow = handleDataSrcImageAllWindow;
+	root.manageDataSrcImageAll = manageDataSrcImageAll;
 })("undefined" !== typeof window ? window : this, document);
 /*!
  * Macy
@@ -509,6 +606,8 @@ isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle*/
 		var layoutTypeTreshold = root.matchMedia("(max-width: 360px)");
 		switchLayoutType(layoutTypeTreshold); // Call listener function at run time
 		layoutTypeTreshold.addListener(switchLayoutType); // Attach listener function on state changes
+
+		manageDataSrcImageAll();
 
 	};
 

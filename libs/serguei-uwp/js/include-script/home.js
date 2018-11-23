@@ -520,6 +520,15 @@ updateMacyThrottled*/
 
 		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
 
+		var onMacyRender = function () {
+			if (root.updateMacyThrottled) {
+				updateMacyThrottled();
+			}
+			if (root.manageExternalLinkAll) {
+				manageExternalLinkAll();
+			}
+		};
+
 		var onMacyResize = function () {
 			try {
 				var container = macyGrid ? (macyGrid.children || macyGrid[querySelectorAll]("." + macyGridClass + " > *") || "") : "";
@@ -557,6 +566,7 @@ updateMacyThrottled*/
 				};
 				imgLoad.on("always", onAlways);
 			}
+			onMacyRender();
 			onMacyResize();
 		};
 
