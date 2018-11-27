@@ -1,6 +1,58 @@
-/*global console, imagesLoaded, manageExternalLinkAll, manageMacy,
-renderAdaptiveCard,
-updateMacyThrottled*/
+/*global console, GLightbox, imagesLoaded, LazyLoad, manageExternalLinkAll,
+manageMacy, manageReadMore, renderAC, updateMacyThrottled*/
+/*!
+ * UWP layout
+ */
+(function (root, document) {
+	"use strict";
+	var getElementsByClassName = "getElementsByClassName";
+	var getElementsByTagName = "getElementsByTagName";
+	var setAttribute = "setAttribute";
+	var container = document[getElementsByClassName]("layout-type-buttons")[0] || "";
+	var buttons = container ? (container[getElementsByTagName]("button") || "") : "";
+	root.layoutTypeToTabs = function (e) {
+		var evt = root.event || e;
+		evt.preventDefault();
+		Array.prototype.slice.call(buttons).forEach(function (el) {
+			return (el.disabled = false);
+		});
+		evt.target.disabled = true;
+		document.body[setAttribute]("data-layout-type", "tabs");
+	};
+
+	root.layoutTypeToOverlay = function (e) {
+		var evt = root.event || e;
+		evt.preventDefault();
+		Array.prototype.slice.call(buttons).forEach(function (el) {
+			return (el.disabled = false);
+		});
+		evt.target.disabled = true;
+		document.body[setAttribute]("data-layout-type", "overlay");
+	};
+
+	root.layoutTypeToDockedMinimized = function (e) {
+		var evt = root.event || e;
+		evt.preventDefault();
+		Array.prototype.slice.call(buttons).forEach(function (el) {
+			return (el.disabled = false);
+		});
+		evt.target.disabled = true;
+		document.body[setAttribute]("data-layout-type", "docked-minimized");
+	};
+
+	root.layoutTypeToDocked = function (e) {
+		var evt = root.event || e;
+		evt.preventDefault();
+		Array.prototype.slice.call(buttons).forEach(function (el) {
+			return (el.disabled = false);
+		});
+		evt.target.disabled = true;
+		document.body[setAttribute]("data-layout-type", "docked");
+	};
+})("undefined" !== typeof window ? window : this, document);
+/*!
+ * page logic
+ */
 (function (root, document) {
 	"use strict";
 
@@ -18,28 +70,15 @@ updateMacyThrottled*/
 		 * @see {@link https://adaptivecards.io/samples/}
 		 * @see {@link https://github.com/Microsoft/AdaptiveCards/issues/1984}
 		 */
-		var renderACIntro = {
+		var renderACVCard = {
 			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 			"type": "AdaptiveCard",
 			"version": "1.0",
 			"body": [{
-					"type": "TextBlock",
-					"text": "Репетитор английского в Тушино",
-					"color": "accent",
-					"size": "large",
-					"weight": "bolder",
-					"spacing": "none",
-					"wrap": true
-				}, {
-					"type": "TextBlock",
-					"text": "«С нуля», подтянуть, улучшить, подготовка к ЕГЭ",
-					"isSubtle": true,
-					"spacing": "none"
-				}, {
 					"type": "ColumnSet",
 					"columns": [{
 							"type": "Column",
-							"width": 1,
+							"width": 2,
 							"items": [{
 									"type": "Image",
 									"altText": "",
@@ -50,34 +89,101 @@ updateMacyThrottled*/
 							]
 						}, {
 							"type": "Column",
-							"width": 5,
+							"width": 6,
 							"items": [{
 									"type": "TextBlock",
 									"text": "Serguei Shimansky",
+									"size": "medium",
 									"color": "accent",
-									"weight": "bolder",
-									"wrap": true
+									"weight": "default",
+									"wrap": true,
+									"spacing": "none"
 								}, {
 									"type": "TextBlock",
-									"spacing": "none",
+									"text": "Репетитор английского",
+									"size": "small",
+									"isSubtle": true,
+									"wrap": true,
+									"spacing": "none"
+								}, {
+									"type": "TextBlock",
 									"text": "Москва, Южное Тушино",
 									"size": "small",
 									"isSubtle": true,
-									"wrap": true
+									"wrap": true,
+									"spacing": "none"
 								}, {
 									"type": "TextBlock",
-									"spacing": "none",
 									"text": "19 лет стажа",
 									"size": "small",
 									"isSubtle": true,
-									"wrap": true
+									"wrap": true,
+									"spacing": "none"
 								}
 							]
 						}
 					]
 				}, {
 					"type": "TextBlock",
+					"text": "«С нуля», подтянуть, улучшить, подготовка к ЕГЭ. В Тушино.",
+					"size": "default",
+					"wrap": true
+				}, {
+					"type": "FactSet",
+					"facts": [{
+							"title": "Стаж:",
+							"value": "19 лет"
+						}, {
+							"title": "Образование:",
+							"value": "МЭГУ, менеджмент в культуре, 1994"
+						}, {
+							"title": "График:",
+							"value": "с 10:00 до 20:00"
+						}, {
+							"title": "Адрес:",
+							"value": "Москва, Южное Тушино"
+						}
+					]
+				}
+			]
+		};
+
+		var renderACIntro = {
+			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+			"type": "AdaptiveCard",
+			"version": "1.0",
+			"body": [{
+					"type": "TextBlock",
+					"text": "Специализация",
+					"size": "medium",
+					"weight": "default",
+					"wrap": true,
+					"spacing": "none"
+				}, {
+					"type": "TextBlock",
 					"text": "Общий, разговорный, британский американский английский. Подготовка к олимпиаде по английскому языку, международный экзамен IELTS, деловой английский, ОГЭ по английскому языку, ЕГЭ по английскому языку. Также, увлекаюсь веб-разработкой, делаю сайты-визитки.",
+					"size": "default",
+					"wrap": true
+				}
+
+			]
+		};
+
+		var renderACBackground = {
+			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+			"type": "AdaptiveCard",
+			"version": "1.0",
+			"body": [{
+					"type": "TextBlock",
+					"text": "Опыт работы",
+					"size": "medium",
+					"weight": "default",
+					"wrap": true,
+					"spacing": "none"
+				}, {
+					"type": "TextBlock",
+					"text": "Работал переводчиком в различных некоммерческих организациях (Врачи без границ, United Way, ВКБ ООН и др.), преподавателем английского в частной школе. В настоящий момент преподаю английский школьникам, студентам и взрослым в частном порядке в Тушино.",
+					"size": "default",
 					"wrap": true
 				}, {
 					"type": "ColumnSet",
@@ -114,42 +220,6 @@ updateMacyThrottled*/
 						}
 					]
 				}
-
-			]
-		};
-
-		var renderACBackground = {
-			"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-			"type": "AdaptiveCard",
-			"version": "1.0",
-			"body": [{
-					"type": "TextBlock",
-					"text": "Опыт работы",
-					"size": "medium",
-					"weight": "bolder",
-					"spacing": "none",
-					"wrap": true
-				}, {
-					"type": "TextBlock",
-					"text": "Работал переводчиком в различных некоммерческих организациях (Врачи без границ, United Way, ВКБ ООН и др.), преподавателем английского в частной школе. В настоящий момент преподаю английский школьникам, студентам и взрослым в частном порядке в Тушино.",
-					"wrap": true
-				}, {
-					"type": "FactSet",
-					"facts": [{
-							"title": "Стаж:",
-							"value": "19 лет"
-						}, {
-							"title": "Образование:",
-							"value": "МЭГУ, менеджмент в культуре, 1994"
-						}, {
-							"title": "График:",
-							"value": "с 10:00 до 20:00"
-						}, {
-							"title": "Адрес:",
-							"value": "Москва, Южное Тушино"
-						}
-					]
-				}
 			]
 		};
 
@@ -161,11 +231,13 @@ updateMacyThrottled*/
 					"type": "TextBlock",
 					"text": "Идивидуально",
 					"size": "medium",
-					"weight": "bolder",
-					"wrap": true
+					"weight": "default",
+					"wrap": true,
+					"spacing": "none"
 				}, {
 					"type": "TextBlock",
 					"text": "Английский индивидуально - наиболее эффективный метод образования: вы говорите больше, чем на занятиях в группах. Язык — средство общения, и мерилом служат ваши навыки аудирования, говорения и чтения, но не объем записанных новых слов вкупе с неспособностью общаться на иностранном языке в реальных ситуациях.",
+					"size": "default",
 					"wrap": true
 				}
 			]
@@ -179,11 +251,13 @@ updateMacyThrottled*/
 					"type": "TextBlock",
 					"text": "Дипломы",
 					"size": "medium",
-					"weight": "bolder",
-					"wrap": true
+					"weight": "default",
+					"wrap": true,
+					"spacing": "none"
 				}, {
 					"type": "TextBlock",
 					"text": "1 место в районной олимпиаде по немецкому языку среди 8-x классов.",
+					"size": "default",
 					"wrap": true
 				}, {
 					"type": "ColumnSet",
@@ -216,11 +290,13 @@ updateMacyThrottled*/
 					"type": "TextBlock",
 					"text": "Дипломы",
 					"size": "medium",
-					"weight": "bolder",
-					"wrap": true
+					"weight": "default",
+					"wrap": true,
+					"spacing": "none"
 				}, {
 					"type": "TextBlock",
 					"text": "1 место в районной олимпиаде по английскому языку среди 8-x классов.",
+					"size": "default",
 					"wrap": true
 				}, {
 					"type": "ColumnSet",
@@ -253,11 +329,13 @@ updateMacyThrottled*/
 					"type": "TextBlock",
 					"text": "Дипломы",
 					"size": "medium",
-					"weight": "bolder",
-					"wrap": true
+					"weight": "default",
+					"wrap": true,
+					"spacing": "none"
 				}, {
 					"type": "TextBlock",
 					"text": "1 место в районной олимпиаде по английскому языку среди 9-x классов.",
+					"size": "default",
 					"wrap": true
 				}, {
 					"type": "ColumnSet",
@@ -290,11 +368,13 @@ updateMacyThrottled*/
 					"type": "TextBlock",
 					"text": "Дипломы",
 					"size": "medium",
-					"weight": "bolder",
-					"wrap": true
+					"weight": "default",
+					"wrap": true,
+					"spacing": "none"
 				}, {
 					"type": "TextBlock",
 					"text": "1 место в районной олимпиаде по английскому языку среди 10-x классов.",
+					"size": "default",
 					"wrap": true
 				}, {
 					"type": "ColumnSet",
@@ -327,9 +407,9 @@ updateMacyThrottled*/
 					"type": "TextBlock",
 					"text": "Контакты",
 					"size": "medium",
-					"weight": "bolder",
-					"spacing": "none",
-					"wrap": true
+					"weight": "default",
+					"wrap": true,
+					"spacing": "none"
 				}, {
 					"type": "ColumnSet",
 					"columns": [{
@@ -430,9 +510,10 @@ updateMacyThrottled*/
 
 		/*!
 		 * to change default style
+		 * @see {@link https://docs.microsoft.com/en-us/adaptive-cards/rendering-cards/host-config}
+		 * @see {@link https://docs.microsoft.com/en-us/adaptive-cards/rendering-cards/host-config#adaptivecardconfig}
 		 * @see {@link https://github.com/Microsoft/AdaptiveCards/pull/905}
 		 * @see {@link https://github.com/Microsoft/AdaptiveCards/issues/1929}
-		 * @see {@link https://docs.microsoft.com/en-us/adaptive-cards/rendering-cards/host-config#adaptivecardconfig}
 		 * @see {@link https://material.io/tools/color/#!/?view.left=0&view.right=0&secondary.color=BDBDBD&primary.color=F06292}
 		 */
 		var renderACOptions = {
@@ -474,7 +555,8 @@ updateMacyThrottled*/
 			}
 		};
 
-		var renderACItems = [
+		var macyItems = [
+			renderACVCard,
 			renderACIntro,
 			renderACBackground,
 			renderACInPerson,
@@ -485,32 +567,73 @@ updateMacyThrottled*/
 			renderACContacts
 		];
 
-		var onACExecute = function (action) {
+		var onExecuteAC = function (action) {
 			if (action.url) {
 				root[location].href = action.url;
 			}
 		};
 
-		var onACRender = function () {
-			if (root.updateMacyThrottled) {
-				updateMacyThrottled();
-			}
-			if (root.manageExternalLinkAll) {
-				manageExternalLinkAll();
+		var manageAC = function (macyGrid, callback) {
+			if (root.renderAC) {
+				var count = 0;
+				var i,
+				l;
+				for (i = 0, l = macyItems[_length]; i < l; i += 1) {
+					renderAC(macyGrid, macyItems[i], renderACOptions, onExecuteAC, null);
+					count++;
+					if (count === macyItems[_length]) {
+						if ("function" === typeof callback) {
+							callback();
+						}
+					}
+				}
+				i = l = null;
 			}
 		};
 
-		var manageAC = function (macyGrid, callback) {
-			if (root.renderAdaptiveCard) {
-				var i,
-				l;
-				for (i = 0, l = renderACItems[_length]; i < l; i += 1) {
-					renderAdaptiveCard(macyGrid, renderACItems[i], renderACOptions, onACExecute, onACRender);
-				}
-				i = l = null;
-				if ("function" === typeof callback) {
-					callback();
-				}
+		var glightboxClass = "glightbox";
+
+		/*!
+		 * @see {@link https://glightbox.mcstudios.com.mx/#options}
+		 */
+		var manageGlightbox = function (glightboxClass) {
+			if (root.GLightbox) {
+				var glightbox;
+				glightbox = GLightbox({
+						selector: glightboxClass
+					});
+			}
+		};
+
+		var dataSrcLazyClass = "data-src-lazy";
+
+		/*!
+		 * @see {@link https://github.com/verlok/lazyload}
+		 */
+		var manageLazyLoad = function (dataSrcLazyClass) {
+			if (root.LazyLoad) {
+				var lzld;
+				lzld = new LazyLoad({
+						elements_selector: "." + dataSrcLazyClass
+					});
+			}
+		};
+
+		/*!
+		 * @see {@link https://imagesloaded.desandro.com/}
+		 * Triggered after all images have been either loaded or confirmed broken.
+		 */
+		var onImagesLoaded = function (macyGrid) {
+			if (root.imagesLoaded) {
+				var imgLoad;
+				imgLoad = new imagesLoaded(macyGrid);
+				var onAlways = function (instance) {
+					if (root.updateMacyThrottled) {
+						updateMacyThrottled();
+					}
+					console.log("imagesLoaded: found " + instance.images[_length] + " images");
+				};
+				imgLoad.on("always", onAlways);
 			}
 		};
 
@@ -521,12 +644,20 @@ updateMacyThrottled*/
 		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
 
 		var onMacyRender = function () {
-			if (root.updateMacyThrottled) {
-				updateMacyThrottled();
-			}
-			if (root.manageExternalLinkAll) {
-				manageExternalLinkAll();
-			}
+			updateMacyThrottled();
+			onImagesLoaded(macyGrid);
+			manageLazyLoad(dataSrcLazyClass);
+			manageExternalLinkAll();
+			manageGlightbox(glightboxClass);
+			manageReadMore(null, {
+				target: ".dummy",
+				numOfWords: 10,
+				toggle: true,
+				moreLink: "БОЛЬШЕ",
+				lessLink: "МЕНЬШЕ",
+				inline: true,
+				customBlockElement: "p"
+			});
 		};
 
 		var onMacyResize = function () {
@@ -551,23 +682,19 @@ updateMacyThrottled*/
 		};
 
 		var onMacyManage = function () {
-			if (root.imagesLoaded) {
-				/*!
-				 * @see {@link https://imagesloaded.desandro.com/}
-				 * Triggered after all images have been either loaded or confirmed broken.
-				 */
-				var imgLoad;
-				imgLoad = new imagesLoaded(macyGrid);
-				var onAlways = function (instance) {
-					if (root.updateMacyThrottled) {
-						updateMacyThrottled();
-					}
-					console.log("imagesLoaded: found " + instance.images[_length] + " images");
-				};
-				imgLoad.on("always", onAlways);
-			}
 			onMacyRender();
 			onMacyResize();
+		};
+
+		var addMacyItems = function (macyGrid, callback) {
+			if (root.AdaptiveCards) {
+				macyGrid.innerHTML = "";
+				manageAC(macyGrid, callback);
+			} else {
+				if ("function" === typeof callback) {
+					callback();
+				}
+			}
 		};
 
 		if (macyGrid) {
@@ -586,7 +713,7 @@ updateMacyThrottled*/
 				}
 			});
 
-			manageAC(macyGrid, onMacyManage);
+			addMacyItems(macyGrid, onMacyManage);
 		}
 
 		if (root.manageExternalLinkAll) {

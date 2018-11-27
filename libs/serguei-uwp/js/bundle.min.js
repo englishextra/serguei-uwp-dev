@@ -1,6 +1,6 @@
 /*global AdaptiveCards, console, debounce, doesFontExist, getHTTP, isElectron,
-isNwjs, loadJsCss, Macy, manageDataSrcImageAll, openDeviceBrowser, parseLink,
-require, throttle*/
+isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle,
+$readMoreJS*/
 /*!
  * modified loadExt
  * @see {@link https://gist.github.com/englishextra/ff9dc7ab002312568742861cb80865c9}
@@ -365,60 +365,6 @@ require, throttle*/
 	root.manageExternalLinkAll = manageExternalLinkAll;
 })("undefined" !== typeof window ? window : this, document);
 /*!
- * manageDataSrcImageAll
- */
-(function (root, document) {
-	"use strict";
-	var classList = "classList";
-	var dataset = "dataset";
-	var getElementsByClassName = "getElementsByClassName";
-	var _addEventListener = "addEventListener";
-	var _length = "length";
-	var isActiveClass = "is-active";
-	var handleDataSrcImageAll = function (callback) {
-		var cb = function () {
-			return callback && "function" === typeof callback && callback();
-		};
-		var images = document[getElementsByClassName]("data-src-img") || "";
-		var i = images[_length];
-		var isBindedDataSrcImgClass = "is-binded-data-src-img";
-		while (i--) {
-			var wH = root.innerHeight;
-			var boundingRect = images[i].getBoundingClientRect();
-			var offset = 100;
-			var yPositionTop = boundingRect.top - wH;
-			var yPositionBottom = boundingRect.bottom;
-			if (!images[i][classList].contains(isBindedDataSrcImgClass) && yPositionTop <= offset && yPositionBottom >= -offset) {
-				images[i][classList].add(isBindedDataSrcImgClass);
-				images[i].src = images[i][dataset].src || "";
-				images[i].srcset = images[i][dataset].srcset || "";
-				images[i][classList].add(isActiveClass);
-				cb();
-			}
-		}
-	};
-	var handleDataSrcImageAllWindow = function () {
-		var throttleHandleDataSrcImageAll = throttle(handleDataSrcImageAll, 100);
-		throttleHandleDataSrcImageAll();
-	};
-	var manageDataSrcImageAll = function () {
-		root[_addEventListener]("scroll", handleDataSrcImageAllWindow, {
-			passive: true
-		});
-		root[_addEventListener]("resize", handleDataSrcImageAllWindow, {
-			passive: true
-		});
-		var timer = setTimeout(function () {
-				clearTimeout(timer);
-				timer = null;
-				handleDataSrcImageAll();
-			}, 100);
-	};
-	root.handleDataSrcImageAll = handleDataSrcImageAll;
-	root.handleDataSrcImageAllWindow = handleDataSrcImageAllWindow;
-	root.manageDataSrcImageAll = manageDataSrcImageAll;
-})("undefined" !== typeof window ? window : this, document);
-/*!
  * Macy
  */
 (function (root) {
@@ -443,7 +389,6 @@ require, throttle*/
 		}
 	};
 	var updateMacyThrottled = throttle(updateMacy, 1000);
-	/* var macyContainerClass = "ac-grid"; */
 	var initMacy = function (macyContainerClass, options) {
 		var defaultSettings = {
 			/* container: ".macy-container", */
@@ -497,12 +442,12 @@ require, throttle*/
 	root.manageMacy = manageMacy;
 })("undefined" !== typeof window ? window : this);
 /*!
- * AdaptiveCards
+ * renderAC
  */
 (function (root) {
 	"use strict";
 	var appendChild = "appendChild";
-	var renderAdaptiveCard = function (acGrid, cardObj, renderOptions, onExecute, callback) {
+	var renderAC = function (acGrid, cardObj, renderOptions, onExecute, callback) {
 		if (root.AdaptiveCards && acGrid) {
 			var adaptiveCard = new AdaptiveCards.AdaptiveCard();
 			adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(renderOptions);
@@ -516,50 +461,68 @@ require, throttle*/
 			adaptiveCard = renderedCard = null;
 		}
 	};
-	root.renderAdaptiveCard = renderAdaptiveCard;
+	root.renderAC = renderAC;
 })("undefined" !== typeof window ? window : this);
 /*!
- * UWP layout
+ * manageReadMore
  */
-(function (root) {
+(function (root, document) {
 	"use strict";
-
-	root.layoutTypeToTabs = function (event) {
-		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
-			return (el.disabled = false);
-		});
-		event.target.disabled = true;
-		document.body.setAttribute("data-layout-type", "tabs");
+	var classList = "classList";
+	var getElementsByClassName = "getElementsByClassName";
+	var isBindedClass = "is-binded";
+	var _addEventListener = "addEventListener";
+	var _length = "length";
+	var manageReadMore = function (callback, options) {
+		var cb = function () {
+			return callback && "function" === typeof callback && callback();
+		};
+		var defaultSettings = {
+			target: ".dummy",
+			numOfWords: 10,
+			toggle: true,
+			moreLink: "БОЛЬШЕ",
+			lessLink: "МЕНЬШЕ",
+			inline: true,
+			customBlockElement: "p"
+		};
+		var settings = options || {};
+		var opt;
+		for (opt in defaultSettings) {
+			if (defaultSettings.hasOwnProperty(opt) && !settings.hasOwnProperty(opt)) {
+				settings[opt] = defaultSettings[opt];
+			}
+		}
+		opt = null;
+		var rmLink = document[getElementsByClassName]("rm-link") || "";
+		var arrange = function (e) {
+			if (!e[classList].contains(isBindedClass)) {
+				e[classList].add(isBindedClass);
+				e[_addEventListener]("click", cb);
+			}
+		};
+		var initScript = function () {
+			if (root.$readMoreJS) {
+				$readMoreJS.init(settings);
+				var i,
+				l;
+				for (i = 0, l = rmLink[_length]; i < l; i += 1) {
+					arrange(rmLink[i]);
+				}
+				i = l = null;
+			}
+		};
+		if (rmLink) {
+			/* var timer = setTimeout(function () {
+					clearTimeout(timer);
+					timer = null;
+					initScript();
+				}, 100); */
+			initScript();
+		}
 	};
-
-	root.layoutTypeToOverlay = function (event) {
-		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
-			return (el.disabled = false);
-		});
-		event.target.disabled = true;
-		document.body.setAttribute("data-layout-type", "overlay");
-	};
-
-	root.layoutTypeToDockedMinimized = function (event) {
-		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
-			return (el.disabled = false);
-		});
-		event.target.disabled = true;
-		document.body.setAttribute("data-layout-type", "docked-minimized");
-	};
-
-	root.layoutTypeToDocked = function (event) {
-		event.preventDefault();
-		Array.prototype.slice.call(document.querySelectorAll("main section button")).forEach(function (el) {
-			return (el.disabled = false);
-		});
-		event.target.disabled = true;
-		document.body.setAttribute("data-layout-type", "docked");
-	};
-})("undefined" !== typeof window ? window : this);
+	root.manageReadMore = manageReadMore;
+})("undefined" !== typeof window ? window : this, document);
 /*!
  * app logic
  */
@@ -585,9 +548,9 @@ require, throttle*/
 			root.UWP.init({
 				pageTitle: "UWP web framework",
 				layoutType: "docked-minimized",
-				activeColor: "#26c6da",
+				activeColor: "#26C6DA",
 				mainColor: "#373737",
-				mainColorDarkened: "#0097a7",
+				mainColorDarkened: "#0097A7",
 				includes: "./includes/serguei-uwp",
 				includeScript: "./libs/serguei-uwp/js/include-script",
 				includeStyle: "./libs/serguei-uwp/css/include-style",
@@ -597,18 +560,15 @@ require, throttle*/
 			});
 		}
 		var switchLayoutType = function (x) {
-			if (x.matches) { // If media query matches
+			if (x.matches) {
 				document.body.setAttribute("data-layout-type", "overlay");
 			} else {
 				document.body.setAttribute("data-layout-type", "docked-minimized");
 			}
 		};
 		var layoutTypeTreshold = root.matchMedia("(max-width: 360px)");
-		switchLayoutType(layoutTypeTreshold); // Call listener function at run time
-		layoutTypeTreshold.addListener(switchLayoutType); // Attach listener function on state changes
-
-		manageDataSrcImageAll();
-
+		switchLayoutType(layoutTypeTreshold);
+		layoutTypeTreshold.addListener(switchLayoutType);
 	};
 
 	/* var scripts = [

@@ -1,27 +1,50 @@
-/*global console, imagesLoaded, LazyLoad, manageExternalLinkAll,
-manageMacy, updateMacyThrottled*/
+/*global console, imagesLoaded, LazyLoad, manageExternalLinkAll, manageMacy,
+updateMacyThrottled*/
+/*!
+ * page logic
+ */
 (function (root, document) {
 	"use strict";
 
 	var run = function () {
 
+		var appendChild = "appendChild";
 		var classList = "classList";
 		var getElementsByClassName = "getElementsByClassName";
 		var querySelectorAll = "querySelectorAll";
+		var setAttribute = "setAttribute";
 		var _addEventListener = "addEventListener";
 		var _length = "length";
 
-		var dataSrcImgClass = "data-src-img";
+		var dataSrcLazyClass = "data-src-lazy";
 
 		/*!
 		 * @see {@link https://github.com/verlok/lazyload}
 		 */
-		var manageLazyLoad = function (dataSrcImgClass) {
+		var manageLazyLoad = function (dataSrcLazyClass) {
 			if (root.LazyLoad) {
 				var lzld;
 				lzld = new LazyLoad({
-						elements_selector: "." + dataSrcImgClass
+						elements_selector: "." + dataSrcLazyClass
 					});
+			}
+		};
+
+		/*!
+		 * @see {@link https://imagesloaded.desandro.com/}
+		 * Triggered after all images have been either loaded or confirmed broken.
+		 */
+		var onImagesLoaded = function (macyGrid) {
+			if (root.imagesLoaded) {
+				var imgLoad;
+				imgLoad = new imagesLoaded(macyGrid);
+				var onAlways = function (instance) {
+					if (root.updateMacyThrottled) {
+						updateMacyThrottled();
+					}
+					console.log("imagesLoaded: found " + instance.images[_length] + " images");
+				};
+				imgLoad.on("always", onAlways);
 			}
 		};
 
@@ -32,12 +55,10 @@ manageMacy, updateMacyThrottled*/
 		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
 
 		var onMacyRender = function () {
-			if (root.updateMacyThrottled) {
-				updateMacyThrottled();
-			}
-			if (root.manageExternalLinkAll) {
-				manageExternalLinkAll();
-			}
+			updateMacyThrottled();
+			onImagesLoaded(macyGrid);
+			manageLazyLoad(dataSrcLazyClass);
+			manageExternalLinkAll();
 		};
 
 		var onMacyResize = function () {
@@ -62,24 +83,8 @@ manageMacy, updateMacyThrottled*/
 		};
 
 		var onMacyManage = function () {
-			if (root.imagesLoaded) {
-				/*!
-				 * @see {@link https://imagesloaded.desandro.com/}
-				 * Triggered after all images have been either loaded or confirmed broken.
-				 */
-				var imgLoad;
-				imgLoad = new imagesLoaded(macyGrid);
-				var onAlways = function (instance) {
-					if (root.updateMacyThrottled) {
-						updateMacyThrottled();
-					}
-					console.log("imagesLoaded: found " + instance.images[_length] + " images");
-				};
-				imgLoad.on("always", onAlways);
-			}
 			onMacyRender();
 			onMacyResize();
-			manageLazyLoad(dataSrcImgClass);
 		};
 
 		var macyItems = [{
@@ -130,21 +135,41 @@ manageMacy, updateMacyThrottled*/
 			}
 		];
 
-		var dataSrcImgKeyName = "src";
-		var transparentPixel = "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%201%201%27%2F%3E";
-
 		var addMacyItems = function (macyGrid, callback) {
-			var html = "";
+			var dataSrcImgKeyName = "src";
+			var transparentPixel = "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%201%201%27%2F%3E";
+			/* var html = "";
 			var i,
 			l;
-			for (i = 0, l = macyItems.length; i < l; i += 1) {
+			for (i = 0, l = macyItems[_length]; i < l; i += 1) {
 				html += '<a href="' + macyItems[i].href + '" aria-label="Ссылка"><img src="' + transparentPixel + '" class="' + dataSrcImgClass + '" data-' + dataSrcImgKeyName + '="' + macyItems[i].src + '" alt="" /></a>\n';
 			}
 			i = l = null;
 			macyGrid.innerHTML = html;
 			if ("function" === typeof callback) {
 				callback();
+			} */
+			var count = 0;
+			var i,
+			l;
+			for (i = 0, l = macyItems[_length]; i < l; i += 1) {
+				var a = document.createElement("a");
+				a[setAttribute]("href", macyItems[i].href);
+				a[setAttribute]("aria-label", "Ссылка");
+				var img = document.createElement("img");
+				a[appendChild](img);
+				img[setAttribute]("src", transparentPixel);
+				img[setAttribute]("class", dataSrcLazyClass);
+				img[setAttribute]("data-" + dataSrcImgKeyName, macyItems[i].src);
+				macyGrid[appendChild](a);
+				count++;
+				if (count === macyItems[_length]) {
+					if ("function" === typeof callback) {
+						callback();
+					}
+				}
 			}
+			i = l = null;
 		};
 
 		if (macyGrid) {

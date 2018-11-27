@@ -11,9 +11,14 @@ browserSync = require("browser-sync").create(),
 reload = browserSync.reload,
 babel = require("gulp-babel"),
 
-uwp = {
+uwpcss = {
 	scss: "../../cdn/uwp-web-framework/2.0/scss/uwp.style.fixed.scss",
 	css: "../../cdn/uwp-web-framework/2.0/css"
+},
+
+uwpjs = {
+	src: "../../cdn/uwp-web-framework/2.0/src/uwp.core.fixed.js",
+	js: "../../cdn/uwp-web-framework/2.0/js"
 },
 
 /* material = {
@@ -39,6 +44,21 @@ robotomono = {
 highlightjs = {
 	scss: "../../cdn/highlight.js/9.12.0/scss/hljs.scss",
 	css: "../../cdn/highlight.js/9.12.0/css"
+},
+
+typeboost = {
+	scss: "../../cdn/typeboost-uwp.css/0.1.8/scss/typeboost-uwp.scss",
+	css: "../../cdn/typeboost-uwp.css/0.1.8/css"
+},
+
+glightbox = {
+	scss: "../../cdn/glightbox/1.0.8/scss/glightbox.fixed.scss",
+	css: "../../cdn/glightbox/1.0.8/css"
+},
+
+lightgallery =  {
+	scss: "../../cdn/lightgallery.js/1.1.1/scss/lightgallery.fixed.scss",
+	css: "../../cdn/lightgallery.js/1.1.1/css"
 };
 
 gulp.task("browser-sync", ["bundle-assets"], function () {
@@ -61,7 +81,7 @@ gulp.task("browser-sync", ["bundle-assets"], function () {
 });
 
 gulp.task("compile-uwp-web-framework-scss", function () {
-	gulp.src(uwp.scss)
+	gulp.src(uwpcss.scss)
 	.pipe(sass({
 			errLogToConsole: true
 		}))
@@ -69,7 +89,7 @@ gulp.task("compile-uwp-web-framework-scss", function () {
 			browsers: ["last 2 versions"]
 		}))
 	.pipe(minifyCss())
-	.pipe(gulp.dest(uwp.css))
+	.pipe(gulp.dest(uwpcss.css))
 	.pipe(reload({
 			stream: true
 		}));
@@ -135,13 +155,58 @@ gulp.task("compile-highlightjs-scss", function () {
 		}));
 });
 
+gulp.task("compile-typeboost-uwp-scss", function () {
+	gulp.src(typeboost.scss)
+	.pipe(sass({
+			errLogToConsole: true
+		}))
+	.pipe(autoprefixer({
+			browsers: ["last 2 versions"]
+		}))
+	.pipe(minifyCss())
+	.pipe(gulp.dest(typeboost.css))
+	.pipe(reload({
+			stream: true
+		}));
+});
+
+gulp.task("compile-lightgalleryjs-scss", function () {
+	gulp.src(lightgallery.scss)
+	.pipe(sass({
+			errLogToConsole: true
+		}))
+	.pipe(autoprefixer({
+			browsers: ["last 2 versions"]
+		}))
+	.pipe(minifyCss())
+	.pipe(gulp.dest(lightgallery.css))
+	.pipe(reload({
+			stream: true
+		}));
+});
+
+gulp.task("compile-glightbox-scss", function () {
+	gulp.src(glightbox.scss)
+	.pipe(sass({
+			errLogToConsole: true
+		}))
+	.pipe(autoprefixer({
+			browsers: ["last 2 versions"]
+		}))
+	.pipe(minifyCss())
+	.pipe(gulp.dest(glightbox.css))
+	.pipe(reload({
+			stream: true
+		}));
+});
+
 gulp.task("babel-uwp-web-framework-js", function () {
-	gulp.src("../../cdn/uwp-web-framework/2.0/src/uwp.core.fixed.js")
+	gulp.src(uwpjs.src)
 	.pipe(babel({
 			presets: ["@babel/env"],
 			plugins: ["@babel/plugin-transform-object-assign"]
 		}))
-	.pipe(gulp.dest("../../cdn/uwp-web-framework/2.0/js/"));
+	.pipe(gulp.dest(uwpjs.js));
 });
 
 gulp.task("bundle-assets", function () {
