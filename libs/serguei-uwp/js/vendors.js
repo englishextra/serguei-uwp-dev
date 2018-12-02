@@ -1119,7 +1119,6 @@ var LazyLoad = function () {
    * @see {@link http://www.javascriptkit.com/javatutors/loadjavascriptcss2.shtml}
    */
 
-
   var removeJsCssFile = function removeJsCssFile(filename, filetype) {
     var targetelement = filetype == "js" ? "script" : filetype == "css" ? "link" : "none";
     var targetattr = filetype == "js" ? "src" : filetype == "css" ? "href" : "none";
@@ -1157,7 +1156,6 @@ var LazyLoad = function () {
     return tempDiv;
   };
   /* Define UWP namespace */
-
 
   var UWP = {
     version: "2.0.0",
@@ -1265,7 +1263,6 @@ var LazyLoad = function () {
       };
       /* Gets user-set config */
 
-
       UWP.getConfig(params);
       /* Set page title */
 
@@ -1300,7 +1297,6 @@ var LazyLoad = function () {
         UWP.navigate(root.location.hash.split(/#\//)[1], false);
       };
       /* Prepares space for document's title, puts it in place */
-
 
       UWP.pageTitle = document.createElement("span");
       UWP.header.prependChild(UWP.pageTitle);
@@ -1458,7 +1454,6 @@ var LazyLoad = function () {
         }
         /* var Darkened_RGB = parseColor(UWP.config.Darkened); */
 
-
         UWP.customStyle.innerHTML += "\n\t\t\t\t[data-layout-type=\"tabs\"] .uwp-header {\n\t\t\t\t\tbackground: ".concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\n\t\t\t\t[data-layout-type=\"overlay\"] .uwp-header {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layout-type=\"overlay\"] .uwp-header .uwp-nav:nth-of-type(1) {\n\t\t\t\t\tbackground-color: ").concat(UWP.config.mainColorDarkened, ";\n\t\t\t\t}\n\n\t\t\t\t[data-layout-type=\"docked-minimized\"] .uwp-header {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layout-type=\"docked-minimized\"] .uwp-header .uwp-nav:nth-of-type(1) {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColorDarkened, ";\n\t\t\t\t}\n\n\t\t\t\t[data-layout-type=\"docked\"] .uwp-header {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColor, ";\n\t\t\t\t}\n\t\t\t\t[data-layout-type=\"docked\"] .uwp-header .uwp-nav:nth-of-type(1) {\n\t\t\t\t\tbackground: ").concat(UWP.config.mainColorDarkened, ";\n\t\t\t\t}\n\t\t\t");
       }
 
@@ -1509,7 +1504,6 @@ var LazyLoad = function () {
 
       /* var headerNav = UWP.header.getElementsByTagName("nav")[0] || ""; */
 
-
       UWP.menuList = UWP.header.getElementsByClassName("uwp-nav")[0] || "";
 
       if (UWP.menuList) {
@@ -1538,7 +1532,6 @@ var LazyLoad = function () {
         history.pushState("", "", "".concat(root.location.href.split(/#\//)[0], "#/", target));
       }
       /* Clears the page content */
-
 
       UWP.main.classList.remove("uwp-main--error");
       UWP.main.innerHTML = "";
@@ -1620,7 +1613,6 @@ var LazyLoad = function () {
             UWP.body.appendChild(script);
           }
           /* Loads defined style */
-
 
           if (pageIncludeStyle) {
             var styleName = pageIncludeStyle.textContent;

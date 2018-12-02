@@ -25,13 +25,18 @@ body {
 .uwp-container {
 	display: flex;
 	width: 100%;
-	/*!
-	 * if height 100%
-	 * the chrome on mobile
-	 * won't hide addressbar on scroll
-	 * but we need that
-	 */
-	height: 100%;
+}
+
+/*!
+ * if height 100%
+ * the chrome on mobile
+ * won't hide addressbar on scroll
+ */
+[data-layout-type="tabs"] .uwp-container,
+[data-layout-type="overlay"] .uwp-container,
+[data-layout-type="docked-minimized"] .uwp-container,
+[data-layout-type="docked"] .uwp-container {
+	height: auto;
 }
 
 [data-layout-type="tabs"] .uwp-container,
@@ -66,6 +71,7 @@ body {
 
 [data-layout-type="tabs"] .uwp-header {
 	width: 100%;
+	position: fixed;
 	background: rgb(230, 230, 230);
 	color: rgb(92, 92, 92);
 }
@@ -149,9 +155,14 @@ body {
 	font-size: 16px;
 }
 
+[data-layout-type="tabs"] .uwp-main {
+	margin-top: 66px;
+}
+
 [data-layout-type="overlay"] .uwp-header {
 	width: 100%;
 	height: 44px;
+	position: fixed;
 	background: rgb(250, 250, 250);
 	color: rgb(50, 50, 50);
 	display: flex;
@@ -314,6 +325,10 @@ body {
 	color: rgb(50, 50, 50);
 }
 
+[data-layout-type="overlay"] .uwp-main {
+	margin-top: 44px;
+}
+
 [data-layout-type="docked-minimized"] .uwp-header {
 	width: 44px;
 	height: 100%;
@@ -344,7 +359,7 @@ body {
 	outline: none;
 	background-color: transparent;
 	vertical-align: top;
-	position: relative;
+	position: fixed;
 	z-index: 999;
 	font-size: 20px;
 	color: inherit;
@@ -468,6 +483,9 @@ body {
 [data-layout-type="docked"] .uwp-header {
 	width: 250px;
 	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
 	background: rgb(250, 250, 250);
 	color: rgb(50, 50, 50);
 	display: flex;
@@ -582,6 +600,10 @@ body {
 	font-size: 15px;
 	line-height: 24px;
 	color: rgb(50, 50, 50);
+}
+
+[data-layout-type="docked"] .uwp-main {
+	margin-left: 250px;
 }
 
 /* Commands */
@@ -700,19 +722,16 @@ body {
  * on scroll down
  */
 
-[data-layout-type="tabs"] .uwp-container,
+/* [data-layout-type="tabs"] .uwp-container,
 [data-layout-type="overlay"] .uwp-container,
-[data-layout-type="docked-minimized"] .uwp-container {
+[data-layout-type="docked-minimized"] .uwp-container,
+[data-layout-type="docked"] .uwp-container {
 	height: auto;
 }
 
 [data-layout-type="tabs"] .uwp-header,
 [data-layout-type="overlay"] .uwp-header {
 	position: fixed;
-}
-
-[data-layout-type="docked-minimized"] .uwp-header .uwp-menu-button {
-	position: fixed !important;
 }
 
 [data-layout-type="tabs"] .uwp-main {
@@ -722,3 +741,11 @@ body {
 [data-layout-type="overlay"] .uwp-main {
 	margin-top: 44px;
 }
+
+[data-layout-type="docked-minimized"] .uwp-header .uwp-menu-button {
+	position: fixed;
+}
+
+[data-layout-type="docked"] .uwp-main {
+	margin-left: 250px;
+} */

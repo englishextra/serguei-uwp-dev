@@ -2,9 +2,6 @@
 /*!
  * root
  */
-* {
-  box-sizing: border-box; }
-
 /*!
  * Default CSS Values for HTML Elements
  * @see {@link https://www.w3schools.com/cssref/css_default_values.asp}
@@ -161,7 +158,8 @@ template {
 .uwp-header .uwp-menu-button {
   cursor: pointer; }
 
-.uwp-header .uwp-menu-button img {
+.uwp-header .uwp-menu-button img,
+.uwp-header .uwp-menu-button svg {
   display: block;
   width: 16px;
   height: 16px;
@@ -175,22 +173,8 @@ template {
   margin-right: -50%;
   transform: translate(-50%, -50%); }
 
-.uwp-header .uwp-menu-button svg {
-  display: block;
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%); }
-
+.uwp-nav li img,
 .uwp-nav li svg {
-  width: 16px;
-  height: 16px; }
-
-.uwp-nav li img {
   width: 16px;
   height: 16px; }
 
