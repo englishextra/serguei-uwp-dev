@@ -5,6 +5,10 @@
 * {
   box-sizing: border-box; }
 
+/*!
+ * Default CSS Values for HTML Elements
+ * @see {@link https://www.w3schools.com/cssref/css_default_values.asp}
+ */
 html,
 body {
   height: 100%; }
@@ -23,8 +27,6 @@ body {
   font-weight: 400;
   font-size: 1.000rem;
   line-height: 1.333rem;
-  /* font-size: 1.000rem;
-	line-height: 1.333rem; */
   width: 100%;
   color: #212121;
   -webkit-text-size-adjust: none;
@@ -131,13 +133,31 @@ h4,
 h5 {
   color: #212121; }
 
+template {
+  display: block; }
+
+/*!
+ * reveal on css loaded
+ */
+/* .macy-grid, */
+/*!
+ * .macy-grid visibility and opacity is set in js
+ */
+.uwp-header,
+.uwp-main {
+  visibility: visible;
+  opacity: 1; }
+
 .uwp-main {
   color: #212121;
   background-color: transparent; }
 
-/*!
- * @see {@link https://www.w3.org/Style/Examples/007/center.en.html}
- */
+.uwp-main a {
+  color: #00838F; }
+
+.uwp-main img {
+  max-width: 100%; }
+
 .uwp-header .uwp-menu-button {
   cursor: pointer; }
 
@@ -145,16 +165,15 @@ h5 {
   display: block;
   width: 16px;
   height: 16px;
+  /*!
+	 * @see {@link https://www.w3.org/Style/Examples/007/center.en.html}
+	 */
   margin: 0;
   position: absolute;
   top: 50%;
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%); }
-
-.uwp-nav li img {
-  width: 16px;
-  height: 16px; }
 
 .uwp-header .uwp-menu-button svg {
   display: block;
@@ -171,35 +190,9 @@ h5 {
   width: 16px;
   height: 16px; }
 
-.uwp-main a {
-  color: #00838F; }
-
-/* .uwp-main input[type="text"]:focus,
-.uwp-main input[type="email"]:focus,
-.uwp-main input[type="password"]:focus,
-.uwp-main input[type="number"]:focus,
-.uwp-main select:focus {
-	border-color: $UWPAccentColor;
-}
-
-.uwp-main input[type="checkbox"]:checked+label:before {
-	background-color: $UWPAccentColor;
-	border-color: $UWPAccentColor;
-} */
-/*!
- * reveal on css loaded
- */
-/* .macy-grid, */
-/*!
- * .macy-grid visibility and opacity is set in js
- */
-.uwp-header,
-.uwp-main {
-  visibility: visible;
-  opacity: 1; }
-
-template {
-  display: block; }
+.uwp-nav li img {
+  width: 16px;
+  height: 16px; }
 
 [data-layout-type="tabs"] .uwp-header {
   background-color: #373737 !important; }
