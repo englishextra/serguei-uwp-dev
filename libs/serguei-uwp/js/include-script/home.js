@@ -8,7 +8,7 @@ updateMacyThrottled*/
 (function (root, document) {
 	"use strict";
 
-	var run = function run() {
+	var runHome = function runHome() {
 		var classList = "classList";
 		var getElementsByClassName = "getElementsByClassName";
 		var location = "location";
@@ -621,10 +621,7 @@ updateMacyThrottled*/
 				var i, l;
 
 				for (i = 0, l = macyItems[_length]; i < l; i += 1) {
-					if (!macyItems[i][classList].contains(isRenderedMacyItemClass)) {
-						macyItems[i][classList].add(isRenderedMacyItemClass);
-					}
-
+					macyItems[i][classList].add(isRenderedMacyItemClass);
 					count++;
 
 					if (count === macyItems[_length]) {
@@ -661,5 +658,5 @@ updateMacyThrottled*/
 		}
 	};
 
-	run();
+	runHome();
 })("undefined" !== typeof window ? window : this, document);
