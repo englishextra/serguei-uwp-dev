@@ -1327,7 +1327,10 @@ var LazyLoad = (function() {
 			includeStyle: "./libs/serguei-uwp/css/include-style",
 			navContainer: "nav-container",
 			home: "home",
-			hashNavKey: "page"
+			hashNavKey: "page",
+			onPageLoad: function onPageLoad() {
+				return;
+			}
 		},
 
 		/* Main init function */
@@ -1918,6 +1921,13 @@ var LazyLoad = (function() {
 
 					UWP.updateNavigation();
 					UWP.concealUWPLoading();
+
+					if (
+						UWP.config.onPageLoad &&
+						"function" === typeof UWP.config.onPageLoad
+					) {
+						UWP.config.onPageLoad();
+					}
 				}
 			};
 

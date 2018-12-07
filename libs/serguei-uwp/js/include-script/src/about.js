@@ -7,10 +7,11 @@ updateMacyThrottled*/
 (function (root, document) {
 	"use strict";
 
-	var runAbout = function () {
+	var getElementsByClassName = "getElementsByClassName";
+
+	root.runAbout = function () {
 
 		var classList = "classList";
-		var getElementsByClassName = "getElementsByClassName";
 		var querySelectorAll = "querySelectorAll";
 		var _addEventListener = "addEventListener";
 		var _length = "length";
@@ -126,7 +127,7 @@ updateMacyThrottled*/
 		};
 
 		var isRenderedMacyItemClass = "is-rendered-macy-item";
-		
+
 		var addMacyItems = function (macyGrid, callback) {
 				var macyItems = document[getElementsByClassName]("col") || "";
 				var count = 0;
@@ -167,6 +168,9 @@ updateMacyThrottled*/
 			manageExternalLinkAll();
 		}
 	};
-	runAbout();
+
+	if (root.runAbout && document[getElementsByClassName]("macy-grid--about")[0]) {
+		runAbout();
+	}
 
 })("undefined" !== typeof window ? window : this, document);

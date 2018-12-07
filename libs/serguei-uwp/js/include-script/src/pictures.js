@@ -6,11 +6,12 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 (function (root, document) {
 	"use strict";
 
-	var runPictures = function () {
+	var getElementsByClassName = "getElementsByClassName";
+	
+	root.runPictures = function () {
 
 		var appendChild = "appendChild";
 		var classList = "classList";
-		var getElementsByClassName = "getElementsByClassName";
 		var querySelectorAll = "querySelectorAll";
 		var setAttribute = "setAttribute";
 		var _addEventListener = "addEventListener";
@@ -256,6 +257,9 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 			manageExternalLinkAll();
 		}
 	};
-	runPictures();
+	
+	if (root.runPictures && document[getElementsByClassName]("macy-grid--pictures")[0]) {
+		runPictures();
+	}
 
 })("undefined" !== typeof window ? window : this, document);

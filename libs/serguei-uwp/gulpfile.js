@@ -200,6 +200,14 @@ vendorsCssOptions = {
 vendorsJsOptions = {
 	path: "vendors.js",
 	newLine: "\n"
+},
+pagesCssOptions = {
+	path: "../pages.css",
+	newLine: "\n"
+},
+pagesJsOptions = {
+	path: "../pages.js",
+	newLine: "\n"
 };
 
 gulp.task("browser-sync", [
@@ -338,6 +346,7 @@ gulp.task("compile-include-style-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
+	.pipe(concat(pagesCssOptions))
 	.pipe(gulp.dest(includeStyle.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
@@ -356,6 +365,7 @@ gulp.task("compile-include-script-js", function () {
 	.pipe(babel(babelOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
+	.pipe(concat(pagesJsOptions))
 	.pipe(gulp.dest(includeScript.js))
 	.pipe(rename(function (path) {
 			path.basename += ".min";

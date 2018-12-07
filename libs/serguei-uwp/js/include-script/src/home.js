@@ -7,10 +7,11 @@ updateMacyThrottled*/
 (function (root, document) {
 	"use strict";
 
-	var runHome = function () {
+	var getElementsByClassName = "getElementsByClassName";
+
+	root.runHome = function () {
 
 		var classList = "classList";
-		var getElementsByClassName = "getElementsByClassName";
 		var location = "location";
 		var querySelectorAll = "querySelectorAll";
 		var _addEventListener = "addEventListener";
@@ -699,6 +700,9 @@ updateMacyThrottled*/
 			manageExternalLinkAll();
 		}
 	};
-	runHome();
+
+	if (root.runHome && document[getElementsByClassName]("macy-grid--home")[0]) {
+		runHome();
+	}
 
 })("undefined" !== typeof window ? window : this, document);

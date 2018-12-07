@@ -6,11 +6,12 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 (function (root, document) {
 	"use strict";
 
-	var runGallery = function () {
+	var getElementsByClassName = "getElementsByClassName";
+	
+	root.runGallery = function () {
 
 		var appendChild = "appendChild";
 		var classList = "classList";
-		var getElementsByClassName = "getElementsByClassName";
 		var querySelectorAll = "querySelectorAll";
 		var setAttribute = "setAttribute";
 		var _addEventListener = "addEventListener";
@@ -248,7 +249,7 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 		];
 
 		var isRenderedMacyItemClass = "is-rendered-macy-item";
-		
+
 		var addMacyItems = function (macyGrid, callback) {
 			var dataSrcImgKeyName = "src";
 			var transparentPixel = "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%201%201%27%2F%3E";
@@ -310,6 +311,9 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 			manageExternalLinkAll();
 		}
 	};
-	runGallery();
+
+	if (root.runGallery && document[getElementsByClassName]("macy-grid--gallery")[0]) {
+		runGallery();
+	}
 
 })("undefined" !== typeof window ? window : this, document);
