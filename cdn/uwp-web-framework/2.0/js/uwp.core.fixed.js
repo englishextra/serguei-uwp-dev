@@ -3,15 +3,14 @@
 	"use strict";
 	/* Helpers */
 
-	Element.prototype.prependChild = function(child) {
-		return this.insertBefore(child, this.firstChild);
-	};
+	Element.prototype.prependChild = function(node) {
+		var firstChild = this.firstChild;
 
-	Element.prototype.insertAfter = function(newNode, referenceNode) {
-		return referenceNode.parentNode.insertBefore(
-			newNode,
-			referenceNode.nextSibling
-		);
+		if (firstChild) {
+			return this.insertBefore(node, firstChild);
+		} else {
+			return this.appendChild(node);
+		}
 	};
 
 	var toArray = function toArray(obj) {
@@ -246,8 +245,18 @@
 			};
 			/* Prepares space for document's title, puts it in place */
 
-			UWP.pageTitle = document.createElement("span");
-			UWP.header.prependChild(UWP.pageTitle);
+			var _uwp_page_heading =
+				document.getElementsByClassName("uwp-page-heading")[0] || "";
+
+			if (!_uwp_page_heading) {
+				var pageHeading = document.createElement("h1");
+				pageHeading.setAttribute("class", "uwp-page-heading");
+				pageHeading.innerHTML = UWP.pageTitle;
+				UWP.pageTitle = pageHeading;
+				UWP.header.appendChild(UWP.pageTitle);
+			} else {
+				UWP.pageTitle = _uwp_page_heading;
+			}
 		},
 
 		/* Gets document's navigation, puts it in place */
