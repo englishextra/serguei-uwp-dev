@@ -1328,9 +1328,12 @@ var LazyLoad = (function() {
 			navContainer: "nav-container",
 			home: "home",
 			hashNavKey: "page",
+			hashBang: "#/",
 			onPageLoad: function onPageLoad() {
 				return;
-			}
+			},
+			errorTitle: "Something went wrong",
+			errorLinkText: "Go Home"
 		},
 
 		/* Main init function */
@@ -1535,7 +1538,10 @@ var LazyLoad = (function() {
 					event.preventDefault();
 					/* if (root.location.hash !== "".concat("#", UWP.config.hashNavKey, "=", navTarget)) { */
 
-					if (root.location.hash !== "".concat("#/", navTarget)) {
+					if (
+						root.location.hash !==
+						"".concat(UWP.config.hashBang, navTarget)
+					) {
 						UWP.menuList.classList.remove("active");
 						UWP.navigate(navTarget);
 					}
@@ -1784,7 +1790,11 @@ var LazyLoad = (function() {
 				history.pushState(
 					"",
 					"",
-					"".concat(root.location.href.split(/#\//)[0], "#/", target)
+					"".concat(
+						root.location.href.split(/#\//)[0],
+						UWP.config.hashBang,
+						target
+					)
 				);
 			}
 			/* Clears the page content */
@@ -1792,10 +1802,12 @@ var LazyLoad = (function() {
 			UWP.main.innerHTML = "";
 			/* Displays error message */
 
-			function displayError(title) {
+			function displayError(title, linkText) {
 				UWP.main.innerHTML = '\n\t<div class="uwp-error">\n\t<p>'.concat(
 					title,
-					'</p>\n\t<p><a href="javascript:void(0);" class="error-link">Go Home</a></p>\n\t</div>\n\t'
+					'</p>\n\t<p><a href="javascript:void(0);" class="error-link">' +
+						linkText +
+						"</a></p>\n\t</div>\n\t"
 				);
 				var mainA =
 					UWP.main.getElementsByClassName("error-link")[0] || "";
@@ -1829,8 +1841,11 @@ var LazyLoad = (function() {
 						"Error XMLHttpRequest-ing file",
 						UWP_navigate_request.status
 					);
-					console.error("Something went wrong");
-					displayError("Something went wrong");
+					console.error(UWP.config.errorTitle);
+					displayError(
+						UWP.config.errorTitle,
+						UWP.config.errorLinkText
+					);
 				} else if (
 					UWP_navigate_request.readyState === 4 &&
 					UWP_navigate_request.status === 200 &&
@@ -1845,8 +1860,11 @@ var LazyLoad = (function() {
 						parsed.getElementsByTagName("page-container")[0] || "";
 
 					if (!page) {
-						console.error("Something went wrong");
-						displayError("Something went wrong");
+						console.error(UWP.config.errorTitle);
+						displayError(
+							UWP.config.errorTitle,
+							UWP.config.errorLinkText
+						);
 					}
 
 					UWP.revealUWPLoading();
@@ -1919,15 +1937,15 @@ var LazyLoad = (function() {
 						UWP.body.appendChild(link);
 					}
 
-					UWP.updateNavigation();
-					UWP.concealUWPLoading();
-
 					if (
 						UWP.config.onPageLoad &&
 						"function" === typeof UWP.config.onPageLoad
 					) {
 						UWP.config.onPageLoad();
 					}
+
+					UWP.updateNavigation();
+					UWP.concealUWPLoading();
 				}
 			};
 

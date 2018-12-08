@@ -1,6 +1,6 @@
 /*global AdaptiveCards, console, debounce, doesFontExist, getHTTP, isElectron,
-isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, throttle,
-$readMoreJS*/
+isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, runHome,
+runWorks, runPictures, runGallery, runAbout,  throttle, $readMoreJS*/
 
 /*!
  * modified loadExt
@@ -619,7 +619,7 @@ $readMoreJS*/
 				}
 
 				root.handleMacy = new Macy(settings);
-				macyContainer[classList].add(isActiveClass);
+				/* macyContainer[classList].add(isActiveClass); */
 			} catch (err) {
 				throw new Error("cannot init Macy " + err);
 			}
@@ -860,8 +860,9 @@ $readMoreJS*/
 	docElem[classList].add("no-js");
 
 	var run = function run() {
+		var hashBang = "#/";
+
 		var onPageLoad = function onPageLoad() {
-			var hashBang = "#/";
 			var hashName = root.location.hash
 				? root.location.hash.split(hashBang)[1]
 				: "";
@@ -918,7 +919,10 @@ $readMoreJS*/
 				navContainer: "nav-container",
 				home: "home",
 				hashNavKey: "page",
-				onPageLoad: onPageLoad
+				hashBang: hashBang,
+				onPageLoad: onPageLoad,
+				errorTitle: "Что-то пошло не так",
+				errorLinkText: "На Главную"
 			});
 		}
 

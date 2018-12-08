@@ -1,6 +1,6 @@
 /*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss,
-manageExternalLinkAll, manageMacy, manageReadMore, scriptIsLoaded,
-updateMacyThrottled*/
+manageExternalLinkAll, manageMacy, manageReadMore, renderAC, runAbout,
+scriptIsLoaded, updateMacyThrottled*/
 
 /*!
  * page logic
@@ -15,6 +15,88 @@ updateMacyThrottled*/
 		var querySelectorAll = "querySelectorAll";
 		var _addEventListener = "addEventListener";
 		var _length = "length";
+		var macyItems = [];
+		/*!
+		 * to change default style
+		 * @see {@link https://docs.microsoft.com/en-us/adaptive-cards/rendering-cards/host-config}
+		 * @see {@link https://docs.microsoft.com/en-us/adaptive-cards/rendering-cards/host-config#adaptivecardconfig}
+		 * @see {@link https://github.com/Microsoft/AdaptiveCards/pull/905}
+		 * @see {@link https://github.com/Microsoft/AdaptiveCards/issues/1929}
+		 * @see {@link https://material.io/tools/color/#!/?view.left=0&view.right=0&secondary.color=BDBDBD&primary.color=F06292}
+		 */
+
+		var renderACOptions = {
+			fontFamily:
+				"Roboto, Segoe UI, Segoe MDL2 Assets, Helvetica Neue, sans-serif",
+			containerStyles: {
+				default: {
+					foregroundColors: {
+						default: {
+							default: "#212121",
+							subtle: "#757575"
+						},
+						dark: {
+							default: "#000000",
+							subtle: "#424242"
+						},
+						light: {
+							default: "#757575",
+							subtle: "#bdbdbd"
+						},
+						accent: {
+							default: "#0097a7",
+							subtle: "#26c6da"
+						},
+						good: {
+							default: "#388e3c",
+							subtle: "#66bb6a"
+						},
+						warning: {
+							default: "#e64a19",
+							subtle: "#ff7043"
+						},
+						attention: {
+							default: "#d81b60",
+							subtle: "#f06292"
+						}
+					},
+					backgroundColor: "#ffffff"
+				}
+			}
+		};
+
+		var onExecuteAC = function onExecuteAC(action) {
+			if (action.url) {
+				root[location].href = action.url;
+			}
+		};
+
+		var manageAC = function manageAC(macyGrid, callback) {
+			if (root.renderAC) {
+				var count = 0;
+				var i, l;
+
+				for (i = 0, l = macyItems[_length]; i < l; i += 1) {
+					renderAC(
+						macyGrid,
+						macyItems[i],
+						renderACOptions,
+						onExecuteAC,
+						null
+					);
+					count++;
+
+					if (count === macyItems[_length]) {
+						if (callback && "function" === typeof callback) {
+							callback();
+						}
+					}
+				}
+
+				i = l = null;
+			}
+		};
+
 		var glightboxClass = "glightbox";
 		/*!
 		 * @see {@link https://glightbox.mcstudios.com.mx/#options}
@@ -98,9 +180,12 @@ updateMacyThrottled*/
 		var isBindedMacyItemClass = "is-binded-macy-item";
 		var macyGridClass = "macy-grid";
 		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
+		var isActiveClass = "is-active";
 
 		var onMacyRender = function onMacyRender() {
-			updateMacyThrottled();
+			macyGrid[classList].add(isActiveClass);
+			/* updateMacyThrottled(); */
+
 			onImagesLoaded(macyGrid);
 			manageLazyLoad(dataSrcLazyClass);
 			manageExternalLinkAll();
@@ -155,32 +240,6 @@ updateMacyThrottled*/
 		};
 
 		var onMacyManage = function onMacyManage() {
-			onMacyRender();
-			onMacyResize();
-		};
-
-		var isRenderedMacyItemClass = "is-rendered-macy-item";
-
-		var addMacyItems = function addMacyItems(macyGrid, callback) {
-			var macyItems = document[getElementsByClassName]("col") || "";
-			var count = 0;
-			var i, l;
-
-			for (i = 0, l = macyItems[_length]; i < l; i += 1) {
-				macyItems[i][classList].add(isRenderedMacyItemClass);
-				count++;
-
-				if (count === macyItems[_length]) {
-					if (callback && "function" === typeof callback) {
-						callback();
-					}
-				}
-			}
-
-			i = l = null;
-		};
-
-		if (macyGrid) {
 			manageMacy(macyGridClass, {
 				trueOrder: false,
 				waitForImages: false,
@@ -195,6 +254,58 @@ updateMacyThrottled*/
 					360: 1
 				}
 			});
+			onMacyRender();
+			onMacyResize();
+		};
+		/* var macyItems = [
+    ]; */
+
+		var isRenderedMacyItemClass = "is-rendered-macy-item";
+
+		var addMacyItems = function addMacyItems(macyGrid, callback) {
+			if (root.AdaptiveCards) {
+				macyGrid.innerHTML = "";
+				manageAC(macyGrid, callback);
+			} else {
+				/*!
+				 * @see {@link https://stackoverflow.com/questions/18393981/append-vs-html-vs-innerhtml-performance}
+				 */
+
+				/* var html = [];
+        var count = 0;
+        var i,
+        l;
+        for (i = 0, l = macyItems[_length]; i < l; i += 1) {
+        	html.push(macyItems[i]);
+        	count++;
+        	if (count === macyItems[_length]) {
+        		macyGrid.innerHTML = html.join("");
+        		if (callback && "function" === typeof callback) {
+        			callback();
+        		}
+        	}
+        }
+        i = l = null; */
+				macyItems = document[getElementsByClassName]("col") || "";
+				var count = 0;
+				var i, l;
+
+				for (i = 0, l = macyItems[_length]; i < l; i += 1) {
+					macyItems[i][classList].add(isRenderedMacyItemClass);
+					count++;
+
+					if (count === macyItems[_length]) {
+						if (callback && "function" === typeof callback) {
+							callback();
+						}
+					}
+				}
+
+				i = l = null;
+			}
+		};
+
+		if (macyGrid) {
 			addMacyItems(macyGrid, onMacyManage);
 		}
 
@@ -202,17 +313,14 @@ updateMacyThrottled*/
 			manageExternalLinkAll();
 		}
 	};
-
-	if (
-		root.runAbout &&
-		document[getElementsByClassName]("macy-grid--about")[0]
-	) {
-		runAbout();
-	}
+	/* if (document[getElementsByClassName]("macy-grid--about")[0]) {
+  	runAbout();
+  } */
 })("undefined" !== typeof window ? window : this, document);
 
 /*global console, imagesLoaded, LazyLoad, lightGallery, loadJsCss,
-manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
+manageExternalLinkAll, manageMacy, runGallery, scriptIsLoaded,
+updateMacyThrottled*/
 
 /*!
  * page logic
@@ -223,10 +331,11 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 	var getElementsByClassName = "getElementsByClassName";
 
 	root.runGallery = function() {
-		var appendChild = "appendChild";
+		/*var appendChild = "appendChild";*/
 		var classList = "classList";
 		var querySelectorAll = "querySelectorAll";
-		var setAttribute = "setAttribute";
+		/*var setAttribute = "setAttribute";*/
+
 		var _addEventListener = "addEventListener";
 		var _length = "length";
 		/*!
@@ -314,9 +423,12 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 		var isBindedMacyItemClass = "is-binded-macy-item";
 		var macyGridClass = "macy-grid";
 		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
+		var isActiveClass = "is-active";
 
 		var onMacyRender = function onMacyRender() {
-			updateMacyThrottled();
+			macyGrid[classList].add(isActiveClass);
+			/* updateMacyThrottled(); */
+
 			onImagesLoaded(macyGrid);
 			manageLazyLoad(dataSrcLazyClass);
 			manageExternalLinkAll();
@@ -362,6 +474,20 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 		};
 
 		var onMacyManage = function onMacyManage() {
+			manageMacy(macyGridClass, {
+				trueOrder: false,
+				waitForImages: false,
+				margin: 0,
+				columns: 4,
+				breakAt: {
+					1280: 4,
+					1024: 3,
+					960: 2,
+					640: 2,
+					480: 1,
+					360: 1
+				}
+			});
 			onMacyRender();
 			onMacyResize();
 		};
@@ -620,44 +746,39 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 					"./libs/serguei-uwp/img/mytushino-gallery/@1x/zhantil_khimkinskij_bul_17.jpg"
 			}
 		];
-		var isRenderedMacyItemClass = "is-rendered-macy-item";
+		/*var isRenderedMacyItemClass = "is-rendered-macy-item";*/
 
 		var addMacyItems = function addMacyItems(macyGrid, callback) {
 			var dataSrcImgKeyName = "src";
 			var transparentPixel =
 				"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%201%201%27%2F%3E";
-			/* var html = "";
-      var i,
-      l;
-      for (i = 0, l = macyItems[_length]; i < l; i += 1) {
-      	html += '<a href="' + macyItems[i].href + '" aria-label="Показать картинку"><img src="' + transparentPixel + '" class="' + dataSrcImgClass + '" data-' + dataSrcImgKeyName + '="' + macyItems[i].src + '" alt="" /></a>\n';
-      }
-      i = l = null;
-      macyGrid.innerHTML = html;
-      if (callback && "function" === typeof callback) {
-      	callback();
-      } */
+			/*!
+			 * @see {@link https://stackoverflow.com/questions/18393981/append-vs-html-vs-innerhtml-performance}
+			 */
 
+			var html = [];
 			var count = 0;
 			var i, l;
 
 			for (i = 0, l = macyItems[_length]; i < l; i += 1) {
-				var macyItem = document.createElement("a");
-				macyItem[classList].add(isRenderedMacyItemClass);
-				macyItem[setAttribute]("href", macyItems[i].href);
-				macyItem[setAttribute]("aria-label", "Показать картинку");
-				var img = document.createElement("img");
-				macyItem[appendChild](img);
-				img[setAttribute]("src", transparentPixel);
-				img[setAttribute]("class", dataSrcLazyClass);
-				img[setAttribute](
-					"data-" + dataSrcImgKeyName,
-					macyItems[i].src
+				html.push(
+					'<a href="' +
+						macyItems[i].href +
+						'" aria-label="Показать картинку"><img src="' +
+						transparentPixel +
+						'" class="' +
+						dataSrcLazyClass +
+						'" data-' +
+						dataSrcImgKeyName +
+						'="' +
+						macyItems[i].src +
+						'" alt="" /></a>\n'
 				);
-				macyGrid[appendChild](macyItem);
 				count++;
 
 				if (count === macyItems[_length]) {
+					macyGrid.innerHTML = html.join("");
+
 					if (callback && "function" === typeof callback) {
 						callback();
 					}
@@ -665,23 +786,31 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 			}
 
 			i = l = null;
+			/* var count = 0;
+      var i,
+      l;
+      for (i = 0, l = macyItems[_length]; i < l; i += 1) {
+      	var macyItem = document.createElement("a");
+      	macyItem[classList].add(isRenderedMacyItemClass);
+      	macyItem[setAttribute]("href", macyItems[i].href);
+      	macyItem[setAttribute]("aria-label", "Показать картинку");
+      	var img = document.createElement("img");
+      	macyItem[appendChild](img);
+      	img[setAttribute]("src", transparentPixel);
+      	img[setAttribute]("class", dataSrcLazyClass);
+      	img[setAttribute]("data-" + dataSrcImgKeyName, macyItems[i].src);
+      	macyGrid[appendChild](macyItem);
+      	count++;
+      	if (count === macyItems[_length]) {
+      		if (callback && "function" === typeof callback) {
+      			callback();
+      		}
+      	}
+      }
+      i = l = null; */
 		};
 
 		if (macyGrid) {
-			manageMacy(macyGridClass, {
-				trueOrder: false,
-				waitForImages: false,
-				margin: 0,
-				columns: 4,
-				breakAt: {
-					1280: 4,
-					1024: 3,
-					960: 2,
-					640: 2,
-					480: 1,
-					360: 1
-				}
-			});
 			addMacyItems(macyGrid, onMacyManage);
 		}
 
@@ -689,18 +818,14 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 			manageExternalLinkAll();
 		}
 	};
-
-	if (
-		root.runGallery &&
-		document[getElementsByClassName]("macy-grid--gallery")[0]
-	) {
-		runGallery();
-	}
+	/* if (document[getElementsByClassName]("macy-grid--gallery")[0]) {
+  	runGallery();
+  } */
 })("undefined" !== typeof window ? window : this, document);
 
 /*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss,
-manageExternalLinkAll, manageMacy, manageReadMore, renderAC, scriptIsLoaded,
-updateMacyThrottled*/
+manageExternalLinkAll, manageMacy, manageReadMore, renderAC, runHome,
+scriptIsLoaded, updateMacyThrottled*/
 
 /*!
  * page logic
@@ -1414,9 +1539,12 @@ updateMacyThrottled*/
 		var isBindedMacyItemClass = "is-binded-macy-item";
 		var macyGridClass = "macy-grid";
 		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
+		var isActiveClass = "is-active";
 
 		var onMacyRender = function onMacyRender() {
-			updateMacyThrottled();
+			macyGrid[classList].add(isActiveClass);
+			/* updateMacyThrottled(); */
+
 			onImagesLoaded(macyGrid);
 			manageLazyLoad(dataSrcLazyClass);
 			manageExternalLinkAll();
@@ -1471,9 +1599,25 @@ updateMacyThrottled*/
 		};
 
 		var onMacyManage = function onMacyManage() {
+			manageMacy(macyGridClass, {
+				trueOrder: false,
+				waitForImages: false,
+				margin: 20,
+				columns: 4,
+				breakAt: {
+					1280: 4,
+					1024: 3,
+					960: 2,
+					640: 2,
+					480: 1,
+					360: 1
+				}
+			});
 			onMacyRender();
 			onMacyResize();
 		};
+		/* var macyItems = [
+    ]; */
 
 		var isRenderedMacyItemClass = "is-rendered-macy-item";
 
@@ -1482,7 +1626,26 @@ updateMacyThrottled*/
 				macyGrid.innerHTML = "";
 				manageAC(macyGrid, callback);
 			} else {
-				var macyItems =
+				/*!
+				 * @see {@link https://stackoverflow.com/questions/18393981/append-vs-html-vs-innerhtml-performance}
+				 */
+
+				/* var html = [];
+        var count = 0;
+        var i,
+        l;
+        for (i = 0, l = macyItems[_length]; i < l; i += 1) {
+        	html.push(macyItems[i]);
+        	count++;
+        	if (count === macyItems[_length]) {
+        		macyGrid.innerHTML = html.join("");
+        		if (callback && "function" === typeof callback) {
+        			callback();
+        		}
+        	}
+        }
+        i = l = null; */
+				macyItems =
 					document[getElementsByClassName]("ac-container") || "";
 				var count = 0;
 				var i, l;
@@ -1503,20 +1666,6 @@ updateMacyThrottled*/
 		};
 
 		if (macyGrid) {
-			manageMacy(macyGridClass, {
-				trueOrder: false,
-				waitForImages: false,
-				margin: 20,
-				columns: 4,
-				breakAt: {
-					1280: 4,
-					1024: 3,
-					960: 2,
-					640: 2,
-					480: 1,
-					360: 1
-				}
-			});
 			addMacyItems(macyGrid, onMacyManage);
 		}
 
@@ -1524,17 +1673,14 @@ updateMacyThrottled*/
 			manageExternalLinkAll();
 		}
 	};
-
-	if (
-		root.runHome &&
-		document[getElementsByClassName]("macy-grid--home")[0]
-	) {
-		runHome();
-	}
+	/* if (document[getElementsByClassName]("macy-grid--home")[0]) {
+  	runHome();
+  } */
 })("undefined" !== typeof window ? window : this, document);
 
 /*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss,
-manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
+manageExternalLinkAll, manageMacy, runPictures, scriptIsLoaded,
+updateMacyThrottled*/
 
 /*!
  * page logic
@@ -1545,10 +1691,11 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 	var getElementsByClassName = "getElementsByClassName";
 
 	root.runPictures = function() {
-		var appendChild = "appendChild";
+		/*var appendChild = "appendChild";*/
 		var classList = "classList";
 		var querySelectorAll = "querySelectorAll";
-		var setAttribute = "setAttribute";
+		/*var setAttribute = "setAttribute";*/
+
 		var _addEventListener = "addEventListener";
 		var _length = "length";
 		var glightboxClass = "glightbox";
@@ -1634,9 +1781,12 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 		var isBindedMacyItemClass = "is-binded-macy-item";
 		var macyGridClass = "macy-grid";
 		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
+		var isActiveClass = "is-active";
 
 		var onMacyRender = function onMacyRender() {
-			updateMacyThrottled();
+			macyGrid[classList].add(isActiveClass);
+			/* updateMacyThrottled(); */
+
 			onImagesLoaded(macyGrid);
 			manageLazyLoad(dataSrcLazyClass);
 			manageExternalLinkAll();
@@ -1682,6 +1832,20 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 		};
 
 		var onMacyManage = function onMacyManage() {
+			manageMacy(macyGridClass, {
+				trueOrder: false,
+				waitForImages: false,
+				margin: 0,
+				columns: 4,
+				breakAt: {
+					1280: 4,
+					1024: 3,
+					960: 2,
+					640: 2,
+					480: 1,
+					360: 1
+				}
+			});
 			onMacyRender();
 			onMacyResize();
 		};
@@ -1832,45 +1996,41 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 					"./libs/serguei-uwp/img/serguei-pictures/@2x/36229259776_09b4755088_z.jpg"
 			}
 		];
-		var isRenderedMacyItemClass = "is-rendered-macy-item";
+		/*var isRenderedMacyItemClass = "is-rendered-macy-item";*/
 
 		var addMacyItems = function addMacyItems(macyGrid, callback) {
 			var dataSrcImgKeyName = "src";
 			var transparentPixel =
 				"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%201%201%27%2F%3E";
-			/* var html = "";
-      var i,
-      l;
-      for (i = 0, l = macyItems[_length]; i < l; i += 1) {
-      	html += '<a href="' + macyItems[i].href + '" class="' + glightboxClass + '" aria-label="Показать картинку"><img src="' + transparentPixel + '" class="' + dataSrcImgClass + '" data-' + dataSrcImgKeyName + '="' + macyItems[i].src + '" alt="" /></a>\n';
-      }
-      i = l = null;
-      macyGrid.innerHTML = html;
-      if (callback && "function" === typeof callback) {
-      	callback();
-      } */
+			/*!
+			 * @see {@link https://stackoverflow.com/questions/18393981/append-vs-html-vs-innerhtml-performance}
+			 */
 
+			var html = [];
 			var count = 0;
 			var i, l;
 
 			for (i = 0, l = macyItems[_length]; i < l; i += 1) {
-				var macyItem = document.createElement("a");
-				macyItem[classList].add(isRenderedMacyItemClass);
-				macyItem[setAttribute]("href", macyItems[i].href);
-				macyItem[setAttribute]("class", glightboxClass);
-				macyItem[setAttribute]("aria-label", "Показать картинку");
-				var img = document.createElement("img");
-				macyItem[appendChild](img);
-				img[setAttribute]("src", transparentPixel);
-				img[setAttribute]("class", dataSrcLazyClass);
-				img[setAttribute](
-					"data-" + dataSrcImgKeyName,
-					macyItems[i].src
+				html.push(
+					'<a href="' +
+						macyItems[i].href +
+						'" class="' +
+						glightboxClass +
+						'" aria-label="Показать картинку"><img src="' +
+						transparentPixel +
+						'" class="' +
+						dataSrcLazyClass +
+						'" data-' +
+						dataSrcImgKeyName +
+						'="' +
+						macyItems[i].src +
+						'" alt="" /></a>\n'
 				);
-				macyGrid[appendChild](macyItem);
 				count++;
 
 				if (count === macyItems[_length]) {
+					macyGrid.innerHTML = html.join("");
+
 					if (callback && "function" === typeof callback) {
 						callback();
 					}
@@ -1878,23 +2038,32 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 			}
 
 			i = l = null;
+			/* var count = 0;
+      var i,
+      l;
+      for (i = 0, l = macyItems[_length]; i < l; i += 1) {
+      	var macyItem = document.createElement("a");
+      	macyItem[classList].add(isRenderedMacyItemClass);
+      	macyItem[setAttribute]("href", macyItems[i].href);
+      	macyItem[setAttribute]("class", glightboxClass);
+      	macyItem[setAttribute]("aria-label", "Показать картинку");
+      	var img = document.createElement("img");
+      	macyItem[appendChild](img);
+      	img[setAttribute]("src", transparentPixel);
+      	img[setAttribute]("class", dataSrcLazyClass);
+      	img[setAttribute]("data-" + dataSrcImgKeyName, macyItems[i].src);
+      	macyGrid[appendChild](macyItem);
+      	count++;
+      	if (count === macyItems[_length]) {
+      		if (callback && "function" === typeof callback) {
+      			callback();
+      		}
+      	}
+      }
+      i = l = null; */
 		};
 
 		if (macyGrid) {
-			manageMacy(macyGridClass, {
-				trueOrder: false,
-				waitForImages: false,
-				margin: 0,
-				columns: 4,
-				breakAt: {
-					1280: 4,
-					1024: 3,
-					960: 2,
-					640: 2,
-					480: 1,
-					360: 1
-				}
-			});
 			addMacyItems(macyGrid, onMacyManage);
 		}
 
@@ -1902,17 +2071,13 @@ manageExternalLinkAll, manageMacy, scriptIsLoaded, updateMacyThrottled*/
 			manageExternalLinkAll();
 		}
 	};
-
-	if (
-		root.runPictures &&
-		document[getElementsByClassName]("macy-grid--pictures")[0]
-	) {
-		runPictures();
-	}
+	/* if (document[getElementsByClassName]("macy-grid--pictures")[0]) {
+  	runPictures();
+  } */
 })("undefined" !== typeof window ? window : this, document);
 
 /*global console, imagesLoaded, LazyLoad, manageExternalLinkAll, manageMacy,
-updateMacyThrottled*/
+runWorks, updateMacyThrottled*/
 
 /*!
  * page logic
@@ -1923,10 +2088,11 @@ updateMacyThrottled*/
 	var getElementsByClassName = "getElementsByClassName";
 
 	root.runWorks = function() {
-		var appendChild = "appendChild";
+		/*var appendChild = "appendChild";*/
 		var classList = "classList";
 		var querySelectorAll = "querySelectorAll";
-		var setAttribute = "setAttribute";
+		/*var setAttribute = "setAttribute";*/
+
 		var _addEventListener = "addEventListener";
 		var _length = "length";
 		var dataSrcLazyClass = "data-src-lazy";
@@ -1971,9 +2137,12 @@ updateMacyThrottled*/
 		var isBindedMacyItemClass = "is-binded-macy-item";
 		var macyGridClass = "macy-grid";
 		var macyGrid = document[getElementsByClassName](macyGridClass)[0] || "";
+		var isActiveClass = "is-active";
 
 		var onMacyRender = function onMacyRender() {
-			updateMacyThrottled();
+			macyGrid[classList].add(isActiveClass);
+			/* updateMacyThrottled(); */
+
 			onImagesLoaded(macyGrid);
 			manageLazyLoad(dataSrcLazyClass);
 			manageExternalLinkAll();
@@ -2018,6 +2187,20 @@ updateMacyThrottled*/
 		};
 
 		var onMacyManage = function onMacyManage() {
+			manageMacy(macyGridClass, {
+				trueOrder: false,
+				waitForImages: false,
+				margin: 0,
+				columns: 4,
+				breakAt: {
+					1280: 4,
+					1024: 3,
+					960: 2,
+					640: 2,
+					480: 1,
+					360: 1
+				}
+			});
 			onMacyRender();
 			onMacyResize();
 		};
@@ -2101,44 +2284,39 @@ updateMacyThrottled*/
 					"./libs/serguei-uwp/img/works-screenshots/@1x/www.npmjs.com-englishextra.jpg"
 			}
 		];
-		var isRenderedMacyItemClass = "is-rendered-macy-item";
+		/*var isRenderedMacyItemClass = "is-rendered-macy-item";*/
 
 		var addMacyItems = function addMacyItems(macyGrid, callback) {
 			var dataSrcImgKeyName = "src";
 			var transparentPixel =
 				"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%201%201%27%2F%3E";
-			/* var html = "";
-      var i,
-      l;
-      for (i = 0, l = macyItems[_length]; i < l; i += 1) {
-      	html += '<a href="' + macyItems[i].href + '" aria-label="Ссылка"><img src="' + transparentPixel + '" class="' + dataSrcImgClass + '" data-' + dataSrcImgKeyName + '="' + macyItems[i].src + '" alt="" /></a>\n';
-      }
-      i = l = null;
-      macyGrid.innerHTML = html;
-      if (callback && "function" === typeof callback) {
-      	callback();
-      } */
+			/*!
+			 * @see {@link https://stackoverflow.com/questions/18393981/append-vs-html-vs-innerhtml-performance}
+			 */
 
+			var html = [];
 			var count = 0;
 			var i, l;
 
 			for (i = 0, l = macyItems[_length]; i < l; i += 1) {
-				var macyItem = document.createElement("a");
-				macyItem[classList].add(isRenderedMacyItemClass);
-				macyItem[setAttribute]("href", macyItems[i].href);
-				macyItem[setAttribute]("aria-label", "Ссылка");
-				var img = document.createElement("img");
-				macyItem[appendChild](img);
-				img[setAttribute]("src", transparentPixel);
-				img[setAttribute]("class", dataSrcLazyClass);
-				img[setAttribute](
-					"data-" + dataSrcImgKeyName,
-					macyItems[i].src
+				html.push(
+					'<a href="' +
+						macyItems[i].href +
+						'" aria-label="Ссылка"><img src="' +
+						transparentPixel +
+						'" class="' +
+						dataSrcLazyClass +
+						'" data-' +
+						dataSrcImgKeyName +
+						'="' +
+						macyItems[i].src +
+						'" alt="" /></a>\n'
 				);
-				macyGrid[appendChild](macyItem);
 				count++;
 
 				if (count === macyItems[_length]) {
+					macyGrid.innerHTML = html.join("");
+
 					if (callback && "function" === typeof callback) {
 						callback();
 					}
@@ -2146,23 +2324,31 @@ updateMacyThrottled*/
 			}
 
 			i = l = null;
+			/* var count = 0;
+      var i,
+      l;
+      for (i = 0, l = macyItems[_length]; i < l; i += 1) {
+      	var macyItem = document.createElement("a");
+      	macyItem[classList].add(isRenderedMacyItemClass);
+      	macyItem[setAttribute]("href", macyItems[i].href);
+      	macyItem[setAttribute]("aria-label", "Ссылка");
+      	var img = document.createElement("img");
+      	macyItem[appendChild](img);
+      	img[setAttribute]("src", transparentPixel);
+      	img[setAttribute]("class", dataSrcLazyClass);
+      	img[setAttribute]("data-" + dataSrcImgKeyName, macyItems[i].src);
+      	macyGrid[appendChild](macyItem);
+      	count++;
+      	if (count === macyItems[_length]) {
+      		if (callback && "function" === typeof callback) {
+      			callback();
+      		}
+      	}
+      }
+      i = l = null; */
 		};
 
 		if (macyGrid) {
-			manageMacy(macyGridClass, {
-				trueOrder: false,
-				waitForImages: false,
-				margin: 0,
-				columns: 4,
-				breakAt: {
-					1280: 4,
-					1024: 3,
-					960: 2,
-					640: 2,
-					480: 1,
-					360: 1
-				}
-			});
 			addMacyItems(macyGrid, onMacyManage);
 		}
 
@@ -2170,11 +2356,7 @@ updateMacyThrottled*/
 			manageExternalLinkAll();
 		}
 	};
-
-	if (
-		root.runWorks &&
-		document[getElementsByClassName]("macy-grid--works")[0]
-	) {
-		runWorks();
-	}
+	/* if (document[getElementsByClassName]("macy-grid--works")[0]) {
+  	runWorks();
+  } */
 })("undefined" !== typeof window ? window : this, document);

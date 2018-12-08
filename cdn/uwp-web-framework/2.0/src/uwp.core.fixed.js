@@ -105,7 +105,12 @@
 			navContainer: "nav-container",
 			home: "home",
 			hashNavKey: "page",
-			onPageLoad: function () {return;}
+			hashBang: "#/",
+			onPageLoad: function () {
+				return;
+			},
+			errorTitle: "Something went wrong",
+			errorLinkText: "Go Home"
 		},
 
 		/* Main init function */
@@ -298,7 +303,7 @@
 					event.preventDefault();
 					/* if (root.location.hash !== "".concat("#", UWP.config.hashNavKey, "=", navTarget)) { */
 
-					if (root.location.hash !== "".concat("#/", navTarget)) {
+					if (root.location.hash !== "".concat(UWP.config.hashBang, navTarget)) {
 						UWP.menuList.classList.remove("active");
 						UWP.navigate(navTarget);
 					}
@@ -486,15 +491,15 @@
 
 			if (addHistory !== false) {
 				/* history.pushState("", "", "".concat(root.location.href.split("#")[0], "#", UWP.config.hashNavKey, "=", target)); */
-				history.pushState("", "", "".concat(root.location.href.split(/#\//)[0], "#/", target));
+				history.pushState("", "", "".concat(root.location.href.split(/#\//)[0], UWP.config.hashBang, target));
 			}
 			/* Clears the page content */
 
 			UWP.main.innerHTML = "";
 			/* Displays error message */
 
-			function displayError(title) {
-				UWP.main.innerHTML = "\n\t<div class=\"uwp-error\">\n\t<p>".concat(title, "</p>\n\t<p><a href=\"javascript:void(0);\" class=\"error-link\">Go Home</a></p>\n\t</div>\n\t");
+			function displayError(title, linkText) {
+				UWP.main.innerHTML = "\n\t<div class=\"uwp-error\">\n\t<p>".concat(title, "</p>\n\t<p><a href=\"javascript:void(0);\" class=\"error-link\">" + linkText + "</a></p>\n\t</div>\n\t");
 				var mainA = UWP.main.getElementsByClassName("error-link")[0] || "";
 				mainA.addEventListener("click", function (event) {
 					event.stopPropagation();
@@ -517,8 +522,8 @@
 			UWP_navigate_request.onreadystatechange = function () {
 				if (UWP_navigate_request.status === 404 || UWP_navigate_request.status === 0) {
 					console.log("Error XMLHttpRequest-ing file", UWP_navigate_request.status);
-					console.error("Something went wrong");
-					displayError("Something went wrong");
+					console.error(UWP.config.errorTitle);
+					displayError(UWP.config.errorTitle, UWP.config.errorLinkText);
 				} else if (UWP_navigate_request.readyState === 4 && UWP_navigate_request.status === 200 && UWP_navigate_request.responseText) {
 					/* var parser = new DOMParser();
 					var parsed = parser.parseFromString(UWP_navigate_request.responseText, "text/xml"); */
@@ -526,8 +531,8 @@
 					var page = parsed.getElementsByTagName("page-container")[0] || "";
 
 					if (!page) {
-						console.error("Something went wrong");
-						displayError("Something went wrong");
+						console.error(UWP.config.errorTitle);
+						displayError(UWP.config.errorTitle, UWP.config.errorLinkText);
 					}
 
 					UWP.revealUWPLoading();
@@ -589,12 +594,12 @@
 						UWP.body.appendChild(link);
 					}
 
-					UWP.updateNavigation();
-					UWP.concealUWPLoading();
-
 					if (UWP.config.onPageLoad && "function" === typeof UWP.config.onPageLoad) {
 						UWP.config.onPageLoad();
 					}
+
+					UWP.updateNavigation();
+					UWP.concealUWPLoading();
 				}
 			};
 
