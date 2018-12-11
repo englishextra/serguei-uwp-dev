@@ -5,6 +5,11 @@
  * @see {@link https://gulpjs.com/plugins/blackList.json}
  * @see {@link https://hackernoon.com/how-to-automate-all-the-things-with-gulp-b21a3fc96885}
  */
+var getTimestamp = function () {
+	var dateTime = Date.now();
+	return Math.floor(dateTime / 1000);
+};
+
 var gulp = require("gulp");
 var plumber = require("gulp-plumber");
 var sass = require("gulp-sass");
@@ -12,6 +17,7 @@ var minifyCss = require("gulp-minify-css");
 var uglify = require("gulp-uglify");
 var sourcemaps = require('gulp-sourcemaps');
 var rename = require("gulp-rename");
+var replace = require("gulp-replace");
 var concat = require("gulp-concat");
 /* var bundle = require("gulp-bundle-assets"); */
 
@@ -107,6 +113,8 @@ prettierOptions = {
 	"printWidth:": 0
 };
 
+var stripDebug = require("gulp-strip-debug");
+
 var options = {
 	muicss: {
 		scss: "../../cdn/mui/0.9.39/scss/*.scss",
@@ -135,6 +143,12 @@ var options = {
 		js: "../../cdn/highlight.js/9.12.0/js",
 		scss: "../../cdn/highlight.js/9.12.0/scss/*.scss",
 		css: "../../cdn/highlight.js/9.12.0/css"
+	},
+	adaptivecards: {
+		custom: {
+			scss: "../../cdn/adaptivecards/1.1.0/scss/*.scss",
+			css: "../../cdn/adaptivecards/1.1.0/css"
+		}
 	},
 	typeboost: {
 		scss: "../../cdn/typeboost-uwp.css/0.1.8/scss/*.scss",
@@ -202,6 +216,7 @@ var options = {
 		scss: [
 			"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
 			"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
+			"../../cdn/adaptivecards/1.1.0/css/adaptivecards.custom.css",
 			"../../cdn/typeboost-uwp.css/0.1.8/css/typeboost-uwp.css",
 			"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
 		],
@@ -216,6 +231,10 @@ var options = {
 				newLine: "\n"
 			}
 		}
+	},
+	pwabuilderServiceworkers: {
+		src: "../../cdn/pwabuilder-serviceworkers/1.1.1/serviceWorker2/src/*.js",
+		js: "../../"
 	}
 };
 
@@ -348,6 +367,7 @@ gulp.task("compile-libbundle-js", function () {
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
+	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
 	.pipe(gulp.dest(options.libbundle.js))
@@ -393,6 +413,7 @@ gulp.task("compile-include-script-js", function () {
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
+	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
 	.pipe(gulp.dest(options.includeScript.js))
@@ -438,6 +459,7 @@ gulp.task("compile-vendors-js", function () {
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
+	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
 	.pipe(gulp.dest(options.vendors.js))
@@ -464,6 +486,29 @@ gulp.task("compile-typeboost-uwp-css", function () {
 	.pipe(minifyCss())
 	.pipe(sourcemaps.write("."))
 	.pipe(gulp.dest(options.typeboost.css))
+	.pipe(reload({
+			stream: true
+		}));
+});
+
+gulp.task("compile-adaptivecards-custom-css", function () {
+	gulp.src(options.adaptivecards.custom.scss)
+	.pipe(plumber())
+	.pipe(sourcemaps.init())
+	.pipe(sass({
+			errLogToConsole: true
+		}))
+	.pipe(autoprefixer(autoprefixerOptions))
+	.pipe(prettier(prettierOptions))
+	/* .pipe(beautify(beautifyOptions)) */
+	.pipe(plumber.stop())
+	.pipe(gulp.dest(options.adaptivecards.custom.css))
+	.pipe(rename(function (path) {
+			path.basename += ".min";
+		}))
+	.pipe(minifyCss())
+	.pipe(sourcemaps.write("."))
+	.pipe(gulp.dest(options.adaptivecards.custom.css))
 	.pipe(reload({
 			stream: true
 		}));
@@ -527,6 +572,7 @@ gulp.task("compile-uwp-web-framework-js", function () {
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
+	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
 	.pipe(gulp.dest(options.uwp.js))
@@ -570,6 +616,7 @@ gulp.task("compile-highlightjs-js", function () {
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
+	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
 	.pipe(gulp.dest(options.highlightjs.js))
@@ -613,6 +660,7 @@ gulp.task("compile-lightgalleryjs-js", function () {
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
+	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
 	.pipe(gulp.dest(options.lightgalleryjs.js))
@@ -634,6 +682,7 @@ gulp.task("compile-lightgalleryjs-plugins-js", function () {
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
+	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
 	.pipe(gulp.dest(options.lightgalleryjs.plugins.js))
@@ -677,9 +726,38 @@ gulp.task("compile-glightbox-js", function () {
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
+	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
 	.pipe(gulp.dest(options.glightbox.js))
+	.pipe(reload({
+			stream: true
+		}));
+});
+
+gulp.task("compile-pwabuilder-serviceworkers-js", function () {
+	gulp.src(options.pwabuilderServiceworkers.src)
+	.pipe(plumber())
+	.pipe(sourcemaps.init())
+	.pipe(rename(function (path) {
+			/* path.basename = path.basename.replace("pwabuilder-", "");
+			path.basename = path.basename.replace(".fixed", ""); */
+			var pattern = /pwabuilder-|.fixed/ig;
+			path.basename = path.basename.replace(pattern, "");
+		}))
+	.pipe(replace("pwabuilder-offline", "serguei-uwp-offline-v" + getTimestamp()))
+	.pipe(babel(babelOptions))
+	.pipe(prettier(prettierOptions))
+	/* .pipe(beautify(beautifyOptions)) */
+	.pipe(plumber.stop())
+	.pipe(gulp.dest(options.pwabuilderServiceworkers.js))
+	.pipe(rename(function (path) {
+			path.basename += ".min";
+		}))
+	.pipe(stripDebug())
+	.pipe(uglify())
+	.pipe(sourcemaps.write("."))
+	.pipe(gulp.dest(options.pwabuilderServiceworkers.js))
 	.pipe(reload({
 			stream: true
 		}));
