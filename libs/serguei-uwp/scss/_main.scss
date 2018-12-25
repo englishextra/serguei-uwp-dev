@@ -162,7 +162,7 @@ template {
 }
 
 .uwp-main a {
-	color: $UWPAccentColor;
+	color: $uwp-accent-color;
 }
 
 .uwp-main h1,
@@ -205,19 +205,19 @@ template {
 }
 
 [data-layout-type="tabs"] .uwp-header {
-	background-color: $UWPmainColor !important;
+	background-color: $uwp-main-color !important;
 }
 
 [data-layout-type="overlay"] .uwp-header {
-	background-color: $UWPmainColor !important;
+	background-color: $uwp-main-color !important;
 }
 
 [data-layout-type="docked-minimized"] .uwp-header {
-	background-color: $UWPmainColorDarkened !important;
+	background-color: $uwp-main-color-darkened !important;
 }
 
 [data-layout-type="docked"] .uwp-header {
-	background-color: $UWPmainColorDarkened !important;
+	background-color: $uwp-main-color-darkened !important;
 }
 
 /*!
@@ -248,19 +248,19 @@ template {
 }
 
 .col a {
-	color: $UWPAccentColor;
+	color: $uwp-accent-color;
 }
 
 .col a:focus,
 .col a:hover,
 .col a:active {
-	color: $UWPAccentColor;
+	color: $uwp-accent-color;
 }
 
 .col button {
 	font-weight: 400;
-	color: $UWPAccentColor;
-	border: 1px solid $UWPAccentColor;
+	color: $uwp-accent-color;
+	border: 1px solid $uwp-accent-color;
 	background-color: transparent;
 	border-radius: 3px;
 }
@@ -273,20 +273,20 @@ template {
 
 .col button:not([disabled]):hover {
 	color: $clr-white;
-	background-color: $UWPActiveColor;
-	border: 1px solid $UWPActiveColor;
+	background-color: $uwp-active-color;
+	border: 1px solid $uwp-active-color;
 }
 
 .col button:not([disabled]):active,
 .col button:not([disabled]):focus {
-	color: $UWPActiveColor;
+	color: $uwp-active-color;
 	background-color: $clr-white;
-	border: 1px solid $UWPActiveColor;
+	border: 1px solid $uwp-active-color;
 }
 
 .col button.primary {
 	color: $clr-white;
-	background-color: $UWPAccentColor;
+	background-color: $uwp-accent-color;
 }
 
 .col .fit-width {
@@ -303,8 +303,8 @@ template {
  */
 
 .ac-pushButton {
-	color: $UWPAccentColor;
-	border-color: $UWPAccentColor;
+	color: $uwp-accent-color;
+	border-color: $uwp-accent-color;
 	background-color: transparent;
 }
 
@@ -316,24 +316,24 @@ template {
 
 .ac-pushButton:not([disabled]):hover {
 	color: $clr-white;
-	background-color: $UWPActiveColor;
-	border-color: $UWPActiveColor;
+	background-color: $uwp-active-color;
+	border-color: $uwp-active-color;
 }
 
 .ac-pushButton:not([disabled]):active,
 .ac-pushButton:not([disabled]):focus {
-	color: $UWPActiveColor;
+	color: $uwp-active-color;
 	background-color: $clr-white;
-	border-color: $UWPActiveColor;
+	border-color: $uwp-active-color;
 }
 
 .ac-pushButton--primary {
 	color: $clr-white;
-	background-color: $UWPAccentColor;
+	background-color: $uwp-accent-color;
 }
 
 .ac-color--accent {
-	color: $UWPAccentColor;
+	color: $uwp-accent-color;
 }
 
 .ac-color--default {
