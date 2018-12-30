@@ -303,19 +303,18 @@ var options = {
 	},
 	vendors: {
 		src: [
-			// "../../cdn/adaptivecards/1.1.0/js/adaptivecards.fixed.js",
 			"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
 			"../../cdn/lazyload/10.19.0/js/lazyload.iife.fixed.js",
 			"../../cdn/ReadMore.js/1.0.0/js/readMoreJS.fixed.js",
 			"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
 			"../../cdn/resize/1.0.0/js/any-resize-event.fixed.js",
+			"../../cdn/ripple-js/1.4.4/js/ripple.fixed.js",
 			"../../cdn/macy.js/2.3.1/js/macy.fixed.js"
 		],
 		js: "./js",
 		scss: [
 			"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
 			"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
-			"../../cdn/adaptivecards/1.1.0/css/adaptivecards.custom.css",
 			"../../cdn/typeboost-uwp.css/0.1.8/css/typeboost-uwp.css",
 			"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
 		],
