@@ -1291,9 +1291,7 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 				clearInterval(slot);
 				slot = null;
 			}
-			/* progressBar.increase(20); */
-
-			var load;
+				var load;
 			load = new loadJsCss(scripts, run);
 		};
 
