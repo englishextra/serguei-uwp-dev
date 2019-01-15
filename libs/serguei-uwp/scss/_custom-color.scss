@@ -16,10 +16,10 @@ $color-rgba-lightbox-shadow: rgba(3, 3, 3, 0.3);
 $custom-color-primary: #22C0F8;
 $custom-color-highlight-hover: #6DD4F9;
 
-$uwp-main-color: #373737;
-$uwp-main-color-darkened: #0288D1;
-$uwp-active-color: #29B6F6;
-$uwp-accent-color: #0091EA;
+$uwp-main-color: $clr-grey-900;
+$uwp-main-color-darkened: $clr-light-blue-700;
+$uwp-active-color: $clr-light-blue-400;
+$uwp-accent-color: $clr-light-blue-a700;
 
 //
 // brand color

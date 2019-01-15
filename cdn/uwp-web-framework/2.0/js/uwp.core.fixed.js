@@ -49,14 +49,6 @@
 		);
 	};
 
-	var removeChildren = function removeChildren(e) {
-		if (e && e.firstChild) {
-			for (; e.firstChild; ) {
-				e.removeChild(e.firstChild);
-			}
-		}
-	};
-
 	var removeJsCssFile = function removeJsCssFile(filename, filetype) {
 		var targetelement =
 			filetype == "js" ? "script" : filetype == "css" ? "link" : "none";
@@ -106,9 +98,9 @@
 		config: {
 			pageTitle: "UWP web framework",
 			layoutType: "docked-minimized",
-			activeColor: "#29b6f6",
+			activeColor: "#26C6DA",
 			mainColor: "#373737",
-			mainColorDarkened: "#0288d1",
+			mainColorDarkened: "#0097A7",
 			includes: "./includes/serguei-uwp",
 			includeScript: "./libs/serguei-uwp/js/include-script",
 			includeStyle: "./libs/serguei-uwp/css/include-style",
@@ -514,8 +506,8 @@
 					)
 				);
 			}
-			/* UWP.main.innerHTML = ""; */
 
+			/* UWP.main.innerHTML = ""; */
 			removeChildren(UWP.main);
 
 			function displayError(title, linkText) {
@@ -595,7 +587,6 @@
 						? page.getElementsByTagName("include-style")[0] || ""
 						: "";
 					/* UWP.main.innerHTML = ""; */
-
 					removeChildren(UWP.main);
 					UWP.main.innerHTML = pageBody;
 					UWP.main.classList.remove("uwp-main--with-animation");
