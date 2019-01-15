@@ -1117,9 +1117,9 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 			root.UWP.init({
 				pageTitle: "UWP web framework",
 				layoutType: "docked-minimized",
-				activeColor: "#26C6DA",
+				activeColor: "#29B6F6",
 				mainColor: "#373737",
-				mainColorDarkened: "#0097A7",
+				mainColorDarkened: "#0288D1",
 				includes: "./includes/serguei-uwp",
 				includeScript: "./libs/serguei-uwp/js/include-script",
 				includeStyle: "./libs/serguei-uwp/css/include-style",
@@ -1291,7 +1291,8 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 				clearInterval(slot);
 				slot = null;
 			}
-				var load;
+
+			var load;
 			load = new loadJsCss(scripts, run);
 		};
 

@@ -75,16 +75,6 @@
 	}
 }
 
-.macy.macy--home > .col {
-	background-color: #fff;
-	border-radius: 0.125rem;
-	/* box-shadow: 0 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.16), 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.12); */
-	-webkit-box-shadow: 0 0.063rem 0.063rem 0 rgba(0, 0, 0, 0.16),
-		0 0 0.063rem 0 rgba(0, 0, 0, 0.12);
-	box-shadow: 0 0.063rem 0.063rem 0 rgba(0, 0, 0, 0.16),
-		0 0 0.063rem 0 rgba(0, 0, 0, 0.12);
-}
-
 /*! @import "englishextra-ui-variables"; */
 /*!
  * macy
