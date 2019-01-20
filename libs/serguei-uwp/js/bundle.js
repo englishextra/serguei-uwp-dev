@@ -810,6 +810,23 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 	};
 })("undefined" !== typeof window ? window : this, document);
 /*!
+ * removeChildren
+ */
+
+(function(root) {
+	"use strict";
+
+	var removeChildren = function removeChildren(e) {
+		if (e && e.firstChild) {
+			for (; e.firstChild; ) {
+				e.removeChild(e.firstChild);
+			}
+		}
+	};
+
+	root.removeChildren = removeChildren;
+})("undefined" !== typeof window ? window : this);
+/*!
  * revealYandexMap
  */
 

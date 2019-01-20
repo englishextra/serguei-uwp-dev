@@ -602,6 +602,20 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 	};
 })("undefined" !== typeof window ? window : this, document);
 /*!
+ * removeChildren
+ */
+(function(root){
+	"use strict";
+	var removeChildren = function (e) {
+		if (e && e.firstChild) {
+			for (; e.firstChild; ) {
+				e.removeChild(e.firstChild);
+			}
+		}
+	};
+	root.removeChildren = removeChildren;
+})("undefined" !== typeof window ? window : this);
+/*!
  * revealYandexMap
  */
 (function (root, document) {
