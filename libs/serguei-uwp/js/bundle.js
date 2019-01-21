@@ -498,7 +498,12 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 		var handleExternalLink = function handleExternalLink(url, ev) {
 			ev.stopPropagation();
 			ev.preventDefault();
-			debounce(openDeviceBrowser.bind(null, url), 200).call(root);
+
+			var logic = function logic() {
+				openDeviceBrowser(url);
+			};
+
+			debounce(logic, 200).call(root);
 		};
 
 		var arrange = function arrange(e) {
