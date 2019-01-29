@@ -1,5 +1,5 @@
 /*global AdaptiveCards, console, debounce, doesFontExist, getHTTP, isElectron,
-isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, require, runHome,
+isNwjs, loadJsCss, Macy, openDeviceBrowser, parseLink, progressBar, require, runHome,
 runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 /*property console, join, split */
 /*!
@@ -181,7 +181,18 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 (function (root) {
 	"use strict";
 	var isNodejs = "undefined" !== typeof process && "undefined" !== typeof require || "";
-	var isElectron = "undefined" !== typeof root && root.process && "renderer" === root.process.type || "";
+	var isElectron = (function () {
+		if (typeof root !== "undefined" && typeof root.process === "object" && root.process.type === "renderer") {
+			return true;
+		}
+		if (typeof root !== "undefined" && typeof root.process !== "undefined" && typeof root.process.versions === "object" && !!root.process.versions.electron) {
+			return true;
+		}
+		if (typeof navigator === "object" && typeof navigator.userAgent === "string" && navigator.userAgent.indexOf("Electron") >= 0) {
+			return true;
+		}
+		return false;
+	})();
 	var isNwjs = (function () {
 		if ("undefined" !== typeof isNodejs && isNodejs) {
 			try {
@@ -212,9 +223,6 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 			var ns = isNwjs ? require("nw.gui").Shell : "";
 			return ns ? ns.openExternal(url) : "";
 		};
-		var triggerForHTTP = function () {
-			return true;
-		};
 		var triggerForLocal = function () {
 			return root.open(url, "_system", "scrollbars=1,location=no");
 		};
@@ -226,7 +234,7 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 			var locationProtocol = root.location.protocol || "",
 			hasHTTP = locationProtocol ? "http:" === locationProtocol ? "http" : "https:" === locationProtocol ? "https" : "" : "";
 			if (hasHTTP) {
-				triggerForHTTP();
+				return true;
 			} else {
 				triggerForLocal();
 			}
@@ -684,6 +692,19 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 	var _addEventListener = "addEventListener";
 	var _length = "length";
 
+	var toStringFn = {}.toString;
+	var supportsSvgSmilAnimation = !!document[createElementNS] && (/SVGAnimate/).test(toStringFn.call(document[createElementNS]("http://www.w3.org/2000/svg", "animate"))) || "";
+
+	if (supportsSvgSmilAnimation && docElem) {
+		docElem[classList].add("svganimate");
+	}
+
+	var supportsCanvas;
+	supportsCanvas	= (function () {
+		var elem = document[createElement]("canvas");
+		return !!(elem.getContext && elem.getContext("2d"));
+	})();
+
 	var run = function () {
 
 		if (docElem && docElem[classList]) {
@@ -912,13 +933,6 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 		switchLayoutType();
 	};
 
-	/* var scripts = [
-			"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
-			"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
-			"../../cdn/typeboost-uwp.css/0.1.8/css/typeboost-uwp.css",
-			"../../cdn/uwp-web-framework/2.0/css/uwp.style.fixed.css"
-	]; */
-
 	var scripts = [
 		/* "./libs/serguei-uwp/css/vendors.min.css", */
 		"./libs/serguei-uwp/css/bundle.min.css"
@@ -945,8 +959,6 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 		("undefined" === typeof root.Element && !("dataset" in docElem)) ||
 		!("classList" in document[createElement]("_")) ||
 		document[createElementNS] && !("classList" in document[createElementNS]("http://www.w3.org/2000/svg", "g")) ||
-		/* !document.importNode || */
-		/* !("content" in document[createElement]("template")) || */
 		(root.attachEvent && !root[_addEventListener]) ||
 		!("onhashchange" in root) ||
 		!Array.prototype.indexOf ||
@@ -968,52 +980,26 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 		scripts.push("./cdn/polyfills/js/polyfills.fixed.min.js");
 	}
 
-	/* var scripts = [
-			"../../cdn/imagesloaded/4.1.4/js/imagesloaded.pkgd.fixed.js",
-			"../../cdn/lazyload/10.19.0/js/lazyload.iife.fixed.js",
-			"../../cdn/ReadMore.js/1.0.0/js/readMoreJS.fixed.js",
-			"../../cdn/uwp-web-framework/2.0/js/uwp.core.fixed.js",
-			"../../cdn/resize/1.0.0/js/any-resize-event.fixed.js",
-			"../../cdn/macy.js/2.3.1/js/macy.fixed.js"
-	]; */
-
 	scripts.push("./libs/serguei-uwp/js/vendors.min.js",
 		"./libs/serguei-uwp/js/pages.min.js");
 
-	/*!
-	 * load scripts after webfonts loaded using doesFontExist
-	 */
-
-	var supportsCanvas;
-	supportsCanvas = (function () {
-		var elem = document[createElement]("canvas");
-		return !!(elem.getContext && elem.getContext("2d"));
-	})();
-
 	var onFontsLoadedCallback = function () {
-
 		var slot;
-
 		var onFontsLoaded = function () {
-			if (slot) {
-				clearInterval(slot);
-				slot = null;
+			clearInterval(slot);
+			slot = null;
+			if (!supportsSvgSmilAnimation && "undefined" !== typeof progressBar) {
+				progressBar.increase(20);
 			}
-
-				var load;
+			var load;
 			load = new loadJsCss(scripts, run);
 		};
-
 		var checkFontIsLoaded;
 		checkFontIsLoaded = function () {
-			/*!
-			 * check only for fonts that are used in current page
-			 */
 			if (doesFontExist("Roboto") /* && doesFontExist("Roboto Mono") */) {
 				onFontsLoaded();
 			}
 		};
-
 		/* if (supportsCanvas) {
 			slot = setInterval(checkFontIsLoaded, 100);
 		} else {
@@ -1030,7 +1016,6 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 			timer = null;
 			var load;
 			load = new loadJsCss([
-						/* forcedHTTP + "://fonts.googleapis.com/css?family=Roboto+Mono%7CRoboto:300,400,500,700&subset=cyrillic,latin-ext", */
 						"./libs/serguei-uwp/css/vendors.min.css",
 						"./libs/serguei-uwp/css/pages.min.css"
 					],
@@ -1048,10 +1033,6 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 		}
 	};
 	loadDeferred();
-
-	/*!
-	 * load scripts after webfonts loaded using webfontloader
-	 */
 
 	/* root.WebFontConfig = {
 		google: {
@@ -1079,19 +1060,16 @@ runWorks, runPictures, runGallery, runAbout, throttle, $readMoreJS*/
 	};
 
 	var onFontsLoadedCallback = function () {
-
 		var onFontsLoaded = function () {
-			progressBar.increase(20);
-
+			if (!supportsSvgSmilAnimation && "undefined" !== typeof progressBar) {
+				progressBar.increase(20);
+			}
 			var load;
 			load = new loadJsCss(scripts, run);
 		};
-
 		root.WebFontConfig.ready(onFontsLoaded);
 	};
 
 	var load;
-	load = new loadJsCss(
-			[forcedHTTP + "://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js"],
-			onFontsLoadedCallback); */
+	load = new loadJsCss([forcedHTTP + "://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js"], onFontsLoadedCallback); */
 })("undefined" !== typeof window ? window : this, document);
