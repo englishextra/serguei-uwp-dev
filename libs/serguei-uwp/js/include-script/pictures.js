@@ -2,7 +2,7 @@
 
 /*jslint node: true */
 
-/*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss, addClass,
+/*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss, getByClass, addClass,
 hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 /*!
@@ -94,7 +94,7 @@ hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 		var anyResizeEventIsBindedClass = "any-resize-event--is-binded";
 		var macyClass = "macy";
-		var macy = document[getElementsByClassName](macyClass)[0] || "";
+		var macy = getByClass(document, macyClass)[0] || "";
 
 		var onMacyRender = function onMacyRender() {
 			addClass(macy, isActiveClass);
@@ -119,7 +119,7 @@ hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
 
-							item[i][_addEventListener](
+							addListener(item[i], 
 								"onresize",
 								updateMacyThrottled,
 								{

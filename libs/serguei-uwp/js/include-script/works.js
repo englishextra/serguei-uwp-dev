@@ -3,7 +3,7 @@
 /*jslint node: true */
 
 /*global console, IframeLightbox, imagesLoaded, LazyLoad, LoadingSpinner,
-addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
+addListener, removeListener, getByClass, addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 /*!
  * page logic
@@ -27,7 +27,7 @@ addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 			iframeLightboxLinkClass
 		) {
 			var link =
-				document[getElementsByClassName](iframeLightboxLinkClass) || "";
+				getByClass(document, iframeLightboxLinkClass) || "";
 
 			var initScript = function initScript() {
 				var arrange = function arrange(e) {
@@ -100,7 +100,7 @@ addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 		var anyResizeEventIsBindedClass = "any-resize-event--is-binded";
 		var macyClass = "macy";
-		var macy = document[getElementsByClassName](macyClass)[0] || "";
+		var macy = getByClass(document, macyClass)[0] || "";
 
 		var onMacyRender = function onMacyRender() {
 			addClass(macy, isActiveClass);
@@ -125,7 +125,7 @@ addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
 
-							item[i][_addEventListener](
+							addListener(item[i], 
 								"onresize",
 								updateMacyThrottled,
 								{

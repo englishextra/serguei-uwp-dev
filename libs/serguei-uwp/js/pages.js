@@ -2,7 +2,7 @@
 
 /*jslint node: true */
 
-/*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss, addClass,
+/*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss, getByClass, addClass,
 hasClass, manageExternalLinkAll, manageMacy, manageReadMore, updateMacy,
 updateMacyThrottled*/
 
@@ -95,7 +95,7 @@ updateMacyThrottled*/
 
 		var anyResizeEventIsBindedClass = "any-resize-event--is-binded";
 		var macyClass = "macy";
-		var macy = document[getElementsByClassName](macyClass)[0] || "";
+		var macy = getByClass(document, macyClass)[0] || "";
 
 		var onMacyRender = function onMacyRender() {
 			addClass(macy, isActiveClass);
@@ -121,7 +121,7 @@ updateMacyThrottled*/
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
 
-							item[i][_addEventListener](
+							addListener(item[i], 
 								"onresize",
 								updateMacyThrottled,
 								{
@@ -180,7 +180,7 @@ updateMacyThrottled*/
       	}
       }
       i = l = null; */
-			macyItems = document[getElementsByClassName]("col") || "";
+			macyItems = getByClass(document, "col") || "";
 			var count = 0;
 			var i, l;
 
@@ -212,7 +212,7 @@ updateMacyThrottled*/
 
 /*jslint node: true */
 
-/*global console, imagesLoaded, LazyLoad, lightGallery, loadJsCss, addClass,
+/*global console, imagesLoaded, LazyLoad, lightGallery, loadJsCss, getByClass, addClass,
 hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 /*!
@@ -307,7 +307,7 @@ hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 		var anyResizeEventIsBindedClass = "any-resize-event--is-binded";
 		var macyClass = "macy";
-		var macy = document[getElementsByClassName](macyClass)[0] || "";
+		var macy = getByClass(document, macyClass)[0] || "";
 
 		var onMacyRender = function onMacyRender() {
 			addClass(macy, isActiveClass);
@@ -332,7 +332,7 @@ hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
 
-							item[i][_addEventListener](
+							addListener(item[i], 
 								"onresize",
 								updateMacyThrottled,
 								{
@@ -700,7 +700,7 @@ hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 /*jslint node: true */
 
-/*global console, imgLightbox, imagesLoaded, LazyLoad, LoadingSpinner, addClass,
+/*global console, imgLightbox, imagesLoaded, LazyLoad, LoadingSpinner, getByClass, addClass,
 hasClass, manageExternalLinkAll, manageMacy, manageReadMore, renderAC,
 removeChildren, updateMacy, updateMacyThrottled*/
 
@@ -1243,7 +1243,7 @@ removeChildren, updateMacy, updateMacyThrottled*/
 			imgLightboxLinkClass
 		) {
 			var link =
-				document[getElementsByClassName](imgLightboxLinkClass) || "";
+				getByClass(document, imgLightboxLinkClass) || "";
 
 			var initScript = function initScript() {
 				imgLightbox(imgLightboxLinkClass, {
@@ -1306,7 +1306,7 @@ removeChildren, updateMacy, updateMacyThrottled*/
 
 		var anyResizeEventIsBindedClass = "any-resize-event--is-binded";
 		var macyClass = "macy";
-		var macy = document[getElementsByClassName](macyClass)[0] || "";
+		var macy = getByClass(document, macyClass)[0] || "";
 
 		var onMacyRender = function onMacyRender() {
 			addClass(macy, isActiveClass);
@@ -1332,7 +1332,7 @@ removeChildren, updateMacy, updateMacyThrottled*/
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
 
-							item[i][_addEventListener](
+							addListener(item[i], 
 								"onresize",
 								updateMacyThrottled,
 								{
@@ -1397,7 +1397,7 @@ removeChildren, updateMacy, updateMacyThrottled*/
         	}
         }
         i = l = null; */
-				macyItems = document[getElementsByClassName]("col") || "";
+				macyItems = getByClass(document, "col") || "";
 				var count = 0;
 				var i, l;
 
@@ -1430,7 +1430,7 @@ removeChildren, updateMacy, updateMacyThrottled*/
 
 /*jslint node: true */
 
-/*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss, addClass,
+/*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss, getByClass, addClass,
 hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 /*!
@@ -1522,7 +1522,7 @@ hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 		var anyResizeEventIsBindedClass = "any-resize-event--is-binded";
 		var macyClass = "macy";
-		var macy = document[getElementsByClassName](macyClass)[0] || "";
+		var macy = getByClass(document, macyClass)[0] || "";
 
 		var onMacyRender = function onMacyRender() {
 			addClass(macy, isActiveClass);
@@ -1547,7 +1547,7 @@ hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
 
-							item[i][_addEventListener](
+							addListener(item[i], 
 								"onresize",
 								updateMacyThrottled,
 								{
@@ -1811,7 +1811,7 @@ hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 /*jslint node: true */
 
 /*global console, IframeLightbox, imagesLoaded, LazyLoad, LoadingSpinner,
-addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
+addListener, removeListener, getByClass, addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 /*!
  * page logic
@@ -1835,7 +1835,7 @@ addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 			iframeLightboxLinkClass
 		) {
 			var link =
-				document[getElementsByClassName](iframeLightboxLinkClass) || "";
+				getByClass(document, iframeLightboxLinkClass) || "";
 
 			var initScript = function initScript() {
 				var arrange = function arrange(e) {
@@ -1908,7 +1908,7 @@ addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 		var anyResizeEventIsBindedClass = "any-resize-event--is-binded";
 		var macyClass = "macy";
-		var macy = document[getElementsByClassName](macyClass)[0] || "";
+		var macy = getByClass(document, macyClass)[0] || "";
 
 		var onMacyRender = function onMacyRender() {
 			addClass(macy, isActiveClass);
@@ -1933,7 +1933,7 @@ addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
 
-							item[i][_addEventListener](
+							addListener(item[i], 
 								"onresize",
 								updateMacyThrottled,
 								{

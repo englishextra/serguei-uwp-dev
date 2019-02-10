@@ -3571,7 +3571,7 @@ function _typeof(obj) {
 			if (!docElem[classList].contains(imgLightboxWindowIsBindedClass)) {
 				docElem[classList].add(imgLightboxWindowIsBindedClass);
 
-				root[_addEventListener]("keyup", function(ev) {
+				addListener(root, "keyup", function(ev) {
 					if (27 === (ev.which || ev.keyCode)) {
 						hideImgLightbox(onClosed);
 					}
@@ -3740,28 +3740,20 @@ function _typeof(obj) {
 			};
 		};
 
-		var logic = function logic() {
+		var logic = function () {
 			_this.open();
 		};
 
-		var handleIframeLightboxLink = function handleIframeLightboxLink(e) {
+		var handleIframeLightboxLink = function (e) {
 			e.stopPropagation();
 			e.preventDefault();
 			debounce(logic, this.rate).call();
 		};
-
-		if (
-			!this.trigger[classList].contains(iframeLightboxLinkIsBindedClass)
-		) {
+		if (!this.trigger[classList].contains(iframeLightboxLinkIsBindedClass)) {
 			this.trigger[classList].add(iframeLightboxLinkIsBindedClass);
-
 			this.trigger[_addEventListener]("click", handleIframeLightboxLink);
-
 			if (isTouch && (_this.touch || _this.dataTouch)) {
-				this.trigger[_addEventListener](
-					"touchstart",
-					handleIframeLightboxLink
-				);
+				this.trigger[_addEventListener]("touchstart", handleIframeLightboxLink);
 			}
 		}
 	};
@@ -3803,7 +3795,7 @@ function _typeof(obj) {
 		if (!docElem[classList].contains(iframeLightboxWindowIsBindedClass)) {
 			docElem[classList].add(iframeLightboxWindowIsBindedClass);
 
-			root[_addEventListener]("keyup", function(ev) {
+			addListener(root, "keyup", function(ev) {
 				if (27 === (ev.which || ev.keyCode)) {
 					_this.close();
 				}
