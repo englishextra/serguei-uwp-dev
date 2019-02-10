@@ -2,8 +2,9 @@
 
 /*jslint node: true */
 
-/*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss, getByClass, addClass,
-hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
+/*global console, GLightbox, imagesLoaded, LazyLoad, loadJsCss, addListener,
+getByClass, addClass, hasClass, manageExternalLinkAll, manageMacy,
+updateMacyThrottled*/
 
 /*!
  * page logic
@@ -11,11 +12,8 @@ hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 (function(root, document) {
 	"use strict";
 
-	var getElementsByClassName = "getElementsByClassName";
-
 	root.runPictures = function() {
 		var querySelectorAll = "querySelectorAll";
-		var _addEventListener = "addEventListener";
 		var _length = "length";
 		var isActiveClass = "is-active";
 		var glightboxClass = "glightbox";
@@ -118,8 +116,8 @@ hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 					for (i = 0, l = item[_length]; i < l; i += 1) {
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
-
-							addListener(item[i], 
+							addListener(
+								item[i],
 								"onresize",
 								updateMacyThrottled,
 								{

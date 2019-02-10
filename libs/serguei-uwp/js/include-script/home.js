@@ -2,9 +2,10 @@
 
 /*jslint node: true */
 
-/*global console, imgLightbox, imagesLoaded, LazyLoad, LoadingSpinner, getByClass, addClass,
-hasClass, manageExternalLinkAll, manageMacy, manageReadMore, renderAC,
-removeChildren, updateMacy, updateMacyThrottled*/
+/*global console, imgLightbox, imagesLoaded, LazyLoad, LoadingSpinner,
+addListener, getByClass, addClass, hasClass, manageExternalLinkAll,
+manageMacy, manageReadMore, renderAC, removeChildren, updateMacy,
+updateMacyThrottled*/
 
 /*!
  * page logic
@@ -12,12 +13,9 @@ removeChildren, updateMacy, updateMacyThrottled*/
 (function(root, document) {
 	"use strict";
 
-	var getElementsByClassName = "getElementsByClassName";
-
 	root.runHome = function() {
 		var location = "location";
 		var querySelectorAll = "querySelectorAll";
-		var _addEventListener = "addEventListener";
 		var _length = "length";
 		var isActiveClass = "is-active";
 		/*!
@@ -544,8 +542,7 @@ removeChildren, updateMacy, updateMacyThrottled*/
 		var manageImgLightbox = function manageImgLightbox(
 			imgLightboxLinkClass
 		) {
-			var link =
-				getByClass(document, imgLightboxLinkClass) || "";
+			var link = getByClass(document, imgLightboxLinkClass) || "";
 
 			var initScript = function initScript() {
 				imgLightbox(imgLightboxLinkClass, {
@@ -633,8 +630,8 @@ removeChildren, updateMacy, updateMacyThrottled*/
 					for (i = 0, l = item[_length]; i < l; i += 1) {
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
-
-							addListener(item[i], 
+							addListener(
+								item[i],
 								"onresize",
 								updateMacyThrottled,
 								{

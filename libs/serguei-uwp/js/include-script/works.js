@@ -3,7 +3,8 @@
 /*jslint node: true */
 
 /*global console, IframeLightbox, imagesLoaded, LazyLoad, LoadingSpinner,
-addListener, removeListener, getByClass, addClass, hasClass, manageExternalLinkAll, manageMacy, updateMacyThrottled*/
+addListener, addListener, getByClass, addClass, hasClass,
+manageExternalLinkAll, manageMacy, updateMacyThrottled*/
 
 /*!
  * page logic
@@ -11,11 +12,8 @@ addListener, removeListener, getByClass, addClass, hasClass, manageExternalLinkA
 (function(root, document) {
 	"use strict";
 
-	var getElementsByClassName = "getElementsByClassName";
-
 	root.runWorks = function() {
 		var querySelectorAll = "querySelectorAll";
-		var _addEventListener = "addEventListener";
 		var _length = "length";
 		var isActiveClass = "is-active";
 		var iframeLightboxLinkClass = "iframe-lightbox-link";
@@ -26,8 +24,7 @@ addListener, removeListener, getByClass, addClass, hasClass, manageExternalLinkA
 		var manageIframeLightbox = function manageIframeLightbox(
 			iframeLightboxLinkClass
 		) {
-			var link =
-				getByClass(document, iframeLightboxLinkClass) || "";
+			var link = getByClass(document, iframeLightboxLinkClass) || "";
 
 			var initScript = function initScript() {
 				var arrange = function arrange(e) {
@@ -124,8 +121,8 @@ addListener, removeListener, getByClass, addClass, hasClass, manageExternalLinkA
 					for (i = 0, l = item[_length]; i < l; i += 1) {
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
-
-							addListener(item[i], 
+							addListener(
+								item[i],
 								"onresize",
 								updateMacyThrottled,
 								{
