@@ -109,9 +109,7 @@ manageMacy, updateMacyThrottled*/
 					for (i = 0, l = item[_length]; i < l; i += 1) {
 						if (!hasClass(item[i], anyResizeEventIsBindedClass)) {
 							addClass(item[i], anyResizeEventIsBindedClass);
-							addListener(item[i], "onresize", updateMacyThrottled, {
-								passive: true
-							});
+							addListener(item[i], "onresize", updateMacyThrottled, {passive: true});
 						}
 					}
 					i = l = null;
