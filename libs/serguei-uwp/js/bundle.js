@@ -50,7 +50,7 @@ runWorks, supportsCanvas, supportsPassive, supportsSvgSmilAnimation, throttle*/
 						support = true;
 					}
 				});
-			root.addEventListener("test", function() {}, opts);
+			root.addEventListener("test", function () {}, opts);
 		} catch (err) {}
 		return support;
 	})();
@@ -881,39 +881,39 @@ runWorks, supportsCanvas, supportsPassive, supportsSvgSmilAnimation, throttle*/
 		return container ? (container.getElementsByTagName("button") || "") : "";
 	};
 	root.layoutTypeToTabs = function (e) {
-		var evt = root.event || e;
-		evt.preventDefault();
+		var ev = root.event || e;
+		ev.preventDefault();
 		Array.prototype.slice.call(getButtons()).forEach(function (el) {
 			return (el.disabled = false);
 		});
-		evt.target.disabled = true;
+		ev.target.disabled = true;
 		docBody.setAttribute("data-layout-type", "tabs");
 	};
 	root.layoutTypeToOverlay = function (e) {
-		var evt = root.event || e;
-		evt.preventDefault();
+		var ev = root.event || e;
+		ev.preventDefault();
 		Array.prototype.slice.call(getButtons()).forEach(function (el) {
 			return (el.disabled = false);
 		});
-		evt.target.disabled = true;
+		ev.target.disabled = true;
 		docBody.setAttribute("data-layout-type", "overlay");
 	};
 	root.layoutTypeToDockedMinimized = function (e) {
-		var evt = root.event || e;
-		evt.preventDefault();
+		var ev = root.event || e;
+		ev.preventDefault();
 		Array.prototype.slice.call(getButtons()).forEach(function (el) {
 			return (el.disabled = false);
 		});
-		evt.target.disabled = true;
+		ev.target.disabled = true;
 		docBody.setAttribute("data-layout-type", "docked-minimized");
 	};
 	root.layoutTypeToDocked = function (e) {
-		var evt = root.event || e;
-		evt.preventDefault();
+		var ev = root.event || e;
+		ev.preventDefault();
 		Array.prototype.slice.call(getButtons()).forEach(function (el) {
 			return (el.disabled = false);
 		});
-		evt.target.disabled = true;
+		ev.target.disabled = true;
 		docBody.setAttribute("data-layout-type", "docked");
 	};
 })("undefined" !== typeof window ? window : this, document);
