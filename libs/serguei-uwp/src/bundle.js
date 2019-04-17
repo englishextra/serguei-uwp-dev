@@ -124,7 +124,7 @@ supportsSvgSmilAnimation, throttle*/
 	 * Does not handle differences in the Event-objects.
 	 * @see {@link https://github.com/finn-no/eventlistener}
 	 */
-	var wrapListener = function (standard, fallback) {
+	var setListener = function (standard, fallback) {
 		return function (el, type, listener, useCapture) {
 			if (el[standard]) {
 				el[standard](type, listener, useCapture);
@@ -135,8 +135,8 @@ supportsSvgSmilAnimation, throttle*/
 			}
 		};
 	};
-	root.addListener = wrapListener("addEventListener", "attachEvent");
-	root.removeListener = wrapListener("removeEventListener", "detachEvent");
+	root.addListener = setListener("addEventListener", "attachEvent");
+	root.removeListener = setListener("removeEventListener", "detachEvent");
 
 	/*!
 	 * get elements by class name wrapper
